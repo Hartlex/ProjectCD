@@ -9,21 +9,20 @@ using NetworkCommsDotNet.DPSBase;
 
 namespace CD.Network.Server
 {
-    public abstract class CDServer
+    public abstract class CDServerBase
     {
         private readonly ServerConfig _config;
-        private TCPConnectionListener? _listener;
-        private Action<ByteBuffer, Connection> _handlePacket;
-        protected CDServer(ServerConfig config)
+        private readonly TCPConnectionListener? _listener;
+        private readonly Action<ByteBuffer, Connection> _handlePacket;
+        protected CDServerBase(ServerConfig config)
         {
             _config = config;
             _handlePacket = config.GetHandlePacket();
-            
             _listener = StartListening();
         }
 
-        public abstract void OnConnect(Connection connection);
-        ~CDServer()
+        protected abstract void OnConnect(Connection connection);
+        ~CDServerBase()
         {
             StopListening();
         }

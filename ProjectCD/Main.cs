@@ -14,6 +14,7 @@ namespace ProjectCD
         {
             ConfigManager.Instance.LoadConfigurations();
             ServerManager.Instance.Initialize();
+            ActionManager.Instance.Initialize();
         }
     }
 }

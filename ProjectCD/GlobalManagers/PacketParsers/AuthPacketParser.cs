@@ -1,14 +1,13 @@
-﻿using CDShared.ByteLevel;
+﻿using CD.Network.Server;
+using CDShared.ByteLevel;
 using CDShared.Generics;
 using NetworkCommsDotNet.Connections;
+using ProjectCD.Servers.Auth;
+using SunStructs.Packets;
 
 namespace ProjectCD.GlobalManagers.PacketParsers;
 
-internal class AuthPacketParser : Singleton<AuthPacketParser>
+internal class AuthPacketParser : PacketParser<AuthPacketType>
 {
-    public void ParsePacket(ByteBuffer buffer, Connection connection)
-    {
-
-
-    }
+    
 }

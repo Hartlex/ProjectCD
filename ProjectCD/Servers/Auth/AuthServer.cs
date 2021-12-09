@@ -11,7 +11,7 @@ namespace ProjectCD.Servers.Auth
 {
     internal sealed class AuthServer : CDServer
     {
-        public AuthServer(LoginServerConfig config) : base(config)
+        public AuthServer(AuthServerConfig config) : base(config)
         {
         }
 

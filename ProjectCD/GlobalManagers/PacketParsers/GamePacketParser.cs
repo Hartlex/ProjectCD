@@ -1,14 +1,12 @@
-﻿using CDShared.ByteLevel;
+﻿using CD.Network.Server;
+using CDShared.ByteLevel;
 using CDShared.Generics;
 using NetworkCommsDotNet.Connections;
+using SunStructs.Packets;
 
 namespace ProjectCD.GlobalManagers.PacketParsers;
 
-internal class GamePacketParser : Singleton<GamePacketParser>
+internal class GamePacketParser : PacketParser<GamePacketType>
 {
-    public void ParsePacket(ByteBuffer buffer, Connection connection)
-    {
 
-
-    }
 }

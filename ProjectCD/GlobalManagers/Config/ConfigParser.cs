@@ -14,7 +14,7 @@ namespace ProjectCD.GlobalManagers.Config
             _configLines = File.ReadAllLines(configPath);
         }
 
-        public bool TryParseLoginServerInfo(out LoginServerConfig config)
+        public bool TryParseLoginServerInfo(out AuthServerConfig config)
         {
             var configDict = GetConfigDictionary();
             config = null;
@@ -27,7 +27,7 @@ namespace ProjectCD.GlobalManagers.Config
                 int.TryParse(strPort, out var port);
                 int.TryParse(strAcceptedSessions, out var acceptedSessions);
                 var endPoint = new IPEndPoint(ipAddress, port);
-                config = new LoginServerConfig(endPoint, acceptedSessions,AuthPacketParser.Instance.ParsePacket);
+                config = new AuthServerConfig(endPoint, acceptedSessions,AuthPacketParser.Instance.ParsePacket);
                 return true;
             }
             catch (FormatException e)

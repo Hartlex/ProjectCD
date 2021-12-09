@@ -9,9 +9,9 @@ using NetworkCommsDotNet.Connections;
 
 namespace CD.Network.Server.Config
 {
-    public class LoginServerConfig : ServerConfig
+    public class AuthServerConfig : ServerConfig
     {
-        public LoginServerConfig(IPEndPoint ipEndPoint, int acceptedSessions, Action<ByteBuffer, Connection> handlePacket) : base(ipEndPoint, acceptedSessions, handlePacket)
+        public AuthServerConfig(IPEndPoint ipEndPoint, int acceptedSessions, Action<ByteBuffer, Connection> handlePacket) : base(ipEndPoint, acceptedSessions, handlePacket)
         {
         }
     }

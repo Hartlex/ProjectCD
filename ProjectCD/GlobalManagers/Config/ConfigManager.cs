@@ -9,7 +9,7 @@ namespace ProjectCD.GlobalManagers.Config
     public class ConfigManager : Singleton<ConfigManager>
     {
         private static readonly string ConfigPath= ConfigurationManager.AppSettings["configPath"];
-        private LoginServerConfig _loginServerConfig;
+        private AuthServerConfig _authServerConfig;
         private ClientVersion _compatibleClientVersion;
         private DatabaseConfig _databaseConfig;
         private GameServerConfig[] _gameServerConfigs;
@@ -31,9 +31,9 @@ namespace ProjectCD.GlobalManagers.Config
             }
         }
 
-        public LoginServerConfig GetLoginServerConfig()
+        public AuthServerConfig GetLoginServerConfig()
         {
-            return _loginServerConfig;
+            return _authServerConfig;
         }
         public bool IsClientVersionCompatible(ClientVersion version)
         {
@@ -52,11 +52,11 @@ namespace ProjectCD.GlobalManagers.Config
         private void LoadLoginServerConfig()
         {
             var parser = new ConfigParser(ConfigPath + @"\LoginServerConfig.ini");
-            if (!parser.TryParseLoginServerInfo(out _loginServerConfig))
+            if (!parser.TryParseLoginServerInfo(out _authServerConfig))
             {
                 throw new Exception("Failed to load LoginConfig");
             }
-            Logger.Instance.Log("LoginServerConfig loaded!",LogType.SUCCESS);
+            Logger.Instance.Log("AuthServerConfig loaded!",LogType.SUCCESS);
         }
         private void LoadCompatibleClientVersion()
         {

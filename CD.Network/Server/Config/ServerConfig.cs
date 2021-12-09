@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using CDShared.ByteLevel;
+using NetworkCommsDotNet.Connections;
 
 namespace CD.Network.Server.Config
 {
@@ -6,11 +8,13 @@ namespace CD.Network.Server.Config
     {
         private readonly IPEndPoint _myIpEndPoint;
         private readonly int _acceptedSessions;
+        private readonly Action<ByteBuffer, Connection> _handlePacket;
 
-        public ServerConfig(IPEndPoint ipEndPoint, int acceptedSessions)
+        public ServerConfig(IPEndPoint ipEndPoint, int acceptedSessions, Action<ByteBuffer, Connection> handlePacket)
         {
             _myIpEndPoint = ipEndPoint;
             _acceptedSessions = acceptedSessions;
+            _handlePacket = handlePacket;
         }
         public IPEndPoint GetIpEndPoint()
         {
@@ -25,6 +29,11 @@ namespace CD.Network.Server.Config
         public int GetPort()
         {
             return _myIpEndPoint.Port;
+        }
+
+        public Action<ByteBuffer, Connection> GetHandlePacket()
+        {
+            return _handlePacket;
         }
     }
 }

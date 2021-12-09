@@ -21,109 +21,109 @@ namespace CDShared.ByteLevel
 
         #region TypeMethods
 
-        public void Write(TypeCode code, object obj)
-        {
-            switch (code)
-            {
-                case TypeCode.Empty:
-                    break;
-                case TypeCode.Object:
-                    break;
-                case TypeCode.DBNull:
-                    break;
-                case TypeCode.Boolean:
-                    WriteBool((bool)obj);
-                    break;
-                case TypeCode.Char:
-                    WriteChar((char)obj);
-                    break;
-                case TypeCode.SByte:
-                    WriteSByte((sbyte)obj);
-                    break;
-                case TypeCode.Byte:
-                    WriteByte((byte)obj);
-                    break;
-                case TypeCode.Int16:
-                    WriteInt16((short)obj);
-                    break;
-                case TypeCode.UInt16:
-                    WriteUInt16((ushort)obj);
-                    break;
-                case TypeCode.Int32:
-                    WriteInt32((int)obj);
-                    break;
-                case TypeCode.UInt32:
-                    WriteUInt32((uint)obj);
-                    break;
-                case TypeCode.Int64:
-                    WriteInt64((long)obj);
-                    break;
-                case TypeCode.UInt64:
-                    WriteUInt64((ulong)obj);
-                    break;
-                case TypeCode.Single:
-                    WriteFloat((float)obj);
-                    break;
-                case TypeCode.Double:
-                    WriteDouble((double)obj);
-                    break;
-                case TypeCode.Decimal:
-                    break;
-                case TypeCode.DateTime:
-                    break;
-                case TypeCode.String:
-                    WriteString((string)obj);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(code), code, null);
-            }
-        }
+        //public void Write(TypeCode code, object obj)
+        //{
+        //    switch (code)
+        //    {
+        //        case TypeCode.Empty:
+        //            break;
+        //        case TypeCode.Object:
+        //            break;
+        //        case TypeCode.DBNull:
+        //            break;
+        //        case TypeCode.Boolean:
+        //            WriteBool((bool)obj);
+        //            break;
+        //        case TypeCode.Char:
+        //            WriteChar((char)obj);
+        //            break;
+        //        case TypeCode.SByte:
+        //            WriteSByte((sbyte)obj);
+        //            break;
+        //        case TypeCode.Byte:
+        //            WriteByte((byte)obj);
+        //            break;
+        //        case TypeCode.Int16:
+        //            WriteInt16((short)obj);
+        //            break;
+        //        case TypeCode.UInt16:
+        //            WriteUInt16((ushort)obj);
+        //            break;
+        //        case TypeCode.Int32:
+        //            WriteInt32((int)obj);
+        //            break;
+        //        case TypeCode.UInt32:
+        //            WriteUInt32((uint)obj);
+        //            break;
+        //        case TypeCode.Int64:
+        //            WriteInt64((long)obj);
+        //            break;
+        //        case TypeCode.UInt64:
+        //            WriteUInt64((ulong)obj);
+        //            break;
+        //        case TypeCode.Single:
+        //            WriteFloat((float)obj);
+        //            break;
+        //        case TypeCode.Double:
+        //            WriteDouble((double)obj);
+        //            break;
+        //        case TypeCode.Decimal:
+        //            break;
+        //        case TypeCode.DateTime:
+        //            break;
+        //        case TypeCode.String:
+        //            WriteString((string)obj);
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException(nameof(code), code, null);
+        //    }
+        //}
 
-        public dynamic Read(TypeCode code)
-        {
-            switch (code)
-            {
-                case TypeCode.Empty:
-                    throw new ArgumentOutOfRangeException();
-                case TypeCode.Object:
-                    throw new ArgumentOutOfRangeException();
-                case TypeCode.DBNull:
-                    throw new ArgumentOutOfRangeException();
-                case TypeCode.Boolean:
-                    return ReadBool();
-                case TypeCode.Char:
-                    return ReadChar();
-                case TypeCode.SByte:
-                    return ReadSByte();
-                case TypeCode.Byte:
-                    return ReadByte();
-                case TypeCode.Int16:
-                    return ReadInt16();
-                case TypeCode.UInt16:
-                    return ReadUInt16();
-                case TypeCode.Int32:
-                    return ReadInt32();
-                case TypeCode.UInt32:
-                    return ReadUInt32();
-                case TypeCode.Int64:
-                    return ReadInt64();
-                case TypeCode.UInt64:
-                    return ReadUInt64();
-                case TypeCode.Single:
-                    return ReadFloat();
-                case TypeCode.Double:
-                    return ReadDouble();
-                case TypeCode.Decimal:
-                    throw new ArgumentOutOfRangeException();
-                case TypeCode.DateTime:
-                    throw new ArgumentOutOfRangeException();
-                case TypeCode.String:
-                    return ReadString();
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+        //public dynamic Read(TypeCode code)
+        //{
+        //    switch (code)
+        //    {
+        //        case TypeCode.Empty:
+        //            throw new ArgumentOutOfRangeException();
+        //        case TypeCode.Object:
+        //            throw new ArgumentOutOfRangeException();
+        //        case TypeCode.DBNull:
+        //            throw new ArgumentOutOfRangeException();
+        //        case TypeCode.Boolean:
+        //            return ReadBool();
+        //        case TypeCode.Char:
+        //            return ReadChar();
+        //        case TypeCode.SByte:
+        //            return ReadSByte();
+        //        case TypeCode.Byte:
+        //            return ReadByte();
+        //        case TypeCode.Int16:
+        //            return ReadInt16();
+        //        case TypeCode.UInt16:
+        //            return ReadUInt16();
+        //        case TypeCode.Int32:
+        //            return ReadInt32();
+        //        case TypeCode.UInt32:
+        //            return ReadUInt32();
+        //        case TypeCode.Int64:
+        //            return ReadInt64();
+        //        case TypeCode.UInt64:
+        //            return ReadUInt64();
+        //        case TypeCode.Single:
+        //            return ReadFloat();
+        //        case TypeCode.Double:
+        //            return ReadDouble();
+        //        case TypeCode.Decimal:
+        //            throw new ArgumentOutOfRangeException();
+        //        case TypeCode.DateTime:
+        //            throw new ArgumentOutOfRangeException();
+        //        case TypeCode.String:
+        //            return ReadString();
+        //        default:
+        //            throw new ArgumentOutOfRangeException();
+        //    }
 
-        }
+        //}
 
         #endregion
 
@@ -190,11 +190,16 @@ namespace CDShared.ByteLevel
             MergeArrays(BitConverter.GetBytes(length));
             MergeArrays(value);
         }
-        public void WriteString(string value)
+
+        public void WriteBlock(byte[] value)
         {
-            var length = value.Length;
-            MergeArrays(BitConverter.GetBytes(length));
-            MergeArrays(Encoding.ASCII.GetBytes(value));
+            MergeArrays(value);
+        }
+        public void WriteString(string value,int length)
+        {
+            var data = new byte[length];
+            Buffer.BlockCopy(Encoding.ASCII.GetBytes(value),0,data,0,value.Length);
+            MergeArrays(data);
         }
         public void WriteBool(bool value)
         {
@@ -289,13 +294,12 @@ namespace CDShared.ByteLevel
             return BitConverter.ToSingle(_data, _head - 4);
         }
 
-        public string ReadString()
+        public string ReadString(int length)
         {
-            var length = ReadInt32();
             var bytes = new byte[length];
             Buffer.BlockCopy(_data, _head, bytes, 0, length);
             _head += length;
-            return Encoding.ASCII.GetString(bytes);
+            return Encoding.ASCII.GetString(bytes).Trim();
         }
         #endregion
 

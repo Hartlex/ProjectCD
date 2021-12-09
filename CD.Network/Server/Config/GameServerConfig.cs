@@ -7,6 +7,7 @@ namespace CD.Network.Server.Config
         private readonly byte _id;
         private readonly string _name;
         private readonly int _channelCount;
+
         public GameServerConfig(byte id, string name, IPEndPoint ipEndPoint, int acceptedSessions, int channelCount) : base(ipEndPoint, acceptedSessions)
         {
             _id = id;

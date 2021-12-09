@@ -18,22 +18,16 @@ namespace CD.Network.Server
         {
             _config = config;
             _handlePacket = config.GetHandlePacket();
+            
+            _listener = StartListening();
         }
 
+        public abstract void OnConnect(Connection connection);
         ~CDServer()
         {
             StopListening();
         }
 
-        public void Start()
-        {
-            _listener = StartListening();
-        }
-
-        public void Stop()
-        {
-
-        }
         private TCPConnectionListener StartListening()
         {
             var endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), _config.GetPort());

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Text;
-using static CherryDragon.Prog.Helpers.ByteUtils;
+﻿using System.Text;
+using static CDShared.ByteLevel.ByteUtils;
 
 
-namespace CherryDragon.Prog.Helpers
+namespace CDShared.ByteLevel
 {
     public static class TEA
     {

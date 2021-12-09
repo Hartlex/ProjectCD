@@ -299,12 +299,16 @@ namespace CDShared.ByteLevel
             var bytes = new byte[length];
             Buffer.BlockCopy(_data, _head, bytes, 0, length);
             _head += length;
-            return Encoding.ASCII.GetString(bytes).Trim();
+            return Encoding.ASCII.GetString(ByteUtils.CutTail(bytes));
         }
         #endregion
 
         #region PublicMethods
 
+        public bool IsDoneReading()
+        {
+            return _head >= _data.Length;
+        }
         public int GetHead()
         {
             return _head;

@@ -9,6 +9,7 @@ using NetworkCommsDotNet.Connections;
 using ProjectCD.GlobalManagers.PacketParsers;
 using ProjectCD.Servers.Channel;
 using SunStructs.PacketInfos.Auth;
+using SunStructs.PacketInfos.Auth.Server;
 
 namespace ProjectCD.Servers.Game
 {
@@ -35,7 +36,7 @@ namespace ProjectCD.Servers.Game
                 );
 
                 _channelServers[i] = new ChannelServer(channelConfig);
-                _channelInfos[i] = new ChannelInfo("Ch " + i + 1, i, config.GetId());
+                _channelInfos[i] = new ChannelInfo("Channel " + i + 1, i, config.GetId());
             }
 
         }
@@ -45,9 +46,17 @@ namespace ProjectCD.Servers.Game
             
         }
 
-        public IEnumerable<ChannelServer> GetChannelServers()
+        public ChannelServer[] GetChannelServers()
         {
             return _channelServers;
+        }
+        public ServerInfo GetServerInfoForClient()
+        {
+            return new (_config.GetName(), _config.GetId());
+        }
+        public ChannelInfo[] GetChannelInfosForClient()
+        {
+            return _channelInfos;
         }
     }
 }

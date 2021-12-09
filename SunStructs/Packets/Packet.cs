@@ -13,11 +13,11 @@ namespace SunStructs.Packets
         private readonly byte _packetSubType;
         private readonly byte[] _data;
 
-        protected Packet(byte gamePacketType, byte packetSubType, PacketInfo packetStruct)
+        protected Packet(byte gamePacketType, byte packetSubType, ServerPacketInfo serverPacketStruct)
         {
             _packetType = gamePacketType;
             _packetSubType = packetSubType;
-            _data = packetStruct.GetBytes();
+            _data = serverPacketStruct.GetBytes();
         }
         
         public byte[] GetBytes()
@@ -34,17 +34,17 @@ namespace SunStructs.Packets
 
     public class GameServerPacket : Packet
     {
-        public GameServerPacket(GamePacketType gamePacketType, byte packetSubType, PacketInfo packetStruct) : 
-            base((byte)gamePacketType,packetSubType, packetStruct) { }
+        public GameServerPacket(GamePacketType gamePacketType, byte packetSubType, ServerPacketInfo serverPacketStruct) : 
+            base((byte)gamePacketType,packetSubType, serverPacketStruct) { }
     }
     public class WorldServerPacket : Packet
     {
-        public WorldServerPacket(WorldPacketType worldPacketType, byte packetSubType, PacketInfo packetStruct) : 
-            base((byte)worldPacketType, packetSubType, packetStruct) { }
+        public WorldServerPacket(WorldPacketType worldPacketType, byte packetSubType, ServerPacketInfo serverPacketStruct) : 
+            base((byte)worldPacketType, packetSubType, serverPacketStruct) { }
     }
     public class AuthServerPacket : Packet
     {
-        public AuthServerPacket(AuthPacketType autPacketType, byte packetSubType, PacketInfo packetStruct) : 
-            base((byte)autPacketType, packetSubType, packetStruct) { }
+        public AuthServerPacket(AuthPacketType autPacketType, byte packetSubType, ServerPacketInfo serverPacketStruct) : 
+            base((byte)autPacketType, packetSubType, serverPacketStruct) { }
     }
 }

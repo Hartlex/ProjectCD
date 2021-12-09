@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using CDShared.Generics;
 using CDShared.Logging;
+using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using NetworkCommsDotNet.Tools;
 using Timer = System.Timers.Timer;
@@ -22,13 +23,13 @@ namespace ProjectCD.GlobalManagers
             {
                 connection.ConnectionInfo.ResetNetworkIdentifer(ShortGuid.NewGuid());
                 _activeConnections.Add(connection.ConnectionInfo.NetworkIdentifier,connection);
-                Logger.Instance.Log($"Connection[{connection.ConnectionInfo.NetworkIdentifier}] added!");
+                Logger.Instance.Log($"Connection[{connection.ConnectionInfo.NetworkIdentifier}] added!", LogType.FULL);
 
                 var timer = new Timer(5000);
                 timer.AutoReset = false;
                 timer.Elapsed += (sender, args) =>
                 {
-                    //CheckConnection(connection);
+                    CheckConnection(connection);
                 };
                 timer.Start();
             }
@@ -36,7 +37,7 @@ namespace ProjectCD.GlobalManagers
 
         private void CheckConnection(Connection connection)
         {
-            if(!connection.ConnectionAlive()) RemoveConnection(connection);
+            if(connection.ConnectionInfo.ConnectionState != ConnectionState.Established) RemoveConnection(connection);
         }
 
         public void RemoveConnection(Connection connection)
@@ -44,7 +45,7 @@ namespace ProjectCD.GlobalManagers
             if (_activeConnections.ContainsKey(connection.ConnectionInfo.NetworkIdentifier))
             {
                 _activeConnections.Remove(connection.ConnectionInfo.NetworkIdentifier);
-                Logger.Instance.Log($"Connection[{connection.ConnectionInfo.NetworkIdentifier}] removed!");
+                Logger.Instance.Log($"Connection[{connection.ConnectionInfo.NetworkIdentifier}] removed!",LogType.FULL);
 
             }
         }

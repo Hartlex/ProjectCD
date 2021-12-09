@@ -1,8 +1,8 @@
 ﻿using CDShared.ByteLevel;
 
-namespace SunStructs.PacketInfos.Auth
+namespace SunStructs.PacketInfos.Auth.Server
 {
-    public class AnsServerListInfo : PacketInfo
+    public class AnsServerListInfo : ServerPacketInfo
     {
         private readonly ServerInfo[] _serverInfos;
 

@@ -3,6 +3,7 @@ using CD.Network.Server.Config;
 using CDShared.Generics;
 using CDShared.Logging;
 using SunStructs.PacketInfos.Auth;
+using SunStructs.PacketInfos.Auth.Server;
 
 namespace ProjectCD.GlobalManagers.Config
 {

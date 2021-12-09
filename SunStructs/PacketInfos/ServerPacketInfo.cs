@@ -2,7 +2,7 @@
 
 namespace SunStructs.PacketInfos
 {
-    public abstract class PacketInfo
+    public abstract class ServerPacketInfo
     {
         public byte[] GetBytes()
         {

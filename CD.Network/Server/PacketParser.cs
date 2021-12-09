@@ -45,7 +45,7 @@ namespace CD.Network.Server
                 length -= size + 2;
                 var packetCategory = buffer.ReadByte();
                 var subPacketType = buffer.ReadByte();
-                var packetBytes = buffer.ReadBlock(size - 2);
+                //var packetBytes = buffer.ReadBlock(size - 2);
                 if (_bib.TryFindAction(packetCategory, subPacketType, out var action))
                 {
                     Logger.Instance.Log("GameServer: " + action.Method.Name);
@@ -55,7 +55,7 @@ namespace CD.Network.Server
                 {
                     Logger.Instance.Log("Unknown Game Packet:" + packetCategory + "|" + subPacketType);
                     var sb = new StringBuilder();
-                    foreach (var b in packetBytes)
+                    foreach (var b in buffer.ReadBlock(size - 2))
                     {
                         sb.Append(b + "|");
                     }

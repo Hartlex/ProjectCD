@@ -1,8 +1,8 @@
 ﻿using CDShared.ByteLevel;
 
-namespace SunStructs.PacketInfos.Auth
+namespace SunStructs.PacketInfos.Auth.Server
 {
-    public class ClientVersion :PacketInfo
+    public class ClientVersion :ServerPacketInfo
     {
         public readonly byte HighVersion;
         public readonly byte MiddleVersion;

@@ -9,6 +9,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CD.Network\CD.Network.csproj" />
+    <ProjectReference Include="..\CDShared\CDShared.csproj" />
+    <ProjectReference Include="..\SunStructs\SunStructs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UnifyBase">
+      <HintPath>..\include\UnifyBase.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

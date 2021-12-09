@@ -8,7 +8,7 @@ using CD.Network.Server.Config;
 using NetworkCommsDotNet.Connections;
 using ProjectCD.GlobalManagers.PacketParsers;
 using ProjectCD.Servers.Channel;
-using SunStructs.Packet.Auth;
+using SunStructs.PacketInfos.Auth;
 
 namespace ProjectCD.Servers.Game
 {
@@ -40,9 +40,14 @@ namespace ProjectCD.Servers.Game
 
         }
 
-        protected override void OnConnect(Connection connection)
+        public override void OnConnect(Connection connection)
         {
             
+        }
+
+        public IEnumerable<ChannelServer> GetChannelServers()
+        {
+            return _channelServers;
         }
     }
 }

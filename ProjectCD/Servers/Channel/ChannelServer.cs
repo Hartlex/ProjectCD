@@ -16,7 +16,7 @@ namespace ProjectCD.Servers.Channel
 
         }
 
-        protected override void OnConnect(Connection connection)
+        public override void OnConnect(Connection connection)
         {
             
         }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CDShared.ByteLevel;
+﻿using CDShared.ByteLevel;
 
-namespace SunStructs.Packet.Auth
+namespace SunStructs.PacketInfos.Auth
 {
     public class ChannelInfo : PacketInfo
     {

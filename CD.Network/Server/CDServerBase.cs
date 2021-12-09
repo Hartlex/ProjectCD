@@ -21,7 +21,7 @@ namespace CD.Network.Server
             _listener = StartListening();
         }
 
-        protected abstract void OnConnect(Connection connection);
+        public abstract void OnConnect(Connection connection);
         ~CDServerBase()
         {
             StopListening();
@@ -36,6 +36,7 @@ namespace CD.Network.Server
             {
                 _handlePacket(new ByteBuffer(data), connection);
             } );
+            
             Connection.StartListening(listener, endPoint);
             Logger.Instance.Log("Started Listening on Endpoint: " + endPoint);
             return listener;
@@ -44,6 +45,10 @@ namespace CD.Network.Server
         private void StopListening()
         {
             Connection.StopListening(_listener);
+        }
+        public IPEndPoint GetLocalEndPoint()
+        {
+            return _config.GetIpEndPoint();
         }
     }
 }

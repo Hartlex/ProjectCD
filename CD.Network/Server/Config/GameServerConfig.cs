@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using CDShared.ByteLevel;
+using NetworkCommsDotNet.Connections;
 
 namespace CD.Network.Server.Config
 {
@@ -8,7 +10,7 @@ namespace CD.Network.Server.Config
         private readonly string _name;
         private readonly int _channelCount;
 
-        public GameServerConfig(byte id, string name, IPEndPoint ipEndPoint, int acceptedSessions, int channelCount) : base(ipEndPoint, acceptedSessions)
+        public GameServerConfig(byte id, string name, IPEndPoint ipEndPoint, int acceptedSessions, int channelCount, Action<ByteBuffer,Connection> handlePacket) : base(ipEndPoint, acceptedSessions,handlePacket)
         {
             _id = id;
             _name = name;

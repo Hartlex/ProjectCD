@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using CD.Network.Server.Config;
 using CDShared.Generics;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using ProjectCD.GlobalManagers.Config;
+using ProjectCD.Objects.NetObjects;
 using ProjectCD.Servers.Auth;
-using ProjectCD.Servers.Channel;
 using ProjectCD.Servers.Game;
 using SunStructs.PacketInfos.Auth.Client;
 using SunStructs.PacketInfos.Auth.Server;
@@ -18,22 +20,30 @@ namespace ProjectCD.GlobalManagers
     internal class ServerManager :Singleton<ServerManager>
     {
         private AuthServer? _authServer;
-        private Dictionary<int,GameServer>? _gameServers;
-        private Dictionary<int,ChannelServer>? _channelServers;
+        private Dictionary<byte,List<GameServer>>? _gameServers;
+        private List<ServerInfo> _serverGroupInfo;
+        private List<ChannelInfo> _channelInfos;
         public void Initialize()
         {
             _authServer = new AuthServer(ConfigManager.Instance.GetLoginServerConfig());
             _gameServers = new ();
-            _channelServers = new ();
             var configs = ConfigManager.Instance.GetGameServerConfigs();
+            _serverGroupInfo = new (configs.Length);
+            _channelInfos = new();
             foreach (var config in configs)
             {
-                var gameServer = new GameServer(config);
-                _gameServers.Add(config.GetId(),gameServer);
-                var channelServers = gameServer.GetChannelServers();
-                for (var i = 0; i < channelServers.Length; i++)
+                _gameServers.Add(config.GetId(),new ());
+                _serverGroupInfo.Add(new (config.GetName(),config.GetId()));
+                for(int i=0;i<config.GetChannelCount();i++)
                 {
-                    _channelServers.Add(i,channelServers[i]);
+                    var serverConfig = new ServerConfig(
+                        new IPEndPoint(config.GetIpEndPoint().Address, config.GetPort() + i),
+                        config.GetAcceptedSessions(),
+                        config.GetHandlePacket()
+                    );
+                    _gameServers[config.GetId()].Add(new (serverConfig));
+
+                    _channelInfos.Add(new ChannelInfo("Channel "+(i+1),i,config.GetId()));
                 }
             }
 
@@ -54,43 +64,51 @@ namespace ProjectCD.GlobalManagers
                 _authServer.OnConnect(connection);
                 return;
             }
-            foreach (var gameServer in _gameServers)
+            foreach (var gameServerList in _gameServers)
             {
-                if (!Equals(endPoint, gameServer.GetLocalEndPoint())) continue;
-                gameServer.OnConnect(connection);
-                return;
+                foreach (var gameServer in gameServerList.Value)
+                {
+                    if (Equals(endPoint, gameServer.GetLocalEndPoint()))
+                    {
+                        gameServer.OnConnect(connection);
+                        return;
+                    }
+                }
             }
-            foreach (var channelServer in _channelServers)
-            {
-                if (!Equals(endPoint, channelServer.GetLocalEndPoint())) continue;
-                channelServer.OnConnect(connection);
-                return;
-            }
+
         }
 
         public AnsServerListInfo GetServerListInfo()
         {
-            var result = new ServerInfo[_gameServers.Count];
-            for (int i = 0; i < _gameServers.Count; i++)
-            {
-                result[i] = _gameServers[i].GetServerInfoForClient();
-            }
-            return new (result);
+            return new (_serverGroupInfo.ToArray());
         }
         public AnsChannelListInfo GetChannelListInfo()
         {
-            var result = new List<ChannelInfo>();
-            foreach (var gameServer in _gameServers)
-            {
-                result.AddRange(gameServer.Value.GetChannelInfosForClient());
-            }
-
-            return new (result.ToArray());
+            return new (_channelInfos.ToArray());
         }
 
-        public bool UserCanConnect(AskServerSelectInfo info)
+        public bool CanUserJoin(AskServerSelectInfo info,Connection connection,User user,out IPEndPoint endPoint)
         {
-            
+            endPoint = null;
+            if (!_gameServers.TryGetValue(info.ServerGroupId, out var list)) return false;
+
+            try
+            {
+                var server = list[info.ChannelId];
+                if (server.CanUserJoin(connection))
+                {
+
+                    endPoint = server.GetLocalEndPoint();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                return false;
+            }
         }
+
     }
 }

@@ -76,17 +76,22 @@ namespace ProjectCD.Servers.Auth
             var info = new AskServerSelectInfo(ref buffer);
             if (UserManager.Instance.TryGetUser(connection, out var user))
             {
-                if (ServerManager.Instance.UserCanConnect(info))
+                if (ServerManager.Instance.CanUserJoin(info,connection,user,out var endPoint))
                 {
+                    var result = AUTH_RESULT_OK;
+                    var serial = user.GetClientSerial();
+                    var logKey = new byte[] { 0x33, 0x36, 0x65, 0x36, 0x65, 0x6b, 0x6f, 0x37, 0x00 };
 
+                    var outInfo = new AckServerSelectInfo(result, user.UserID, endPoint.Address.ToString(),
+                        endPoint.Port, serial, logKey);
+
+                    connection.SendUnmanagedBytes(new AckServerSelect(outInfo).GetBytes());
                 }
-                var serial = user.GetClientSerial();
-                var logKey = new byte[] {0x33, 0x36, 0x65, 0x36, 0x65, 0x6b, 0x6f, 0x37, 0x00};
+
 
             }
 
 
-            var outInfo = new AckServerSelectInfo()
         }
     }
 }

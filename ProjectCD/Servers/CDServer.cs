@@ -14,6 +14,7 @@ namespace ProjectCD.Servers
     internal abstract class CDServer : CDServerBase
     {
         private readonly Dictionary<ShortGuid,User> _connectedUsers = new ();
+        private readonly Dictionary<byte[], User> _waitingList=new();
         protected CDServer(ServerConfig config) : base(config) {}
 
         public bool TryGetUser(ShortGuid guid,out User? user)
@@ -34,6 +35,31 @@ namespace ProjectCD.Servers
         public bool TryAddUser(Connection connection, User user)
         {
             return _connectedUsers.TryAdd(connection.ConnectionInfo.NetworkIdentifier, user);
+        }
+
+        public bool CanUserJoin(Connection connection)
+        {
+            if (!_connectedUsers.ContainsKey(connection.ConnectionInfo.NetworkIdentifier)) return true;
+
+            return false;
+        }
+
+        public void PutOnWaitList(User user)
+        {
+            _waitingList.Add(user.GetClientSerial(),user);
+        }
+
+        public bool IsOnWaitList(byte[] serial,out User resultUser)
+        {
+            resultUser = null!;
+            foreach (var (key, user) in _waitingList)
+            {
+                if (!key.SequenceEqual(serial)) continue;
+                resultUser = user;
+                return true;
+            }
+
+            return false;
         }
 
     }

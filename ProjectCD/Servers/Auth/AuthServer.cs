@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CD.Network.Connections;
 using CD.Network.Server.Config;
 using ProjectCD.GlobalManagers;
+using ProjectCD.NetworkBase.Connections;
 using SunStructs.PacketInfos.Auth.Server;
 using SunStructs.Packets.AuthServerPackets;
 

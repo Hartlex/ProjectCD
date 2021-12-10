@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CDShared.Generics;
 using ProjectCD.Servers.Auth;
+using ProjectCD.Servers.Game;
 
 namespace ProjectCD.GlobalManagers
 {
@@ -13,6 +14,7 @@ namespace ProjectCD.GlobalManagers
         public void Initialize()
         {
             AuthActions.Instance.Initialize();
+            GameActions.Instance.Initialize();
         }
     }
 }

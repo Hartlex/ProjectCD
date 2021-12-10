@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CD.Network.Connections;
+using ProjectCD.NetworkBase.Connections;
 
 namespace ProjectCD.Objects.NetObjects
 {
-    internal class User
+    public class User
     {
         private UserConnectionState _connectionState;
         private readonly Connection _authConnection;
@@ -54,7 +54,7 @@ namespace ProjectCD.Objects.NetObjects
         }
     }
 
-    internal enum UserConnectionState
+    public enum UserConnectionState
     {
         UNDEFINED,
         CONNECTED,

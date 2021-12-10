@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using CD.Network.Connections;
 using CDShared.Generics;
 using CDShared.Logging;
+using ProjectCD.NetworkBase.Connections;
 using Timer = System.Timers.Timer;
 
 namespace ProjectCD.GlobalManagers

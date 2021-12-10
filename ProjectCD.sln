@@ -5,11 +5,9 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectCD", "ProjectCD\ProjectCD.csproj", "{08177A03-BAAA-48C4-8D83-403BA26A9669}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CD.Network", "CD.Network\CD.Network.csproj", "{0792983B-4569-4FB5-88BA-7D900DD11763}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDShared", "CDShared\CDShared.csproj", "{858304FE-DBE8-488B-8304-5C5C5907F9D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDShared", "CDShared\CDShared.csproj", "{858304FE-DBE8-488B-8304-5C5C5907F9D8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunStructs", "SunStructs\SunStructs.csproj", "{FB391615-4145-40A6-9D7D-A2094A791301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunStructs", "SunStructs\SunStructs.csproj", "{FB391615-4145-40A6-9D7D-A2094A791301}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		{08177A03-BAAA-48C4-8D83-403BA26A9669}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08177A03-BAAA-48C4-8D83-403BA26A9669}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08177A03-BAAA-48C4-8D83-403BA26A9669}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0792983B-4569-4FB5-88BA-7D900DD11763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0792983B-4569-4FB5-88BA-7D900DD11763}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0792983B-4569-4FB5-88BA-7D900DD11763}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0792983B-4569-4FB5-88BA-7D900DD11763}.Release|Any CPU.Build.0 = Release|Any CPU
 		{858304FE-DBE8-488B-8304-5C5C5907F9D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{858304FE-DBE8-488B-8304-5C5C5907F9D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{858304FE-DBE8-488B-8304-5C5C5907F9D8}.Release|Any CPU.ActiveCfg = Release|Any CPU

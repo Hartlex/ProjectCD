@@ -3,43 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CD.Network.Connections;
-using CD.Network.General;
 using CD.Network.Server;
 using CD.Network.Server.Config;
+using CDShared.Logging;
+using ProjectCD.NetworkBase.Connections;
+using ProjectCD.NetworkBase.General;
 using ProjectCD.Objects.NetObjects;
 
 namespace ProjectCD.Servers
 {
     internal abstract class CDServer : CDServerBase
     {
-        private readonly Dictionary<Guid,User> _connectedUsers = new ();
+        private readonly Dictionary<uint,User> _connectedUsers = new ();
         private readonly Dictionary<byte[], User> _waitingList=new();
         protected CDServer(ServerConfig config) : base(config) {}
 
-        public bool TryGetUser(Guid guid,out User? user)
+        public bool TryGetUser(uint userID,out User? user)
         {
-            return _connectedUsers.TryGetValue(guid, out user);
+            return _connectedUsers.TryGetValue(userID, out user);
         }
 
-        public bool TryAddUser(Guid guid, User user)
+        public bool TryAddUser( User user)
         {
-            return _connectedUsers.TryAdd(guid, user);
+            return _connectedUsers.TryAdd(user.UserID, user);
         }
 
-        public bool TryGetUser(Connection connection, out User? user)
+        public void RemoveUser(User user)
         {
-            return _connectedUsers.TryGetValue(connection.ID, out user);
+            RemoveUser(user.UserID);
         }
-
-        public bool TryAddUser(Connection connection, User user)
+        public void RemoveUser(uint userID)
         {
-            return _connectedUsers.TryAdd(connection.ID, user);
+            if (_connectedUsers.ContainsKey(userID))
+            {
+                _connectedUsers.Remove(userID);
+#if DEBUG
+                Logger.Instance.Log($"[{GetType().Name}] removed User[{userID}]");
+#endif
+            }
         }
-
-        public bool CanUserJoin(Connection connection)
+        public bool CanUserJoin(User user)
         {
-            if (!_connectedUsers.ContainsKey(connection.ID)) return true;
+            if (!_connectedUsers.ContainsKey(user.UserID)) return true;
 
             return false;
         }

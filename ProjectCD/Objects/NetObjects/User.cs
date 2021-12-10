@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetworkCommsDotNet.Connections;
+using CD.Network.Connections;
 
 namespace ProjectCD.Objects.NetObjects
 {

@@ -1,6 +1,6 @@
 ﻿using System.Net;
+using CD.Network.Connections;
 using CDShared.ByteLevel;
-using NetworkCommsDotNet.Connections;
 
 namespace CD.Network.Server.Config
 {

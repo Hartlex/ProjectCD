@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using CD.Network.Connections;
 using CDShared.ByteLevel;
-using NetworkCommsDotNet.Connections;
 
 namespace CD.Network.Server.Config
 {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CD.Network.Connections;
 using CDShared.ByteLevel;
 using CDShared.Generics;
 using CDShared.Logging;
-using NetworkCommsDotNet.Connections;
 using ProjectCD.GlobalManagers;
 using ProjectCD.GlobalManagers.Config;
 using ProjectCD.GlobalManagers.DB;
@@ -38,12 +38,13 @@ namespace ProjectCD.Servers.Auth
             var info = new AskConnectInfo(ref buffer);
             var compatible = ConfigManager.Instance.IsClientVersionCompatible(info.ClientVersion);
             var packet = new AckConnect(new(compatible ? PACKET_RESULT_SUCCESS : PACKET_RESULT_FAIL));
-            connection.SendUnmanagedBytes(packet.GetBytes());
+            connection.Send(packet);
 #if DEBUG
-            if(!compatible)
-                Logger.Instance.Log($"Connection[{connection.ConnectionInfo.NetworkIdentifier}] " +
-                                $"tried to connect from an incompatible client!\n" +
-                                $"EndPoint[{connection.ConnectionInfo.RemoteEndPoint}]");
+            if (!compatible)
+            {
+                Logger.Instance.Log("change this error",LogType.ERROR);
+            }
+
 #endif
 
         }
@@ -56,7 +57,7 @@ namespace ProjectCD.Servers.Auth
                 UserManager.Instance.CreateUser(connection, userID);
             var outInfo = new AckLoginInfo(result, 0, "Test Info", 0);
             var outPacket = new AckLogin(outInfo);
-            connection.SendUnmanagedBytes(outPacket.GetBytes());
+            connection.Send(outPacket);
         }
 
         private void OnAskServerList(ByteBuffer buffer, Connection connection)
@@ -67,8 +68,8 @@ namespace ProjectCD.Servers.Auth
             var serverPacket = new AnsServerList(serverInfo);
             var channelPacket = new AnsChannelList(channelInfo);
 
-            connection.SendUnmanagedBytes(serverPacket.GetBytes());
-            connection.SendUnmanagedBytes(channelPacket.GetBytes());
+            connection.Send(serverPacket);
+            connection.Send(channelPacket);
         }
 
         private void OnAskServerSelect(ByteBuffer buffer, Connection connection)
@@ -85,7 +86,7 @@ namespace ProjectCD.Servers.Auth
                     var outInfo = new AckServerSelectInfo(result, user.UserID, endPoint.Address.ToString(),
                         endPoint.Port, serial, logKey);
 
-                    connection.SendUnmanagedBytes(new AckServerSelect(outInfo).GetBytes());
+                    connection.Send(new AckServerSelect(outInfo));
                 }
 
 

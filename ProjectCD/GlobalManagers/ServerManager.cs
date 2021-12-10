@@ -4,10 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using CD.Network.Connections;
 using CD.Network.Server.Config;
 using CDShared.Generics;
-using NetworkCommsDotNet;
-using NetworkCommsDotNet.Connections;
 using ProjectCD.GlobalManagers.Config;
 using ProjectCD.Objects.NetObjects;
 using ProjectCD.Servers.Auth;
@@ -47,36 +46,34 @@ namespace ProjectCD.GlobalManagers
                 }
             }
 
-            NetworkComms.AppendGlobalConnectionEstablishHandler(HandleNewConnection);
-            NetworkComms.AppendGlobalConnectionCloseHandler(HandleCloseConnection);
         }
 
-        private void HandleCloseConnection(Connection connection)
-        {
-            ConnectionManager.Instance.RemoveConnection(connection);
-        }
+        //private void HandleCloseConnection(Connection connection)
+        //{
+        //    ConnectionManager.Instance.RemoveConnection(connection);
+        //}
 
-        private void HandleNewConnection(Connection connection)
-        {
-            var endPoint = connection.ConnectionInfo.LocalEndPoint;
-            if (Equals(endPoint, _authServer.GetLocalEndPoint()))
-            {
-                _authServer.OnConnect(connection);
-                return;
-            }
-            foreach (var gameServerList in _gameServers)
-            {
-                foreach (var gameServer in gameServerList.Value)
-                {
-                    if (Equals(endPoint, gameServer.GetLocalEndPoint()))
-                    {
-                        gameServer.OnConnect(connection);
-                        return;
-                    }
-                }
-            }
+        //private void HandleNewConnection(Connection connection)
+        //{
+        //    var endPoint = connection.ConnectionInfo.LocalEndPoint;
+        //    if (Equals(endPoint, _authServer.GetLocalEndPoint()))
+        //    {
+        //        _authServer.OnConnect(connection);
+        //        return;
+        //    }
+        //    foreach (var gameServerList in _gameServers)
+        //    {
+        //        foreach (var gameServer in gameServerList.Value)
+        //        {
+        //            if (Equals(endPoint, gameServer.GetLocalEndPoint()))
+        //            {
+        //                gameServer.OnConnect(connection);
+        //                return;
+        //            }
+        //        }
+        //    }
 
-        }
+        //}
 
         public AnsServerListInfo GetServerListInfo()
         {

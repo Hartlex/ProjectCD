@@ -113,7 +113,7 @@ namespace ProjectCD.GlobalManagers
                 server.RemoveUser(info.UserId);
             });
             _gameServersWaitList.Remove(user.UserID);
-            user.SetGameServerConnection(connection);
+            //user.SetGameServerConnection(connection);
             user.SetState(UserConnectionState.AT_CHAR_SELECT);
             connection.OnGameServerConnect(user);
             return true;

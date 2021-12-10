@@ -36,6 +36,8 @@ namespace ProjectCD.Servers.Game.Actions
                 {
                     UserManager.Instance.RemoveUser(user,RemoveUserType.FROM_GAME);
                 });
+
+
             }
         }
     }

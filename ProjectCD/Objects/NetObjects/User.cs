@@ -10,9 +10,6 @@ namespace ProjectCD.Objects.NetObjects
     public class User
     {
         private UserConnectionState _connectionState;
-        private readonly Connection _authConnection;
-        private Connection _gameServerConnection;
-        private Connection _worldServerConnection;
         private byte[] _clientSerial=Array.Empty<byte>();
         public readonly uint UserID;
 
@@ -33,9 +30,6 @@ namespace ProjectCD.Objects.NetObjects
         {
             _connectionState = state;
         }
-
-        public void SetGameServerConnection(Connection connection){ _gameServerConnection = connection;}
-        public void SetWorldServerConnection(Connection connection) { _worldServerConnection = connection;}
 
         private void GenerateSerial()
         {

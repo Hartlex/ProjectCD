@@ -1,8 +1,7 @@
 ﻿using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttrProfiles;
 using SunStructs.Definitions;
-using static ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttrCalcType;
 using static ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttrValueType;
-using Attribute = ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.Attribute;
+
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 {
@@ -21,20 +20,23 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 
         public Attribute this[AttrType key] => _attributes[(int)key];
 
-        public int this[int key]
+        public ushort GetValue16(AttrType key)
         {
-            get => _attributes[key].GetValue();
-            set => _attributes[key][ABSOLUTE][BASE] = value;
+            return this[key].GetValue16();
         }
-        public int GetValue(AttrType key)
+        public uint GetValue32(AttrType key)
         {
-            return this[key].GetValue();
+            return this[key].GetValue32();
+        }
+        public void SetBaseValue(AttrType key, ushort value)
+        {
+            _attributes[(int) key].SetValue(value);
+        }
+        public void SetBaseValue(AttrType key, uint value)
+        {
+            _attributes[(int)key].SetValue(value);
         }
 
-        public void SetBaseValue(AttrType key, int value)
-        {
-            _attributes[(int) key][ABSOLUTE][BASE] = value;
-        }
         public void Update()
         {
             foreach (var attribute in _attributes)

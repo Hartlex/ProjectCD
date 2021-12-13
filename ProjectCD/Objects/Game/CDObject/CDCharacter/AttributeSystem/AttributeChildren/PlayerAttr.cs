@@ -15,9 +15,5 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
 
         }
 
-        public void InitFromCharInfo(FullCharacterInfo info)
-        {
-
-        }
     }
 }

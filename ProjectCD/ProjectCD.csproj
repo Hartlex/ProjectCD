@@ -16,4 +16,8 @@
     <ProjectReference Include="..\SunStructs\SunStructs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Objects\Game\Quest\" />
+  </ItemGroup>
+
 </Project>

@@ -17,7 +17,7 @@ namespace SunStructs.PacketInfos.Auth.Server
             buffer.WriteByte((byte)_serverInfos.Length);
             foreach (var serverInfo in _serverInfos)
             {
-                buffer.WriteBlock(serverInfo.GetBytes());
+                serverInfo.GetBytes(ref buffer);
             }
         }
     }

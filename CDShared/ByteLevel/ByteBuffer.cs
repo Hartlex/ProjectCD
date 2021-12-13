@@ -195,10 +195,28 @@ namespace CDShared.ByteLevel
         {
             MergeArrays(value);
         }
-        public void WriteString(string value,int length)
+        public void WriteBlock(byte[] bytes, int offset, int size)
         {
-            var data = new byte[length];
-            Buffer.BlockCopy(Encoding.ASCII.GetBytes(value),0,data,0,value.Length);
+            byte[] data = new byte[size];
+            Buffer.BlockCopy(bytes, offset, data, 0, size);
+            MergeArrays(data);
+        }
+        public void WriteString(string value,int length,bool includeSize=false)
+        {
+            byte[] data;
+            var offset = 0;
+            if (includeSize)
+            {
+                data = new byte[length+1];
+                data[0] = (byte)length;
+                offset = 1;
+            }
+            else
+            {
+                data = new byte[length];
+            }
+  
+            Buffer.BlockCopy(Encoding.ASCII.GetBytes(value),0,data,offset,value.Length);
             MergeArrays(data);
         }
         public void WriteBool(bool value)
@@ -301,6 +319,19 @@ namespace CDShared.ByteLevel
             _head += length;
             return Encoding.ASCII.GetString(ByteUtils.CutTail(bytes));
         }
+        #endregion
+
+        #region InsertMethods
+
+        public void InsertByte(byte b)
+        {
+            var data = new byte[_data.Length + 1];
+            Buffer.BlockCopy(_data, 0,data,1,_data.Length);
+            data[0] = b;
+            _head++;
+            _data = data;
+        }
+
         #endregion
 
         #region PublicMethods

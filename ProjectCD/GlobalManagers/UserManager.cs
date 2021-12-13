@@ -14,9 +14,9 @@ namespace ProjectCD.GlobalManagers
     {
         private readonly Dictionary<uint, User> _activeUsers = new();
 
-        public User CreateUser(Connection authConnection,uint userID)
+        public User CreateUser(uint userID)
         {
-            var user = new User(userID, authConnection);
+            var user = new User(userID);
             AddUser(user,AddUserType.CREATION);
             return user;
         }

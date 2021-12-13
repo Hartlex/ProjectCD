@@ -53,6 +53,7 @@ namespace ProjectCD.NetworkBase.General
             catch (Exception e)
             {
                 Logger.Instance.Log("Connection closed unexpectedly!");
+                Logger.Instance.Log(e);
             }
 
         }

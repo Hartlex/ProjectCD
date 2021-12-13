@@ -1,0 +1,18 @@
+//AI 타입별 파라미터																																		
+//수정일	오후 2:35 2009-03-18			3~20번까지 럭키몬스터 타입																														
+//최종수정자:	정동일																																	
+// AI 타입 코드		 BattleRecord 관련 변수들																		상태 주기 시간						거리 관련		 Help 상태	기타					
+//Version	1.0.0.5		"현, -10% 감소"	<- AICommonInfo 에 수치 값 연결												쓰면 안됨 차후 비율 타입으로 변경																		
+//1		소멸주기(전체 점수 계산 주기)	총점 감소주기	100/1								소멸 주기에 의해서 소멸가능				수치타임이며 낮은 체력 값		소멸 주기에 의해서 소멸가능																
+// 코드	주변타겟리스트를 갱신하는주기	어그로주기	업데이트주기	포인트를잊어먹을확률	타겟변경확률	버서커	드래곤	섀도우	발키리	엘리멘탈	선공포인트	거리포인트증감	거리포인트최대	레벨포인트증감	레벨포인트최대	체력포인트증감	체력포인트최대	데미지포인트증감	데미지포인트최대	탐색주기	후퇴주기	추적시간	Idle최소시간	Idle최대시간	도망시간	리젠영역	최대방황반지름	헬프요청체력조건	NPC HPMP 리젠주기	NPC SD 회복주기	최소도망시간	최대도망시간	도망후리젠시간	
+Code	SearchTargetTime	AggroTime	BattleUpdateTime	PointInitRandomRatio	TargetChangeRatio	ClassBasePoint1	ClassBasePoint2	ClassBasePoint3	ClassBasePoint4	ClassBasePoint5	FirstAttPoint	NearDistPointInc	NearDistPointMax	LowLevelPointInc	LowLevelPointMax	LowHPPointInc	LowHPPointMax	DamagePointInc	DamagePointMax	SearchPeriod	RetreatPeriod	TrackPeriod	IdleMinTime	IdleMaxTime	RunAwayTime	RegenLocationLimit	WanderRadiusFromRegenArea	HelpRequestHPPercent	NPCHpMpRegenPeriod	NPCSDRecoveryPeriod	LuckyMonsterRunawayTimeMin	LuckyMonsterRunawayTimeMax	LuckyMonsterRegenTime	FieldEnd
+1	3000	3000	500	15	100	10	15	15	25	20	50	25	250	15	150	0	0	70	700	1000	5000	700	4000	9000	5000	35	15	0.5	5000	2000	0	0	0	
+2	3000	3000	500	0	100	0	0	0	0	0	50	25	250	15	150	0	0	70	700	1000	5000	700	4000	9000	5000	50	30	0.5	2000	2000	0	0	0	
+//럭키몬스터구간																																		
+3	5000	5000	500	10	30	10	15	15	25	20	60	25	250	15	150	0	0	50	500	1000	5000	700	4000	9000	5000	50	30	0.5	2000	2000	420000	720000	600000	
+4	5000	5000	500	10	30	10	15	15	25	20	60	25	250	15	150	0	0	50	500	1000	5000	700	4000	9000	5000	50	30	0.5	2000	2000	300000	600000	600000	
+//저주받은탑PC형몬스터																																		
+5	3000	3000	500	5	20	10	15	15	25	20	65	25	250	15	150	0	0	75	250	1000	15000	1000	4000	9000	2000	50	50	0.5	2000	2000	0	0	0	
+6	3000	3000	500	5	20	10	15	15	25	20	65	25	250	15	150	0	0	75	250	1000	15000	1000	4000	9000	2000	50	50	0.5	2000	2000	0	0	0	
+7	3000	3000	500	5	20	10	15	15	25	20	65	25	250	15	150	0	0	75	250	1000	15000	1000	4000	9000	2000	50	50	0.5	2000	2000	0	0	0	
+8	3000	3000	500	5	20	10	15	15	25	20	65	25	250	15	150	0	0	75	250	1000	15000	1000	4000	9000	2000	50	50	0.5	2000	2000	0	0	0	

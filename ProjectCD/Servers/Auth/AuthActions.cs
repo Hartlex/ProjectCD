@@ -56,7 +56,7 @@ namespace ProjectCD.Servers.Auth
             var result = Database.Instance.CheckLoginInfo(info, out var userID);
             if (result == AUTH_RESULT_OK)
             {
-                var user = UserManager.Instance.CreateUser(connection, userID);
+                var user = UserManager.Instance.CreateUser(userID);
                 connection.OnLogin(user);
                 connection.AppendCloseHandler((con) =>
                 {

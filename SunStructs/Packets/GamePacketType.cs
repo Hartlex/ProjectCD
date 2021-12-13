@@ -8,7 +8,7 @@
     {
         //AUTH=51,
         CONNECTION=72,
-        CHARACTER=165,
+        CHAR_INFO=165,
         SYNC = 253,
         STATUS = 89,
         BATTLE = 60,

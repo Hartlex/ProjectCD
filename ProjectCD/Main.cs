@@ -15,6 +15,7 @@ namespace ProjectCD
         {
             ConfigManager.Instance.LoadConfigurations();
             Database.Instance.Initialize();
+            RuntimeDataBase.Instance.Initialize();
             ServerManager.Instance.Initialize();
             ActionManager.Instance.Initialize();
         }

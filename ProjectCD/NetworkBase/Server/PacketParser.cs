@@ -26,9 +26,21 @@ namespace ProjectCD.NetworkBase.Server
 #if DEBUG
             if (success)
             {
-                var id = typeof(T) == typeof(GamePacketType) ? "GAME" :
-                    typeof(T) == typeof(AuthPacketType) ? "AUTH" : "WORLD";
-                Logger.Instance.Log($"Action[{id}][{action.Method.Name}] registered!",LogType.FULL);
+                string id;
+                T typ = (T)Enum.ToObject(typeof(T), (int)type);
+                if (typeof(T) == typeof(GamePacketType))
+                {
+                    id = "GAME";
+                }
+                else if (typeof(T) == typeof(AuthPacketType))
+                {
+                    id = "AUTH";
+                }
+                else
+                {
+                    id = "WORLD";
+                }
+                Logger.Instance.Log($"Action[{id}][{typ}][{action.Method.Name}] registered!",LogType.FULL);
             }
 #endif
         }

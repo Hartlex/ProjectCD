@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 using CD.Network.Server.Config;
 using CDShared.Generics;
 using ProjectCD.GlobalManagers.Config;
+using ProjectCD.GlobalManagers.PacketParsers;
 using ProjectCD.NetworkBase.Connections;
 using ProjectCD.Objects.NetObjects;
 using ProjectCD.Servers.Auth;
 using ProjectCD.Servers.Game;
+using ProjectCD.Servers.World;
 using SunStructs.PacketInfos.Auth.Client;
 using SunStructs.PacketInfos.Auth.Server;
 using SunStructs.PacketInfos.Game.Connection;
+using SunStructs.PacketInfos.Game.Connection.Client;
 
 namespace ProjectCD.GlobalManagers
 {
@@ -21,6 +24,7 @@ namespace ProjectCD.GlobalManagers
     {
         private AuthServer? _authServer;
         private Dictionary<byte,List<GameServer>>? _gameServers;
+        private Dictionary<byte, WorldServer> _worldServers;
         private List<ServerInfo> _serverGroupInfo;
         private List<ChannelInfo> _channelInfos;
 
@@ -32,15 +36,17 @@ namespace ProjectCD.GlobalManagers
             _gameServers = new ();
             var configs = ConfigManager.Instance.GetGameServerConfigs();
             _serverGroupInfo = new (configs.Length);
+            _worldServers = new(configs.Length);
             _channelInfos = new();
             foreach (var config in configs)
             {
                 _gameServers.Add(config.GetId(),new ());
                 _serverGroupInfo.Add(new (config.GetName(),config.GetId()));
+                _worldServers.Add(config.GetId(),new WorldServer(new ServerConfig(config.GetIpEndPoint(),config.GetAcceptedSessions(),WorldPacketParser.Instance.ParsePacket)));
                 for(int i=0;i<config.GetChannelCount();i++)
                 {
                     var serverConfig = new ServerConfig(
-                        new IPEndPoint(config.GetIpEndPoint().Address, config.GetPort() + i),
+                        new IPEndPoint(config.GetIpEndPoint().Address, config.GetPort() + i+1),
                         config.GetAcceptedSessions(),
                         config.GetHandlePacket()
                     );
@@ -108,12 +114,12 @@ namespace ProjectCD.GlobalManagers
             if (!_gameServersWaitList.TryGetValue(info.UserId, out var server)) return false;
             if (!server.IsOnWaitList(info.ClientSerial, out user)) return false;
             if (!server.TryAddUser(user)) return false;
+            user.SetGameServer(server,connection);
             connection.AppendCloseHandler((con) =>
             {
                 server.RemoveUser(info.UserId);
             });
             _gameServersWaitList.Remove(user.UserID);
-            //user.SetGameServerConnection(connection);
             user.SetState(UserConnectionState.AT_CHAR_SELECT);
             connection.OnGameServerConnect(user);
             return true;

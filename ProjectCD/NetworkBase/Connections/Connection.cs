@@ -43,6 +43,13 @@ namespace ProjectCD.NetworkBase.Connections
                 new AsyncCallback(SendCallback), workSocket);
         }
 
+        public void Send(params Packet[] packets)
+        {
+            foreach (var packet in packets)
+            {
+                Send(packet);
+            }
+        }
         private void SendCallback(IAsyncResult ar)
         {
             try

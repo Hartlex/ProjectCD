@@ -7,15 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Packets\GameServerPackets\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CDShared\CDShared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PacketInfos\Game\Quest\Client\" />
+    <Folder Include="ServerInfos\General\Object\Items\" />
   </ItemGroup>
 
 </Project>

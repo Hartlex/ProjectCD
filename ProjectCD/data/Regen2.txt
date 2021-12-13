@@ -1,0 +1,13 @@
+//최종수정자:김태현		행	13	1120					//	헌팅은몬스터타입1			///5분확률:0.025															
+//	최초작성일2005년4월42일	열	1	28					//	필드는몬스터타입2			//리젠타임		12000													
+//	최종수정일:	28.05.2009																										
+//Version	0.0.0.1																											
+//		필드시작/끝	710	4220																								
+//																												
+//																												
+//	//몬스터스프레딩스크립트																											
+//					//좌표계번호가9900인경우해당맵에서랜덤하게등장하는몬스터이다.																			*파라미터추가!!!!!여기부터~				
+//	//번호	필드의설명	맵번호	세부맵번호	좌표계번호	배치몬스터타입	리젠우선순위	영역속성	리젠타임	리젠확률	그룹ID1	그룹ID2	그룹ID3	몬스터1코드	몬스터당최대	몬스터2코드	몬스터당최대	몬스터3코드	몬스터당최대	몬스터4코드	몬스터당최대	몬스터5코드	몬스터당최대	몬스터6코드	몬스터당최대	몬스터7코드	몬스터당최대	
+	Num	Desc	Mapcode	FieldIndex	LocationID	MonType	bAllRegen	byMoveAttitude	dRegenTime	fRegenRate	GroupID1	GroupID2	GroupID3	MonCode1	MaxRegenLimit1	MonCode2	MaxRegenLimit2	MonCode3	MaxRegenLimit3	MonCode4	MaxRegenLimit4	MonCode5	MaxRegenLimit5	MonCode6	MaxRegenLimit6	MonCode7	MaxRegenLimit7	FieldEnd
+//	필드부분.맵번호World.txt에서참고할것																											
+	10001	자피르호수	20004	20004	1108	2	0	0	5000	1	0	0	0	1	4	1	4	0	0	0	0	0	0	0	0	0	0	

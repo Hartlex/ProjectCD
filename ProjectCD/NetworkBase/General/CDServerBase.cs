@@ -25,5 +25,6 @@ namespace ProjectCD.NetworkBase.General
             return _config.GetIpEndPoint();
         }
 
+
     }
 }

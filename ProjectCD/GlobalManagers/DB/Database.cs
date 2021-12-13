@@ -3,6 +3,8 @@ using System.Data.SqlClient;
 using CDShared.Generics;
 using CDShared.Logging;
 using ProjectCD.GlobalManagers.Config;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
+using ProjectCD.Objects.NetObjects;
 using SunStructs.Definitions;
 using SunStructs.PacketInfos.Auth.Client;
 using SunStructs.PacketInfos.Game.Object.Character.Player;
@@ -346,20 +348,21 @@ namespace ProjectCD.GlobalManagers.DB
                 return false;
             }
         }
-        public CharacterResult CreateCharacter(uint userId, byte classCode, string charName, BaseCharacterRenderInfo renderInfo,
+        public CharCreateResult CreateCharacter(uint userId, byte classCode, string charName, BaseCharacterRenderInfo renderInfo,
             out ClientCharacterPart characterPart)
         {
             characterPart = null;
-            if (!IsCharNameFree(charName)) return CharacterResult.DB_CREATE_ERROR;
-            if (!TryGetCharSlot(userId, out int slot)) return CharacterResult.CREATE_ERROR;
-            if (!GetInitCharInfo(classCode, out var initCharInfo)) return CharacterResult.CREATE_ERROR;
+            if (!IsCharNameFree(charName)) return CharCreateResult.RC_CHAR_CREATE_DBCHAR_ALREADY_CREATED;
+            if (!TryGetCharSlot(userId, out int slot)) return CharCreateResult.RC_CHAR_CREATE_SLOT_FULL;
+            if (!GetInitCharInfo(classCode, out var initCharInfo)) return CharCreateResult.RC_CHAR_CREATE_TRANSACTION_ERROR;
             if (!InsertNewChar(userId, (byte) slot, charName, renderInfo, initCharInfo, out var charId))
-                return CharacterResult.CREATE_ERROR;
+                return CharCreateResult.RC_CHAR_CREATE_TRANSACTION_ERROR;
             return GetCharacterForCharSelect(userId, charId, out characterPart)
-                ? CharacterResult.CHAR_CREATE_SUCCESS
-                : CharacterResult.DB_CREATE_ERROR;
+                ? CharCreateResult.RC_CHAR_CREATE_SUCCESS
+                : CharCreateResult.RC_CHAR_CREATE_TRANSACTION_ERROR;
+
         }
-        public CharacterResult DeleteCharacter(uint userId, byte slot)
+        public CharDestroyResult DeleteCharacter(uint userId, byte slot)
         {
             try
             {
@@ -371,41 +374,41 @@ namespace ProjectCD.GlobalManagers.DB
                                          "[charSlot] = '" + slot + "'",
                     connection);
                 var rowsAffected = cmd.ExecuteNonQuery();
-                if (rowsAffected != 0) return CharacterResult.CHAR_DELETE_SUCCESS;
-                return CharacterResult.DESTROY_ERROR;
+                if (rowsAffected != 0) return CharDestroyResult.RC_CHAR_DESTROY_SUCCESS;
+                return CharDestroyResult.RC_CHAR_DESTROY_FAILED;
             }
             catch (SqlException e)
             {
                 Logger.Instance.Log(e);
-                return CharacterResult.DESTROY_ERROR;
+                return CharDestroyResult.RC_CHAR_DESTROY_FAILED;
             }
         }
-        //public Player GetPlayer(uint userId, byte charSlot)
-        //{
-        //    try
-        //    {
-        //        using var connection = new SqlConnection(_connectionString);
-        //        connection.Open();
-        //        var cmd = new SqlCommand("SELECT * FROM [dbo].[Character] " +
-        //                                 "WHERE [UserID] ='" + userId + "' AND " +
-        //                                 "[charSlot] = '" + charSlot + "' AND " +
-        //                                 "[DeleteCheck] = '0'"
-        //            , connection);
-        //        var reader = cmd.ExecuteReader();
-        //        while (reader.Read())
-        //        {
-        //            return new Player(ref reader);
-        //        }
+        public Player CreatePlayerFromDB(User user, byte charSlot)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+                connection.Open();
+                var cmd = new SqlCommand("SELECT * FROM [dbo].[Character] " +
+                                         "WHERE [UserID] ='" + user.UserID + "' AND " +
+                                         "[charSlot] = '" + charSlot + "' AND " +
+                                         "[DeleteCheck] = '0'"
+                    , connection);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    return new Player(ref reader,user);
+                }
 
-        //        return null;
-        //    }
-        //    catch (SqlException e)
-        //    {
-        //        Logger.Instance.Log(e);
-        //        return null;
-        //    }
+                return null;
+            }
+            catch (SqlException e)
+            {
+                Logger.Instance.Log(e);
+                return null;
+            }
 
-        //}
+        }
         public void UpdatePlayerPosition(uint userId, uint charId, SunVector position)
         {
             try

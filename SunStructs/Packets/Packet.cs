@@ -13,11 +13,11 @@ namespace SunStructs.Packets
         private readonly byte _packetSubType;
         private readonly byte[] _data;
 
-        protected Packet(byte gamePacketType, byte packetSubType, ServerPacketInfo serverPacketStruct)
+        protected Packet(byte gamePacketType, byte packetSubType, ServerPacketInfo serverInfo)
         {
             _packetType = gamePacketType;
             _packetSubType = packetSubType;
-            _data = serverPacketStruct.GetBytes();
+            _data = serverInfo.GetBytes();
         }
         
         public byte[] GetBytes()
@@ -34,17 +34,24 @@ namespace SunStructs.Packets
 
     public class GameServerPacket : Packet
     {
-        public GameServerPacket(GamePacketType gamePacketType, byte packetSubType, ServerPacketInfo serverPacketStruct) : 
-            base((byte)gamePacketType,packetSubType, serverPacketStruct) { }
+        public GameServerPacket(GamePacketType gamePacketType, byte packetSubType, ServerPacketInfo serverInfo) : 
+            base((byte)gamePacketType,packetSubType, serverInfo) { }
     }
     public class WorldServerPacket : Packet
     {
-        public WorldServerPacket(WorldPacketType worldPacketType, byte packetSubType, ServerPacketInfo serverPacketStruct) : 
-            base((byte)worldPacketType, packetSubType, serverPacketStruct) { }
+        public WorldServerPacket(WorldPacketType worldPacketType, byte packetSubType, ServerPacketInfo serverInfo) : 
+            base((byte)worldPacketType, packetSubType, serverInfo) { }
     }
     public class AuthServerPacket : Packet
     {
-        public AuthServerPacket(AuthPacketType autPacketType, byte packetSubType, ServerPacketInfo serverPacketStruct) : 
-            base((byte)autPacketType, packetSubType, serverPacketStruct) { }
+        public AuthServerPacket(AuthPacketType autPacketType, byte packetSubType, ServerPacketInfo serverInfo) : 
+            base((byte)autPacketType, packetSubType, serverInfo) { }
+    }
+
+    public class TestPacket : Packet
+    {
+        public TestPacket(byte gamePacketType, byte packetSubType, TestPacketInfo serverInfo) : base(gamePacketType, packetSubType, serverInfo)
+        {
+        }
     }
 }

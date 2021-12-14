@@ -5,15 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using CDShared.ByteLevel;
 using SunStructs.Definitions;
+using SunStructs.ServerInfos.General.Object.Items;
 
 namespace ProjectCD.Objects.Game.Items
 {
     internal class Item
     {
         private ushort _itemCode;
-        private byte _durability; //amount
+        private int _durability; //amount
         private ItemParseType _type;
         private ItemOption _option;
+        private readonly BaseItemInfo _info;
         public Item(ref ByteBuffer buffer)
         {
             _itemCode = buffer.ReadUInt16();
@@ -21,7 +23,20 @@ namespace ProjectCD.Objects.Game.Items
             _type = (ItemParseType)buffer.ReadByte();
             _option = new (ref buffer);
         }
+        public Item(BaseItemInfo info)
+        {
+            _info = info;
+            _durability = info.Durability;
+            _type = ItemParseType.EQUIP;
+            _option = new ItemOption();
+        }
 
+        public byte[] GetBytes(ItemByteType type = ItemByteType.MAX)
+        {
+            var buffer = new ByteBuffer();
+            GetBytes(ref buffer,type);
+            return buffer.GetData();
+        }
         public void GetBytes(ref ByteBuffer buffer, ItemByteType type =ItemByteType.MAX)
         {
             switch (type)
@@ -50,54 +65,41 @@ namespace ProjectCD.Objects.Game.Items
         {
             return _type == ItemParseType.EQUIP;
         }
-    }
 
-    internal class ItemOption
-    {
-        private ulong _option1;
-        private uint _option2;
-        private uint _option3;
-        private uint _option4;
-        private byte[] _unkOption;
-
-        public ItemOption(ref ByteBuffer buffer)
+        public ushort GetItemId()
         {
-            var mask = new byte[8];
-            var bytes = buffer.ReadBlock(6);
-            Buffer.BlockCopy(bytes, 0, mask, 0, 6);
-            _option1 = BitConverter.ToUInt64(mask);
-            _option2 = buffer.ReadUInt32();
-            _option3 = buffer.ReadUInt32();
-            _option4 = buffer.ReadUInt32();
-            _unkOption = buffer.ReadBlock(5);
+            return _itemCode;
         }
-
-        public void GetBytes(ref ByteBuffer buffer, ItemByteType type = ItemByteType.MAX)
+        public void SetAmount(byte value)
         {
-            switch (type)
-            {
-                case ItemByteType.MIN:
-                    break;
-                case ItemByteType.TWENTY:
-                    var b2 = BitConverter.GetBytes(_option1);
-                    buffer.WriteBlock(b2, 0, 6);
-                    buffer.WriteUInt32(_option2);
-                    buffer.WriteUInt32(_option3);
-                    var b3 = BitConverter.GetBytes(_option4);
-                    buffer.WriteBlock(b3, 0, 2);
-                    break;
-                case ItemByteType.MAX:
-                    var b = BitConverter.GetBytes(_option1);
-                    buffer.WriteBlock(b, 0, 6);
-                    buffer.WriteUInt32(_option2);
-                    buffer.WriteUInt32(_option3);
-                    buffer.WriteUInt32(_option4);
-                    buffer.WriteBlock(_unkOption);
-                    return;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            _durability = value;
+        }
+        public int GetAmount()
+        {
+            return _durability;
+        }
+        public byte GetStackNumber()
+        {
+            return _info.DupNumber;
+        }
+        public bool IsStackable()
+        {
+            return _info.DupNumber > 1;
+        }
+        public bool IncreaseAmount(int value)
+        {
+            if (_durability + value > GetStackNumber()) return false;
+            _durability += value;
+            return true;
 
         }
+        public bool DecreaseAmount(int value)
+        {
+            if (_durability < value) return false;
+            _durability -= value;
+            return true;
+        }
+
+
     }
 }

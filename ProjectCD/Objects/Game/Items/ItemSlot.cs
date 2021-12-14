@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.ByteLevel;
+using SunStructs.PacketInfos.Game.Item.Server;
 
 namespace ProjectCD.Objects.Game.Items
 {
     internal class ItemSlot
     {
-        private readonly int _pos;
+        public readonly int Pos;
         private Item? _item;
 
         public ItemSlot(int pos)
         {
-            _pos = pos;
+            Pos = pos;
         }
 
         public void SetItem(Item? item)
@@ -53,8 +54,17 @@ namespace ProjectCD.Objects.Game.Items
         }
         public void GetBytes(ref ByteBuffer buffer,ItemByteType type =ItemByteType.MAX)
         {
-            buffer.WriteByte((byte)_pos);
+            buffer.WriteByte((byte)Pos);
             _item!.GetBytes(ref buffer,type);
+        }
+
+        public ushort GetCode()
+        {
+            return _item!.GetItemId();
+        }
+        public ItemSlotInfo GetItemSlotInfo()
+        {
+            return new ((byte)Pos, _item.GetBytes());
         }
     }
 

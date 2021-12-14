@@ -346,7 +346,7 @@ namespace SunStructs.Definitions
 
     }; //end of enum eATTR_TYPE
 
-    enum AttackType
+    public enum AttackType
     {
         ATTACK_TYPE_ALL_OPTION = 0, // ¸ðµç ¿É¼Ç
         ATTACK_TYPE_MELEE = 1, // ¹°¸®(±Ù°Å¸®)
@@ -384,4 +384,144 @@ namespace SunStructs.Definitions
         CHAR_WITCHBLADE = 8, //_NA_007514_20140828_NEW_CHARACTER_WITCHBLADE
         CHAR_TYPE_MAX,
     };
+
+    public enum SlotContainerIndex
+    {
+        SI_TEMPINVENTORY = 0,
+        SI_INVENTORY,
+        SI_EQUIPMENT,
+        SI_WAREHOUSE,
+        SI_SKILL,
+        SI_QUICK,
+        SI_STYLE,
+        SI_GUILDWAREHOUSE,
+        SI_MAX, 
+        SI_EVENT_INVENTORY,
+    }
+    public enum WeaponType
+    {
+        WEAPONTYPE_INVALID = 0,
+        WEAPONTYPE_TWOHANDAXE = 1,
+        WEAPONTYPE_TWOHANDSWORD = 2,
+        WEAPONTYPE_ONEHANDSWORD = 3,
+        WEAPONTYPE_SPEAR = 4,
+        WEAPONTYPE_WHIP = 5,
+        WEAPONTYPE_ETHERCLAW = 6,
+        WEAPONTYPE_ONEHANDCROSSBOW = 7,
+        WEAPONTYPE_ETHERWEAPON = 8,
+        WEAPONTYPE_STAFF = 10,
+        WEAPONTYPE_ORB = 11,
+        WEAPONTYPE_PUNCH = 13
+    };
+    public enum ItemMaterialType
+    {
+        ITEM_MATERIAL_TYPE_NOT_USE_AND_EQUIP = 0,
+        ITEM_MATERIAL_TYPE_CAN_EQUIP,
+        ITEM_MATERIAL_TYPE_CAN_USE,
+        ITEM_MATERIAL_TYPE_CAN_BOTH
+    };
+    public enum EquipContainerPos
+    {
+        EQUIPCONTAINER_WEAPON = 0,
+        EQUIPCONTAINER_ARMOR = 1,
+        EQUIPCONTAINER_PROTECTOR = 2,
+        EQUIPCONTAINER_HELMET = 3,
+        EQUIPCONTAINER_PANTS = 4,
+        EQUIPCONTAINER_BOOTS = 5,
+        EQUIPCONTAINER_GLOVE = 6,
+        EQUIPCONTAINER_BELT = 7,
+        EQUIPCONTAINER_SHIRTS = 8,
+        EQUIPCONTAINER_RING1 = 9,
+        EQUIPCONTAINER_RING2 = 10,
+        EQUIPCONTAINER_NECKLACE = 11,
+        EQUIPCONTAINER_MAX,
+        EQUIPCONTAINER_INVALID = 99
+    };
+
+    public enum ItemType
+    {
+        ITEMTYPE_INVALID = 0,
+        ITEMTYPE_TWOHANDAXE = 1,
+        ITEMTYPE_TWOHANDSWORD = 2,
+        ITEMTYPE_ONEHANDSWORD = 3,
+        ITEMTYPE_SPEAR = 4,
+        ITEMTYPE_WHIP = 5,
+        ITEMTYPE_ETHERCLAW = 6,
+        ITEMTYPE_ONEHANDCROSSBOW = 7,
+        ITEMTYPE_ETHERWEAPON = 8,
+        ITEMTYPE_SCIMITAR = 9,
+        ITEMTYPE_STAFF = 10,
+        ITEMTYPE_ORB = 11,
+
+        ITEMTYPE_PUNCH = 13,
+        ITEMTYPE_ARMOR = 101,
+        ITEMTYPE_PROTECTOR = 201,
+        ITEMTYPE_HELMET = 301,
+        ITEMTYPE_PANTS = 401,
+        ITEMTYPE_BOOTS = 501,
+        ITEMTYPE_GLOVE = 601,
+        ITEMTYPE_BELT = 701,
+        ITEMTYPE_SHIRTS = 801,
+        ITEMTYPE_RING = 811,
+        ITEMTYPE_NECKLACE = 821,
+        ITEMTYPE_BERSERKER_SACCESSORY = 831,
+        ITEMTYPE_DRAGON_SACCESSORY = 841,
+        ITEMTYPE_VALKYRIE_SACCESSORY = 851,
+        ITEMTYPE_SHADOW_SACCESSORY = 861,
+        ITEMTYPE_ELEMENTALIST_SACCESSORY = 871,
+
+        ITEMTYPE_WASTE = 911,
+        ITEMTYPE_ENCHANT = 921,
+        ITEMTYPE_CRYSTAL = 931,
+        ITEMTYPE_SOCKET = 941,
+        ITEMTYPE_ARROW = 951,
+        
+        ITEMTYPE_SOCKETMATERIAL = 961,
+        ITEMTYPE_ACCESSORYMATERIAL = 971,
+        ITEMTYPE_SACCESSORYMATERIAL = 981,
+        ITEMTYPE_TELEPORT = 986,
+        ITEMTYPE_BILL = 1000
+    };
+
+    public enum WasteType
+    {
+        ITEMWASTE_HPPOTION = 1,
+        ITEMWASTE_MPPOTION = 2,
+        ITEMWASTE_MOVE_SPEED_INC = 3,
+        ITEMWASTE_BASE_PHYSICAL_ATTACKPWR_INC = 4,
+        ITEMWASTE_BASE_MAGICAL_ATTACKPWR_INC = 5,
+        ITEMWASTE_BASE_PHYSICAL_DEFENSEPWR_INC = 6,
+        ITEMWASTE_BASE_MAGICAL_DEFENSEPWR_INC = 7
+    };
+    public enum ItemCompositeCode
+    {
+        ITEMCOMPOSITE_NONE = 0,
+        ITEMCOMPOSITE_LOW_ENCHANT = 1,
+        ITEMCOMPOSITE_MEDIUM_ENCHANT = 2,
+        ITEMCOMPOSITE_HIGH_ENCHANT = 3,
+        ITEMCOMPOSITE_RANK_DOWN = 4,
+        ITEMCOMPOSITE_EXTRACT_SOCKET = 6,
+        ITEMCOMPOSITE_ADD_SOCKET = 7,
+        ITEMCOMPOSITE_LOW_RING = 8,
+        ITEMCOMPOSITE_HIGH_RING = 9,
+        ITEMCOMPOSITE_LOW_NECKLACE = 10,
+        ITEMCOMPOSITE_HIGH_NECKLACE = 11
+    };
+    public enum ItemSubType
+    {
+        NORMAL,
+        ELITE,
+        UNIQUE
+    }
+    public enum ArmorType
+    {
+        ARMOR_HARD = 1,
+        ARMOR_MEDIUM,
+        ARMOR_SOFT,
+        ARMOR_SIEGE,
+        ARMOR_UNARMOR,
+
+        ARMOR_TYPE_MAX
+    };
 }
+    

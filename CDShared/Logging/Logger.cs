@@ -50,6 +50,15 @@ namespace CDShared.Logging
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
+
+        public void LogOnLine(string msg, LogType type = LogType.INFO)
+        {
+            if (type <= _type)
+            {
+                Console.ForegroundColor = GetColor(type);
+                Console.Write("\r " +msg);
+            }
+        }
     }
     public enum LogType
     { 

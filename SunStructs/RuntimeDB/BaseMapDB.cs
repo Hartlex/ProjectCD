@@ -11,9 +11,9 @@ namespace SunStructs.RuntimeDB
 
         public void Init(string dataFolderPath)
         {
-
             var parser = new BaseMapParser();
             _baseMapInfos = parser.ParseBaseMapInfos(dataFolderPath);
+            Logger.Instance.LogOnLine($"{_baseMapInfos.Count} FieldInfos loaded!\n", LogType.SUCCESS);
         }
 
         public BaseFieldInfo GetMapInfo(uint mapId)

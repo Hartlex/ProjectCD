@@ -164,6 +164,11 @@ namespace CDShared.ByteLevel
             var bytes = new[] { value };
             MergeArrays(bytes);
         }
+        public void WriteByte(int value)
+        {
+            var bytes = new[] { (byte)value };
+            MergeArrays(bytes);
+        }
         public void WriteSByte(sbyte value)
         {
             var bytes = BitConverter.GetBytes(value);

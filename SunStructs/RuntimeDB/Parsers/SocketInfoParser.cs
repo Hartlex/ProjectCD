@@ -1,27 +1,27 @@
-﻿using CDShared.Logging;
-using SunStructs.ServerInfos.General.World;
+﻿using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
 
 namespace SunStructs.RuntimeDB.Parsers
 {
-    public class BaseMapParser
+    class SocketInfoParser
     {
-        private readonly Dictionary<uint, BaseFieldInfo> _baseMapInfos = new();
-
-        public Dictionary<uint, BaseFieldInfo> ParseBaseMapInfos(string dataFolderPath)
+        private Dictionary<ushort, SocketItemOption> _socketItemOptions = new();
+        
+        public Dictionary<ushort, SocketItemOption> ParseAllOptions(string dataFolderPath)
         {
-            var lines = ReadAllLines(dataFolderPath+"\\World.txt");
+            var lines = ReadAllLines(dataFolderPath+"\\SocketOptionInfo.txt");
             foreach (var line in lines)
             {
                 ParseLine(line);
             }
 
-            return _baseMapInfos;
+            return _socketItemOptions;
         }
+        
         private List<string> ReadAllLines(string path)
         {
             var allLines = File.ReadAllLines(path);
             List<string> noCommentLines = new List<string>();
-            for (var i = 15; i < allLines.Length; i++)
+            for (var i = 3; i < allLines.Length; i++)
             {
                 var line = allLines[i];
                 if (!line.StartsWith("//")) noCommentLines.Add(line);
@@ -33,13 +33,8 @@ namespace SunStructs.RuntimeDB.Parsers
         private void ParseLine(string line)
         {
             var info = line.Split('\t');
-            if (info[1].StartsWith("//")) return;
-            var mapInfo = new BaseFieldInfo(info);
-            _baseMapInfos.Add(mapInfo.MapCode,mapInfo);
-#if DEBUG
-            Logger.Instance.LogOnLine($"Loaded FieldInfo[{mapInfo.MapCode}]");
-#endif
+            var socketItemOption = new SocketItemOption(info);
+            _socketItemOptions.Add(socketItemOption.SocketItemCode,socketItemOption);
         }
-
     }
 }

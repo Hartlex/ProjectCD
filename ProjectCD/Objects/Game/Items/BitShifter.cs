@@ -43,7 +43,7 @@ namespace ProjectCD.Objects.Game.Items
             var result = new List<byte>();
             int shiftCount = 0;
             int itemCount = 0;
-            for (byte i = 0; i < container.GetMaxSlotNum(); i++)
+            for (int i = 0; i < container.GetMaxSlotNum(); i++)
             {
                 var slot = container.GetSlot(i);
                 if (slot.IsEmpty()) continue;

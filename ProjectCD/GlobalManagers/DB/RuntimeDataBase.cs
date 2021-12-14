@@ -11,7 +11,7 @@ namespace ProjectCD.GlobalManagers.DB
         {
             var dataFolderPath = ConfigurationManager.AppSettings["dataPath"];
             //StringDB.Instance.Init(dataFolderPath);
-            //BaseItemDB.Instance.Init(dataFolderPath);
+            BaseItemDB.Instance.Init(dataFolderPath);
             //BaseSkillDB.Instance.Init(dataFolderPath);
             //BaseNpcDB.Instance.Init(dataFolderPath);
             BaseMapDB.Instance.Init(dataFolderPath);

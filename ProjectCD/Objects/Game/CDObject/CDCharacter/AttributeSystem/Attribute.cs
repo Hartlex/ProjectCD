@@ -24,7 +24,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             return (ushort) _values[(int) CALC];
         }
 
-        public int GetValues(AttrValueType type = CALC)
+        public int GetValue(AttrValueType type = CALC)
         {
             return _values[(int)CALC];
         }

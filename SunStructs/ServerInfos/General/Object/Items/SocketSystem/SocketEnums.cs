@@ -21,9 +21,5 @@ namespace SunStructs.ServerInfos.General.Object.Items.SocketSystem
         SOCKET_3,
         SOCKET_MAX,
     };
-    public enum NumericType
-    {
-        TYPE_NUMERIC = 1,
-        TYPE_PERCENTAGE = 2,
-    };
+
 }

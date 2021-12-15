@@ -98,7 +98,13 @@ namespace SunStructs.Definitions
         SYNC_MERCHANT_OBJECT = (MONSTER_OBJECT | (1 << 24)),   // _NA_0_20100222_UNIT_TRIGGERS_REGEN
         MAX_OBJECT = (1 << 31),
     };
-
+    public enum AttrValueKind
+    {
+        VALUE_TYPE_VALUE = 1,   // °íÁ¤ ¼öÄ¡
+        VALUE_TYPE_PERCENT_PER_CUR = 2, // ÇöÀçÄ¡ ´ëºñ ºñÀ²
+        VALUE_TYPE_PERCENT_PER_MAX = 3, // ÃÖ´ëÄ¡ ´ëºñ ºñÀ²
+        VALUE_TYPE_RATIO_VALUE = 5, // ¼öÄ¡°¡ ºñÀ²°ªÀÎ °æ¿ì(ÀÌµ¿¼ÓµµÀ²)
+    };
     public enum AttrType
     {
         ATTR_TYPE_INVALID = 0,                         // À¯È¿ÇÏÁö ¾Ê´Â ¼Ó¼º

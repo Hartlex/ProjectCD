@@ -15,5 +15,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
 
         }
 
+        public void UpdateEx()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

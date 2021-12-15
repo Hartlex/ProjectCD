@@ -28,6 +28,19 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         {
             return _values[(int)CALC];
         }
+
+        public void AddValue(int value, AttrValueType type = BASE)
+        {
+            _values[(int) type] += value;
+        }
+        public void SubtractValue(int value, AttrValueType type = BASE)
+        {
+            _values[(int)type] -= value;
+        }
+        public void SetValue(int value, AttrValueType type = BASE)
+        {
+            _values[(int) type] = value;
+        }
         public void SetValue(ushort value,AttrValueType type = BASE)
         {
             _values[(int) type] = value;

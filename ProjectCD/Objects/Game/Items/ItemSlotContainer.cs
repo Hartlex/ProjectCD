@@ -5,12 +5,12 @@ namespace ProjectCD.Objects.Game.Items
 {
     internal class ItemSlotContainer
     {
-        private Player _owner;
+        protected Player Owner;
         private readonly Dictionary<int, ItemSlot> _slots;
 
         public ItemSlotContainer(int count, byte[] data, Player owner)
         {
-            _owner = owner;
+            Owner = owner;
 
             _slots = new (count);
             for (int i = 0; i < count; i++)
@@ -40,7 +40,9 @@ namespace ProjectCD.Objects.Game.Items
             for (int i = 0; i < filledSlotCount; i++)
             {
                 var pos = buffer.ReadByte();
-                _slots[pos].SetItem(ref buffer);
+                var item = new Item(ref buffer);
+                //_slots[pos].SetItem(ref buffer);
+                InsertItem(item, pos, true);
             }
         }
 

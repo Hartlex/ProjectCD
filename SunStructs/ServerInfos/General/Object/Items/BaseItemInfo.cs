@@ -1,6 +1,7 @@
 ﻿using SunStructs.Definitions;
 using static SunStructs.Definitions.EquipContainerPos;
 using static SunStructs.Definitions.ItemMaterialType;
+using static SunStructs.Definitions.ItemType;
 
 namespace SunStructs.ServerInfos.General.Object.Items
 {
@@ -227,6 +228,11 @@ namespace SunStructs.ServerInfos.General.Object.Items
         {
             return EquipPosition == EQUIPCONTAINER_WEAPON;
         }
+
+        public bool IsEquipment()
+        {
+            return IsWeapon() || IsArmor() || IsAccessory() || IsSpecialAccessory();
+        }
         public bool IsArmor()
         {
             return (
@@ -237,15 +243,21 @@ namespace SunStructs.ServerInfos.General.Object.Items
         }
         public bool IsAccessory()
         {
-            return (EquipPosition == EQUIPCONTAINER_RING1 || EquipPosition == EQUIPCONTAINER_RING2 || EquipPosition == EQUIPCONTAINER_NECKLACE);
+            return IsRing() || IsNecklace();
+        }
+
+        public bool IsSpecialAccessory()
+        {
+            return ItemType is ITEMTYPE_BERSERKER_SACCESSORY or ITEMTYPE_DRAGON_SACCESSORY or
+                ITEMTYPE_ELEMENTALIST_SACCESSORY or ITEMTYPE_SHADOW_SACCESSORY or ITEMTYPE_VALKYRIE_SACCESSORY;
         }
         public bool IsRing()
         {
-            return EquipPosition == EQUIPCONTAINER_RING1 || EquipPosition == EQUIPCONTAINER_RING2;
+            return ItemType is ITEMTYPE_RING or ITEMTYPE_RING;
         }
         public bool IsNecklace()
         {
-            return EquipPosition == EQUIPCONTAINER_NECKLACE;
+            return ItemType == ITEMTYPE_NECKLACE;
         }
         public bool IsCanUserWaste()
         {
@@ -284,6 +296,16 @@ namespace SunStructs.ServerInfos.General.Object.Items
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public bool IsElite()
+        {
+            return SubType is ItemSubType.ELITE;
+        }
+
+        public bool IsUnique()
+        {
+            return SubType is ItemSubType.UNIQUE;
         }
     }
 }

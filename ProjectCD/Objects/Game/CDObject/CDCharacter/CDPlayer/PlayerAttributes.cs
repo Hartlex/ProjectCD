@@ -94,6 +94,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
         public ushort GetExpert1(){ return _attributes[ATTR_EXPERTY1].GetValue16(); }
         public ushort GetExpert2(){ return _attributes[ATTR_EXPERTY2].GetValue16(); }
-        
+
+        public PlayerAttr GetAttributes()
+        {
+            return _attributes;
+        }
     }
 }

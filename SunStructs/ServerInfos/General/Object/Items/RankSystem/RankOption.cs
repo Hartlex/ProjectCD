@@ -163,8 +163,8 @@ namespace SunStructs.ServerInfos.General.Object.Items.RankSystem
         public readonly AttrType AttrType;
         public readonly string OptionName;
         public readonly uint OptionNameCode;
-        public readonly uint NumericType;
-        public readonly uint[] RankValues;
+        public readonly AttrValueKind ValueKind;
+        public readonly int[] RankValues;
         public RankOption(string[] info)
         {
             var sb = new StringBuffer(info);
@@ -173,11 +173,11 @@ namespace SunStructs.ServerInfos.General.Object.Items.RankSystem
             AttrType = _attrTypes[sb.ReadInt()];
             OptionName = sb.ReadString();
             OptionNameCode = sb.ReadUint();
-            NumericType = sb.ReadUint();
-            RankValues = new uint[9];
+            ValueKind = (AttrValueKind) sb.ReadByte();
+            RankValues = new int[9];
             for (int i = 0; i < 9; i++)
             {
-                RankValues[i] = sb.ReadUint();
+                RankValues[i] = sb.ReadInt();
             }
         }
 

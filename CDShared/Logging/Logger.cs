@@ -56,6 +56,7 @@ namespace CDShared.Logging
             if (type <= _type)
             {
                 Console.ForegroundColor = GetColor(type);
+                Console.Write("\r                                                              ");
                 Console.Write("\r " +msg);
             }
         }

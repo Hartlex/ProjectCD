@@ -8,8 +8,8 @@ namespace SunStructs.ServerInfos.General.Object.Items.EnchantSystem
 {
     public enum EnchantGrade
     {
-        ENCHANT_ERR_LV = 0,
-        ENCHANT_LV0 = (1 << 0),
+        //ENCHANT_ERR_LV = 0,
+        ENCHANT_LV0 = 0,
         ENCHANT_LV1 = (1 << 1),
         ENCHANT_LV2 = (1 << 2),
         ENCHANT_LV3 = (1 << 3),

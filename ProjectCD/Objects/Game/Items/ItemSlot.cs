@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.ByteLevel;
+using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Item.Server;
+using SunStructs.ServerInfos.General.Object.Items;
+using SunStructs.ServerInfos.General.Object.Items.RankSystem;
+using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
 
 namespace ProjectCD.Objects.Game.Items
 {
@@ -65,6 +69,26 @@ namespace ProjectCD.Objects.Game.Items
         public ItemSlotInfo GetItemSlotInfo()
         {
             return new ((byte)Pos, _item.GetBytes());
+        }
+
+        public RankInfo[]? GetRankValues()
+        {
+            return _item?.GetRankValues();
+        }
+
+        public SocketInfo[]? GetSockets()
+        {
+            return _item.GetSockets();
+        }
+
+        public BaseItemInfo? GetBaseInfo()
+        {
+            return _item?.GetBaseInfo();
+        }
+
+        public byte GetEnchant()
+        {
+            return _item!.GetEnchant();
         }
     }
 

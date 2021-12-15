@@ -9,6 +9,7 @@ namespace ProjectCD.GlobalManagers.DB
     {
         public void Initialize()
         {
+            Logger.Instance.Log("\nLoading Runtime DB...", LogType.SUCCESS);
             var dataFolderPath = ConfigurationManager.AppSettings["dataPath"];
             //StringDB.Instance.Init(dataFolderPath);
             BaseItemDB.Instance.Init(dataFolderPath);
@@ -17,7 +18,8 @@ namespace ProjectCD.GlobalManagers.DB
             BaseMapDB.Instance.Init(dataFolderPath);
             //PortalDB.Instance.Init(dataFolderPath);
             //AreaDB.Instance.Init(dataFolderPath);
-            //RankOptionDB.Instance.Init(dataFolderPath);
+            RankOptionDB.Instance.Init(dataFolderPath);
+            SocketOptionDB.Instance.Init(dataFolderPath);
             //StateInfoDB.Instance.Init(dataFolderPath);
             //NpcShopDB.Instance.Init(dataFolderPath);
             //EnchantInfoDB.Instance.Init(dataFolderPath);
@@ -29,7 +31,8 @@ namespace ProjectCD.GlobalManagers.DB
             //DropRatioInfoDB.Instance.Init(dataFolderPath);
             //AiParameterDb.Instance.Init(dataFolderPath);
             //MissionInfoDB.Instance.Init(dataFolderPath);
-            Logger.Instance.Log("Runtime DB initialized!",LogType.SUCCESS);
+            SetInfoDB.Instance.Init(dataFolderPath);
+            Logger.Instance.Log("Runtime DB initialized!\n",LogType.SUCCESS);
         }
     }
 }

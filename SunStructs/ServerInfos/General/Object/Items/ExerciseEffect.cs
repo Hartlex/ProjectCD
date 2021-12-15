@@ -1,21 +1,23 @@
-﻿namespace SunStructs.ServerInfos.General.Object.Items
+﻿using SunStructs.Definitions;
+
+namespace SunStructs.ServerInfos.General.Object.Items
 {
     /// <summary>
     /// I have no idea what this is for
     /// </summary>
     public class ExerciseEffect
     {
-        public ushort EffectCode;
-        public ushort OptionType;
-        public ushort OptionKind;
-        public int OptionValue;
+        public byte Exercise;
+        public AttrInfo AttrInfo;
 
         public ExerciseEffect(ref string[] info, int start)
         {
-            EffectCode = ushort.Parse(info[start]);
-            OptionType = ushort.Parse(info[start+1]);
-            OptionKind = ushort.Parse(info[start+2]);
-            OptionValue = int.Parse(info[start+3]);
+            Exercise = byte.Parse(info[start]);
+            AttrInfo = new AttrInfo(
+                (AttrType) byte.Parse(info[start + 1]),
+                (AttrValueKind) byte.Parse(info[start + 2]),
+                int.Parse(info[start + 3])
+            );
         }
     }
 }

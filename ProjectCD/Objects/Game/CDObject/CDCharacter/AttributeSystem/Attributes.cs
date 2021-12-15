@@ -136,7 +136,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         {
             foreach (var attribute in _attributes)
             {
-                attribute.Update();
+                attribute?.Update();
             }
         }
 

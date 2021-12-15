@@ -1,4 +1,5 @@
-﻿using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
+﻿using CDShared.Logging;
+using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
 
 namespace SunStructs.RuntimeDB.Parsers
 {
@@ -35,6 +36,9 @@ namespace SunStructs.RuntimeDB.Parsers
             var info = line.Split('\t');
             var socketItemOption = new SocketItemOption(info);
             _socketItemOptions.Add(socketItemOption.SocketItemCode,socketItemOption);
+#if DEBUG
+            Logger.Instance.LogOnLine($"Loaded Socket[{socketItemOption.AttrIndex}]");
+#endif
         }
     }
 }

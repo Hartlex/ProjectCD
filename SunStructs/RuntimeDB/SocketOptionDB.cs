@@ -1,4 +1,5 @@
 ﻿using CDShared.Generics;
+using CDShared.Logging;
 using SunStructs.RuntimeDB.Parsers;
 using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
 
@@ -15,6 +16,8 @@ namespace SunStructs.RuntimeDB
 
             var parser = new SocketInfoParser();
             _socketItemOptions = parser.ParseAllOptions(dataFolderPath);
+            Logger.Instance.LogOnLine($"{_socketItemOptions.Count} FieldInfos loaded!\n", LogType.SUCCESS);
+
             foreach (var socketItemOption in _socketItemOptions.Values)
             {
                 var key = (byte) socketItemOption.AttrIndex;

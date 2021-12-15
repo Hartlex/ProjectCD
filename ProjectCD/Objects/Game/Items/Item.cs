@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using CDShared.ByteLevel;
 using SunStructs.Definitions;
+using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General.Object.Items;
+using SunStructs.ServerInfos.General.Object.Items.RankSystem;
+using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
 
 namespace ProjectCD.Objects.Game.Items
 {
@@ -21,14 +24,15 @@ namespace ProjectCD.Objects.Game.Items
             _itemCode = buffer.ReadUInt16();
             _durability = buffer.ReadByte();
             _type = (ItemParseType)buffer.ReadByte();
-            _option = new (ref buffer);
+            _option = new (ref buffer,this);
+            _info = BaseItemDB.Instance.GetBaseItemInfo(_itemCode);
         }
         public Item(BaseItemInfo info)
         {
             _info = info;
             _durability = info.Durability;
             _type = ItemParseType.EQUIP;
-            _option = new ItemOption();
+            _option = new ItemOption(this);
         }
 
         public byte[] GetBytes(ItemByteType type = ItemByteType.MAX)
@@ -101,5 +105,34 @@ namespace ProjectCD.Objects.Game.Items
         }
 
 
+        public ItemType GetItemType()
+        {
+            return _info.ItemType;
+        }
+
+        public RankInfo[]? GetRankValues()
+        {
+            return _option.GetRankValues();
+        }
+
+        public SocketInfo[]? GetSockets()
+        {
+            return _option.GetSockets();
+        }
+
+        public BaseItemInfo GetBaseInfo()
+        {
+            return _info;
+        }
+
+        public byte GetEnchant()
+        {
+            return (byte) _option.GetEnchant();
+        }
+
+        public bool IsDivine()
+        {
+            return _option.IsDivine();
+        }
     }
 }

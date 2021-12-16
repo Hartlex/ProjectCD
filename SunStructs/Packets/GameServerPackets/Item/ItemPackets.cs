@@ -23,5 +23,25 @@ namespace SunStructs.Packets.GameServerPackets.Item
     {
         public AckItemPickup(AckItemPickupInfo info) : base(196, info) { }
     }
+    public class AckSkillToQuick : ItemPacket
+    {
+        public AckSkillToQuick(BindSkillToQuickInfo info) : base(247, info) { }
+    }
+
+    public class AckItemToQuick : ItemPacket
+    {
+        public AckItemToQuick(BindItemToQuickInfo info) : base(61, info) { }
+    }
+
+    public class AckUnbindQuick : ItemPacket
+    {
+        public AckUnbindQuick(UnbindQuickInfo info) : base(151, info) { }
+    }
+
+    public class AckMoveQuick : ItemPacket
+    {
+        public AckMoveQuick(MoveQuickInfo info) : base(107, info) { }
+    }
+
 
 }

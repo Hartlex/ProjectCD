@@ -25,5 +25,11 @@ namespace SunStructs.Definitions
         public const int MAX_PLAYERS_ON_MAP = 1000;
         public const int MAX_OBJECTS_ON_MAP = 100000;
 
+        public const int MAX_INVENTORY_SLOT_NUM = 75*2;
+        public const int MAX_TMP_INVENTORY_SLOT_NUM = 20;
+        public const int MAX_SKILL_SLOT_NUM = 100;
+        public const int MAX_WAREHOUSE_SLOT_NUM = 5 * 5 * 5;
+        public const int MAX_QUICK_SLOT_NUM = 48;
+
     }
 }

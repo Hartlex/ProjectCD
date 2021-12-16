@@ -62,7 +62,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         {
             UpdateAbsValues();
             UpdateRatValues();
-            _values[(int) CALC] += _values[(int) CALC_RATIO] * _values[(int) CALC] / 10000; //100 = 10%
+            _values[(int) CALC] += _values[(int) CALC_RATIO] * _values[(int) CALC] / 100; //100 = 10%
         }
 
     }

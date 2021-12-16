@@ -1,4 +1,6 @@
-﻿namespace CDShared.Parsing
+﻿using CDShared.Logging;
+
+namespace CDShared.Parsing
 {
     public class StringBuffer
     {

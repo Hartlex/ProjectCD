@@ -22,16 +22,20 @@ namespace ProjectCD.Servers.Auth
 {
     internal class AuthActions : Singleton<AuthActions>
     {
+        private int _count;
         public void Initialize()
         {
             RegisterAuthAction(1, OnAskConnect);
             RegisterAuthAction(3, OnAskLogin);
             RegisterAuthAction(15, OnAskServerList);
             RegisterAuthAction(19, OnAskServerSelect);
+            Logger.Instance.LogOnLine($"[AUTH][AUTH] {_count} actions registered!", LogType.SUCCESS);
+            Logger.Instance.Log($"", LogType.SUCCESS);
         }
         private void RegisterAuthAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             AuthPacketParser.Instance.RegisterAction((byte)AuthPacketType.AUTH,subType,action);
+            _count++;
         }
         private void OnAskConnect(ByteBuffer buffer, Connection connection)
         {

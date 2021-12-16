@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SunStructs.PacketInfos;
 using SunStructs.PacketInfos.Game.Item.Dual;
+using SunStructs.PacketInfos.Game.Item.Server;
 
 namespace SunStructs.Packets.GameServerPackets.Item
 {
@@ -18,4 +19,9 @@ namespace SunStructs.Packets.GameServerPackets.Item
     {
         public AckItemMove(ItemMoveInfo info) : base(5, info) { }
     }
+    public class AckItemPickup : ItemPacket
+    {
+        public AckItemPickup(AckItemPickupInfo info) : base(196, info) { }
+    }
+
 }

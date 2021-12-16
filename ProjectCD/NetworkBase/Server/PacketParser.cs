@@ -40,7 +40,7 @@ namespace ProjectCD.NetworkBase.Server
                 {
                     id = "WORLD";
                 }
-                Logger.Instance.Log($"Action[{id}][{typ}][{action.Method.Name}] registered!",LogType.FULL);
+                Logger.Instance.LogOnLine($"Action[{id}][{typ}][{action.Method.Name}] registered!");
             }
 #endif
         }
@@ -63,7 +63,9 @@ namespace ProjectCD.NetworkBase.Server
                 }
                 else
                 {
-                    Logger.Instance.Log("Unknown Game Packet:" + packetCategory + "|" + subPacketType);
+                    var type = typeof(T) == typeof(GamePacketType) ? "GameServer" :
+                        typeof(T) == typeof(WorldPacketType) ? "WorldServer" : "AuthServer";
+                    Logger.Instance.Log($"[{type}] Unknown Packet:" + packetCategory + "|" + subPacketType);
                     var sb = new StringBuilder();
                     foreach (var b in buffer.ReadBlock(size - 2))
                     {

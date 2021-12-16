@@ -114,6 +114,7 @@ namespace ProjectCD.NetworkBase.General
             catch (Exception e)
             {
                 Logger.Instance.Log("Error at ReadCallback!");
+                Logger.Instance.Log(e);
 
             }
 

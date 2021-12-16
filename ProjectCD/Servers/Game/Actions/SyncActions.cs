@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.ByteLevel;
+using CDShared.Logging;
 using ProjectCD.GlobalManagers.PacketParsers;
 using ProjectCD.NetworkBase.Connections;
 using SunStructs.PacketInfos;
@@ -16,6 +17,7 @@ namespace ProjectCD.Servers.Game.Actions
 {
     internal class SyncActions
     {
+        private int _count;
         public SyncActions()
         {
             RegisterSyncAction(141,AskEnterField);
@@ -24,10 +26,13 @@ namespace ProjectCD.Servers.Game.Actions
             RegisterSyncAction(202, OnMouseMove);
             RegisterSyncAction(69, OnJumpEnd);
             RegisterSyncAction(123, OnMoveStop);
+            Logger.Instance.LogOnLine($"[GAME][SYNC] {_count} actions registered!", LogType.SUCCESS);
+            Logger.Instance.Log($"", LogType.SUCCESS);
         }
         private void RegisterSyncAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.SYNC, subType, action);
+            _count++;
         }
 
         private void AskEnterField(ByteBuffer buffer, Connection connection)

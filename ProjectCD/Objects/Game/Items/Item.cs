@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.ByteLevel;
+using ProjectCD.Objects.Game.Slots.Items;
 using SunStructs.Definitions;
 using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General.Object.Items;
@@ -12,7 +13,7 @@ using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
 
 namespace ProjectCD.Objects.Game.Items
 {
-    internal class Item
+    public class Item
     {
         private ushort _itemCode;
         private int _durability; //amount

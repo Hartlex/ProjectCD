@@ -18,8 +18,16 @@ namespace ProjectCD.GlobalManagers.DB
         private string _connectionString;
         public bool Initialize()
         {
+            Logger.Instance.Log("Initializing Database...",LogType.SYSTEM_MESSAGE);
+            Logger.Instance.LogLine(LogType.SYSTEM_MESSAGE);
             GetConfig();
-            return TestConnection();
+            var success =TestConnection();
+            if (success)
+            {
+                Logger.Instance.LogLine(LogType.SYSTEM_MESSAGE);
+                Logger.Instance.Log("\n");
+            }
+            return success;
         }
         private bool TestConnection()
         {
@@ -430,157 +438,92 @@ namespace ProjectCD.GlobalManagers.DB
                 Logger.Instance.Log(e);
             }
         }
-        //public bool UpdateFullCharacter(Player player)
-        //{
-        //    //player.Inventory.DeserializeInventoryToByteStream();
-        //    try
-        //    {
-        //        using SqlConnection conn = new SqlConnection(_connectionString);
-        //        conn.Open();
-        //        SqlCommand cmd = new SqlCommand(
-        //            "UPDATE dbo.[Character] SET " +
-        //            "[Level] = @Level," +
-        //            "[Strength] = @Strength," +
-        //            "[Agility]= @Agility," +
-        //            "[Vitality]= @Vitality," +
-        //            "[Intelligence] = @Intelligence," +
-        //            "[Spirit] = @Spirit," +
-        //            "[SkillStat1] = @SkillStat1," +
-        //            "[SkillStat2] = @SkillStat2," +
-        //            "[UserPoint] =@UserPoint," +
-        //            "[Experience] =@Experience," +
-        //            "[MaxHp] = @MaxHp," +
-        //            "[Hp] = @Hp," +
-        //            "[MaxMp]=@MaxMp," +
-        //            "[Mp]=@Mp," +
-        //            "[Money] = @Money," +
-        //            "[RemainStat] = @RemainStat," +
-        //            "[RemainSkill] = @RemainSkill," +
-        //            "[PkState] =@PkState," +
-        //            "[CharState] =@CharState," +
-        //            "[StateTime] =@StateTime," +
-        //            "[Region] =@Region," +
-        //            "[LocationX] =@LocationX," +
-        //            "[LocationY] = @LocationY," +
-        //            "[LocationZ] = @LocationZ," +
-        //            "[TitleID] = @TitleID," +
-        //            "[TitleTime] =@TitleTime," +
-        //            "[InvisOpt] =@InvisOpt," +
-        //            "[InventoryLock] = @InventoryLock," +
-        //            "[InventoryItem] = @InventoryItem," +
-        //            "[TmpInventoryItem] =@TmpInventoryItem," +
-        //            "[EquipItem] = @EquipItem," +
-        //            "[Skill] = @Skill," +
-        //            "[QuickSkill] = @QuickSkill," +
-        //            "[Style] = @Style," +
-        //            "[Quest] = @Quest," +
-        //            "[Mission] =@Mission," +
-        //            "[PlayLimitedTime] =@PlayLimitedTime," +
-        //            "[PVPPoint] = @PVPPoint," +
-        //            "[PVPScore]=@PVPScore," +
-        //            "[PVPGrade] =@PVPGrade," +
-        //            "[PVPDraw] =@PVPDraw," +
-        //            "[PVPSeries] =@PVPSeries," +
-        //            "[PVPKill] =@PVPKill," +
-        //            "[PVPDeath] =@PVPDeath," +
-        //            "[PVPMaxKill] =@PVPMaxKill," +
-        //            "[PVPMaxDeath] =@PVPMaxDeath," +
-        //            "[GuildID] = @GuildId," +
-        //            "[GuildPosition] =@GuildPosition," +
-        //            "[GuildUserPoint] =@GuildUserPoint," +
-        //            "[GuildNickName]=@GuildNickName," +
-        //            //"[CreationDate]=@CreationDate," +
-        //            "[ModifiedDate]=@ModifiedDate," +
-        //            //"[LastDate]=@LastDate," +
-        //            "[DeleteCheck] =@DeleteCheck" +
-        //            " WHERE [charID]=@charID",conn
-        //        );
-        //        #region params
+        public bool UpdateFullCharacter(Player player)
+        {
+            //player.Inventory.DeserializeInventoryToByteStream();
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_connectionString);
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(
+                    "UPDATE dbo.[Character] SET " +
+                    "[Level] = @Level," +
+                    "[Strength] = @Strength," +
+                    "[Agility]= @Agility," +
+                    "[Vitality]= @Vitality," +
+                    "[Intelligence] = @Intelligence," +
+                    "[Spirit] = @Spirit," +
+                    "[SkillStat1] = @SkillStat1," +
+                    "[SkillStat2] = @SkillStat2," +
+                    "[UserPoint] =@UserPoint," +
+                    "[Experience] =@Experience," +
+                    "[MaxHp] = @MaxHp," +
+                    "[Hp] = @Hp," +
+                    "[MaxMp]=@MaxMp," +
+                    "[Mp]=@Mp," +
+                    "[Money] = @Money," +
+                    "[RemainStat] = @RemainStat," +
+                    "[RemainSkill] = @RemainSkill," +
+                    "[PkState] =@PkState," +
+                    "[CharState] =@CharState," +
+                    "[StateTime] =@StateTime," +
+                    "[Region] =@Region," +
+                    "[LocationX] =@LocationX," +
+                    "[LocationY] = @LocationY," +
+                    "[LocationZ] = @LocationZ," +
+                    "[TitleID] = @TitleID," +
+                    "[TitleTime] =@TitleTime," +
+                    "[InvisOpt] =@InvisOpt," +
+                    "[InventoryLock] = @InventoryLock," +
+                    "[InventoryItem] = @InventoryItem," +
+                    "[TmpInventoryItem] =@TmpInventoryItem," +
+                    "[EquipItem] = @EquipItem," +
+                    "[Skill] = @Skill," +
+                    "[QuickSkill] = @QuickSkill," +
+                    "[Style] = @Style," +
+                    "[Quest] = @Quest," +
+                    "[Mission] =@Mission," +
+                    "[PlayLimitedTime] =@PlayLimitedTime," +
+                    "[PVPPoint] = @PVPPoint," +
+                    "[PVPScore]=@PVPScore," +
+                    "[PVPGrade] =@PVPGrade," +
+                    "[PVPDraw] =@PVPDraw," +
+                    "[PVPSeries] =@PVPSeries," +
+                    "[PVPKill] =@PVPKill," +
+                    "[PVPDeath] =@PVPDeath," +
+                    "[PVPMaxKill] =@PVPMaxKill," +
+                    "[PVPMaxDeath] =@PVPMaxDeath," +
+                    "[GuildID] = @GuildId," +
+                    "[GuildPosition] =@GuildPosition," +
+                    "[GuildUserPoint] =@GuildUserPoint," +
+                    "[GuildNickName]=@GuildNickName," +
+                    //"[CreationDate]=@CreationDate," +
+                    "[ModifiedDate]=@ModifiedDate," +
+                    //"[LastDate]=@LastDate," +
+                    "[DeleteCheck] =@DeleteCheck" +
+                    " WHERE [charID]=@charID", conn
+                );
+                #region params
 
-        //        cmd.Parameters.Add("@charId", SqlDbType.Int).Value = player.BaseInfo.CharacterId;
-        //        cmd.Parameters.Add("@userID", SqlDbType.Int).Value = player.BaseInfo.UserId;
-        //        cmd.Parameters.Add("@charSlot", SqlDbType.Int).Value = player.BaseInfo.CharSlot;
-        //        cmd.Parameters.Add("@ClassCode", SqlDbType.Int).Value = player.BaseInfo.ClassCode;
-        //        cmd.Parameters.Add("@CharName", SqlDbType.VarChar).Value = player.BaseInfo.GeneralInfo.Name;
-        //        cmd.Parameters.Add("@HeightCode", SqlDbType.Int).Value = player.BaseInfo.BaseRenderInfo.HeightCode;
-        //        cmd.Parameters.Add("@FaceCode", SqlDbType.Int).Value = player.BaseInfo.BaseRenderInfo.FaceCode;
-        //        cmd.Parameters.Add("@HairCode", SqlDbType.Int).Value = player.BaseInfo.BaseRenderInfo.HairCode;
-        //        cmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = player.BaseInfo.GeneralInfo.Level;
-        //        cmd.Parameters.Add("@Strength", SqlDbType.SmallInt).Value = player.BaseInfo.BaseStats.Strength;
-        //        cmd.Parameters.Add("@Agility", SqlDbType.SmallInt).Value = player.BaseInfo.BaseStats.Agility;
+                player.AddDBParams(ref cmd);
 
-        //        cmd.Parameters.Add("@Vitality", SqlDbType.SmallInt).Value = player.BaseInfo.BaseStats.Vitality;
-        //        cmd.Parameters.Add("@Intelligence", SqlDbType.SmallInt).Value = player.BaseInfo.BaseStats.Intelligence;
-        //        cmd.Parameters.Add("@Spirit", SqlDbType.SmallInt).Value = player.BaseInfo.BaseStats.Spirit;
-        //        cmd.Parameters.Add("@SkillStat1", SqlDbType.SmallInt).Value = player.BaseInfo.BaseStats.SkillStat1;
-        //        cmd.Parameters.Add("@SkillStat2", SqlDbType.SmallInt).Value = player.BaseInfo.BaseStats.SkillStat2;
-        //        cmd.Parameters.Add("@UserPoint", SqlDbType.Int).Value = player.BaseInfo.UpPoints;
-        //        cmd.Parameters.Add("@Experience", SqlDbType.BigInt).Value = player.BaseInfo.GeneralInfo.Experience;
-        //        cmd.Parameters.Add("@MaxHp", SqlDbType.Real).Value = player.BaseInfo.GeneralInfo.MaxHP;
-        //        cmd.Parameters.Add("@Hp", SqlDbType.Real).Value = player.BaseInfo.GeneralInfo.HP;
-        //        cmd.Parameters.Add("@MaxMp", SqlDbType.Real).Value = player.BaseInfo.GeneralInfo.MaxMP;
+                #endregion
 
-        //        cmd.Parameters.Add("@Mp", SqlDbType.Real).Value = player.BaseInfo.GeneralInfo.MP;
-        //        cmd.Parameters.Add("@Money", SqlDbType.BigInt).Value = player.BaseInfo.Money;
-        //        cmd.Parameters.Add("@RemainStat", SqlDbType.Int).Value = player.BaseInfo.RemainStat;
-        //        cmd.Parameters.Add("@RemainSkill", SqlDbType.Int).Value = player.BaseInfo.RemainSkill;
-        //        cmd.Parameters.Add("@PkState", SqlDbType.TinyInt).Value = player.BaseInfo.PkState;
-        //        cmd.Parameters.Add("@CharState", SqlDbType.TinyInt).Value = player.BaseInfo.CharState;
-        //        cmd.Parameters.Add("@StateTime", SqlDbType.TinyInt).Value = player.BaseInfo.StateTime;
-        //        cmd.Parameters.Add("@Region", SqlDbType.Int).Value = player.BaseInfo.Location.Region;
-        //        cmd.Parameters.Add("@LocationX", SqlDbType.SmallInt).Value = (short)player.BaseInfo.Location.Position.GetX();
-        //        cmd.Parameters.Add("@LocationY", SqlDbType.SmallInt).Value = (short)player.BaseInfo.Location.Position.GetY();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
 
-        //        cmd.Parameters.Add("@LocationZ", SqlDbType.SmallInt).Value = (short)player.BaseInfo.Location.Position.GetZ();
-        //        cmd.Parameters.Add("@TitleID", SqlDbType.Int).Value = player.BaseInfo.TitleId;
-        //        cmd.Parameters.Add("@TitleTime", SqlDbType.BigInt).Value = player.BaseInfo.TitleTime;
-        //        cmd.Parameters.Add("@InvisOpt", SqlDbType.TinyInt).Value = player.BaseInfo.InvisibleFlag;
-        //        cmd.Parameters.Add("@InventoryLock", SqlDbType.TinyInt).Value = player.BaseInfo.InvLock;
-        //        cmd.Parameters.Add("@InventoryItem", SqlDbType.VarBinary).Value = player.GetFullInventoryBytes();
-        //        cmd.Parameters.Add("@TmpInventoryItem", SqlDbType.VarBinary).Value = player.GetTmpInventoryBytes();
-        //        cmd.Parameters.Add("@EquipItem", SqlDbType.VarBinary).Value = player.GetEquipmentBytes();
-        //        cmd.Parameters.Add("@Skill", SqlDbType.VarBinary).Value = player.GetSkillBytes();
-        //        cmd.Parameters.Add("@QuickSkill", SqlDbType.VarBinary).Value = player.GetQuickBytes();
-        //        cmd.Parameters.Add("@Style", SqlDbType.VarBinary).Value = player.GetStyleBytes();
+                }
 
-        //        cmd.Parameters.Add("@Quest", SqlDbType.VarBinary).Value = player.GetQuestBytes();
-        //        cmd.Parameters.Add("@Mission", SqlDbType.VarBinary).Value = player.GetMissionBytes();
-        //        cmd.Parameters.Add("@PlayLimitedTime", SqlDbType.BigInt).Value = player.BaseInfo.PlayerLimitedTime;
-        //        cmd.Parameters.Add("@PVPPoint", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPPoint;
-        //        cmd.Parameters.Add("@PVPScore", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPScore;
-        //        cmd.Parameters.Add("@PVPGrade", SqlDbType.TinyInt).Value = player.BaseInfo.PVPInfo.PVPGrade;
-        //        cmd.Parameters.Add("@PVPDraw", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPTotalDraw;
-        //        cmd.Parameters.Add("@PVPSeries", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPMaxSeries;
-        //        cmd.Parameters.Add("@PVPKill", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPTotalKill;
-        //        cmd.Parameters.Add("@PVPDeath", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPTotalDeaths;
+                return true;
+            }
+            catch (SqlException e)
+            {
+                Logger.Instance.Log(e.ToString(), LogType.ERROR);
+            }
 
-        //        cmd.Parameters.Add("@PVPMaxKill", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPMaxKill;
-        //        cmd.Parameters.Add("@PVPMaxDeath", SqlDbType.Int).Value = player.BaseInfo.PVPInfo.PVPMaxDie;
-        //        cmd.Parameters.Add("@GuildID", SqlDbType.Int).Value = player.BaseInfo.GuildInfo.GuildId;
-        //        cmd.Parameters.Add("@GuildPosition", SqlDbType.TinyInt).Value = player.BaseInfo.GuildInfo.GuildPosition;
-        //        cmd.Parameters.Add("@GuildUserPoint", SqlDbType.Int).Value = 0;
-        //        cmd.Parameters.Add("@GuildNickName", SqlDbType.VarChar).Value = "";
-        //        //cmd.Parameters.Add("@CreatonDate", SqlDbType.SmallDateTime).Value = player.CreationDate;
-        //        cmd.Parameters.Add("@ModifiedDate", SqlDbType.SmallDateTime).Value = DateTime.Now;
-        //        //cmd.Parameters.Add("@LastDate", SqlDbType.SmallDateTime).Value = player.LastLoginDate;
-        //        cmd.Parameters.Add("@DeleteCheck", SqlDbType.TinyInt).Value = 0;
-        //        #endregion
-
-        //        SqlDataReader reader = cmd.ExecuteReader();
-        //        while (reader.Read())
-        //        {
-
-        //        }
-
-        //        return true;
-        //    }
-        //    catch (SqlException e)
-        //    {
-        //        Logger.Instance.Log(e.ToString(),LogType.ERROR);
-        //    }
-
-        //    return false;
-        //}
+            return false;
+        }
 
         //public Warehouse GetWarehouse(Player player)
         //{

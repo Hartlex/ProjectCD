@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using CDShared.ByteLevel;
+using ProjectCD.Objects.Game.Slots.Items;
 
 namespace ProjectCD.Objects.Game.Items
 {

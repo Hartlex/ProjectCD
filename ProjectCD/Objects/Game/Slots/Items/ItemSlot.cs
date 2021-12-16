@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CDShared.ByteLevel;
-using SunStructs.Definitions;
+﻿using CDShared.ByteLevel;
+using ProjectCD.Objects.Game.Items;
 using SunStructs.PacketInfos.Game.Item.Server;
 using SunStructs.ServerInfos.General.Object.Items;
 using SunStructs.ServerInfos.General.Object.Items.RankSystem;
 using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
 
-namespace ProjectCD.Objects.Game.Items
+namespace ProjectCD.Objects.Game.Slots.Items
 {
-    internal class ItemSlot
+    public class ItemSlot
     {
         public readonly int Pos;
         private Item? _item;

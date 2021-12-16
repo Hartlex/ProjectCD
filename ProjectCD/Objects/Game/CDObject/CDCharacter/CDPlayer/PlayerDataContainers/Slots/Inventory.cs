@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectCD.Objects.Game.Items;
+﻿using ProjectCD.Objects.Game.Items;
+using ProjectCD.Objects.Game.Slots.Items;
 using SunStructs.PacketInfos.Game.Item.Server;
 using SunStructs.RuntimeDB;
 
-namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers
+namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Slots
 {
-    internal class Inventory : ItemSlotContainer
+    public class Inventory : ItemSlotContainer
     {
         public Inventory(int tabCount, byte[] data, Player owner) : base(tabCount*15, data, owner)
         {

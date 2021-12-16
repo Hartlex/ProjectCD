@@ -20,15 +20,19 @@ namespace ProjectCD.Servers.Game.Actions
 {
     internal class CharInfoActions
     {
+        private int _count;
         public CharInfoActions()
         {
             RegisterCharInfoAction(81, OnAskDuplicateName);
             RegisterCharInfoAction(111, OnAskCreateCharacter);
             RegisterCharInfoAction(137, OnAskDeleteCharacter);
+            Logger.Instance.LogOnLine($"[GAME][CHAR_INFO] {_count} actions registered!", LogType.SUCCESS);
+            Logger.Instance.Log($"", LogType.SUCCESS);
         }
         private void RegisterCharInfoAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.CHAR_INFO, subType, action);
+            _count++;
         }
         private void OnAskDuplicateName(ByteBuffer buffer, Connection connection)
         {

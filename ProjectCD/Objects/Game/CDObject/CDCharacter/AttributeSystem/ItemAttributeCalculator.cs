@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.Logging;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeChildren;
 using ProjectCD.Objects.Game.Items;
+using ProjectCD.Objects.Game.Slots.Items;
 using SunStructs.Definitions;
+using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General.Object.Items;
+using SunStructs.ServerInfos.General.Object.Items.SetSystem;
 using static SunStructs.Definitions.AttrType;
 using static SunStructs.Formulas.Item.CommonItemFormulas;
+using static SunStructs.ServerInfos.General.Object.Items.SetSystem.SetItemOptionLevel;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 {
@@ -77,12 +82,254 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 
             CalcGenericAttrSecond(slot, info,add,isPcRoom);
 
-            CalcSetItem(slot,info);
+            //  CalcSetItem(slot,info,add);
+            CalcSetItemCustom(slot,info,add);
         }
 
-        private void CalcSetItem(ItemSlot slot,BaseItemInfo info)
+        private void CalcSetItemCustom(ItemSlot slot, BaseItemInfo itemInfo, bool isAdd)
         {
-            var setCode = info.SetType;
+            if (!SetInfoDB.Instance.TryGetSetInfo(itemInfo.SetType, out var setInfo)) return;
+
+            var setEquipCount = _equip.GetItemCountOfSet(setInfo!.SetCode);
+
+            var curEquipLevel = SetInfoDB.Instance.GetLevel(setEquipCount);
+
+            var isFull = false;
+
+            if (isAdd)
+            {
+                isFull = setInfo.IsFull(setEquipCount);
+            }
+            else
+            {
+                if (itemInfo.SetOptionType != SetItemOption.SET_ITEM_SPECIAL)
+                {
+                    isFull = setInfo.IsFull(setEquipCount + 1);
+                }
+            }
+            if (isFull && itemInfo.SetOptionType == SetItemOption.SET_ITEM_ACTIVE)
+            {
+                ApplySetItemFullOption(setInfo, isAdd);
+            }
+
+            int changeType = itemInfo.SetOptionType == SetItemOption.SET_ITEM_SPECIAL ? (byte)0 : GetSetItemChangeType(setEquipCount, isAdd);
+
+            if (changeType == 1)
+            {
+                if (curEquipLevel > SET_ITEM_OPTION_LEVEL_NONE)
+                {
+                    for (SetItemOptionLevel level = SET_ITEM_OPTION_LEVEL_FIRST; level <= curEquipLevel; level++)
+                    {
+                        ApplySetItemOption(setInfo, slot.Pos, level, isAdd);
+                    }
+                }
+            }
+
+            
+            if (changeType == 2)
+            {
+                SetItemOptionLevel optionLevel;
+                if (isAdd)
+                {
+                    optionLevel = curEquipLevel;
+                }
+                else
+                {
+                    optionLevel = curEquipLevel + 1;
+                }
+                for (SetItemOptionLevel level = SET_ITEM_OPTION_LEVEL_FIRST; level <= optionLevel; level++)
+                {
+                    ApplySetItemOption(setInfo, slot.Pos, level, isAdd);
+                }
+                for (int i = 0; i < (int)EquipContainerPos.EQUIPCONTAINER_MAX; i++)
+                {
+                    if(i == slot.Pos) continue;
+                    if (_equip.GetSlot(i).GetBaseInfo()?.SetType == setInfo.SetCode)
+                        ApplySetItemOption(setInfo, i, optionLevel, isAdd);
+                }
+            }
+
+            if (isFull)
+            {
+                if (itemInfo.BaseItemId == setInfo.SpecialOption.SpecialItemCode)
+                {
+                    ApplySpecialSetItemOption(setInfo, isAdd);
+                }
+                else
+                {
+                    if (_equip.TryGetItemOfTypeAt(setInfo.SpecialOption.EquipPosition,
+                            setInfo.SpecialOption.SpecialItemCode, out var specialSlot))
+                    {
+                            ApplySpecialSetItemOption(setInfo, isAdd);
+                    }
+                }
+            }
+        }
+
+        private void CalcSetItem(ItemSlot slot,BaseItemInfo itemInfo,bool isAdd)
+        {
+            if (!SetInfoDB.Instance.TryGetSetInfo(itemInfo.SetType, out var setInfo)) return;
+
+            var setEquipCount = _equip.GetItemCountOfSet(setInfo!.SetCode);
+            
+
+            var sameSetResult = _equip.GetSameSetItemSlots(itemInfo, isAdd, out var resultSlots);
+            if (sameSetResult.Item2 == 0) return;
+
+            if (sameSetResult.Item1 != setInfo.SetCode)
+                if (!SetInfoDB.Instance.TryGetSetInfo(sameSetResult.Item1, out setInfo))
+                    return;
+
+            int tempSetItemCount = sameSetResult.Item2;
+            int realSetItemCount = 0;
+            var realItemSlots = new ItemSlot[150];
+
+            for (int i = 0; i < tempSetItemCount; i++)
+            {
+                int pos = resultSlots[i].Pos;
+                if (!_equip.GetSlot(pos).IsEmpty())
+                {
+                    realItemSlots[realSetItemCount] = resultSlots[i];
+                    realSetItemCount++;
+                }
+            }
+
+            var curEquipLevel = SetInfoDB.Instance.GetLevel(realSetItemCount);
+
+            var isFull = false;
+
+            if (isAdd)
+            {
+                isFull = setInfo.IsFull(realSetItemCount);
+            }
+            else
+            {
+                if (itemInfo.SetOptionType != SetItemOption.SET_ITEM_SPECIAL)
+                {
+                    isFull = setInfo.IsFull(realSetItemCount+1);
+                }
+            }
+
+            if ( itemInfo.SetOptionType == SetItemOption.SET_ITEM_ACTIVE)
+            {
+                ApplySetItemFullOption(setInfo,isAdd);
+            }
+
+            byte changeType = 0;
+            changeType = itemInfo.SetOptionType == SetItemOption.SET_ITEM_SPECIAL ? (byte) 0 : GetSetItemChangeType(setEquipCount, isAdd);
+
+            if (changeType == 1)
+            {
+                if (curEquipLevel > SET_ITEM_OPTION_LEVEL_NONE)
+                {
+                    for (SetItemOptionLevel level = SET_ITEM_OPTION_LEVEL_FIRST; level <= curEquipLevel; level++)
+                    {
+                        ApplySetItemOption(setInfo,slot.Pos,level,isAdd);
+                    }
+                }
+            }
+
+            if (changeType == 2)
+            {
+                SetItemOptionLevel optionLevel;
+                if (isAdd)
+                {
+                    optionLevel = curEquipLevel;
+                }
+                else
+                {
+                    optionLevel = curEquipLevel + 1;
+                }
+                for (SetItemOptionLevel level = SET_ITEM_OPTION_LEVEL_FIRST; level <= optionLevel; level++)
+                {
+                    ApplySetItemOption(setInfo, slot.Pos, level, isAdd);
+                }
+
+                for (int i = 0; i < (int) EquipContainerPos.EQUIPCONTAINER_MAX; i++)
+                {
+                    if(_equip.GetSlot(i)?.GetBaseInfo()!.SetType == setInfo.SetCode)
+                        ApplySetItemOption(setInfo, slot.Pos, optionLevel, isAdd);
+                }
+            }
+
+            if (isFull)
+            {
+                if (itemInfo.BaseItemId == setInfo.SpecialOption.SpecialItemCode)
+                {
+                    ApplySpecialSetItemOption(setInfo,isAdd);
+                }
+                else
+                {
+                    if (_equip.TryGetItemOfTypeAt(setInfo.SpecialOption.EquipPosition,
+                            setInfo.SpecialOption.SpecialItemCode, out var specialSlot))
+                    {
+                        if(realItemSlots[specialSlot!.Pos]!=null)
+                            ApplySpecialSetItemOption(setInfo, isAdd);
+                    }
+                }
+            }
+
+        }
+
+        private byte GetSetItemChangeType(int count, bool isAdd)
+        {
+            if (isAdd)
+            {
+                switch (count)
+                {
+                    case 1: return 0;
+                    // ÀåÂø½Ã
+                    case 2: case 4: case 6: return 2;
+                    default: return 1;
+                }
+            }
+            else
+            {
+                switch (count)
+                {
+                    case 0: return 0;
+                    // »¬½Ã..
+                    case 1: case 3: case 5: return 2;
+                    default: return 1;
+                }
+            }
+
+        }
+        private void ApplySetItemFullOption(SetInfo info, bool isAdd)
+        {
+            if (isAdd)
+                foreach (var infoFullOption in info.FullOptions)
+                {
+                    PlusOptionAttribute(infoFullOption);
+                }
+            else
+                foreach (var infoFullOption in info.FullOptions)
+                {
+                    MinusOptionAttribute(infoFullOption);
+                }
+        }
+
+        private void ApplySpecialSetItemOption(SetInfo info, bool isAdd)
+        {
+            if (isAdd)
+                foreach (var infoFullOption in info.SpecialOption.Options)
+                {
+                    PlusOptionAttribute(infoFullOption);
+                }
+            else
+                foreach (var infoFullOption in info.SpecialOption.Options)
+                {
+                    MinusOptionAttribute(infoFullOption);
+                }
+        }
+        private void ApplySetItemOption(SetInfo info, int pos, SetItemOptionLevel level, bool isAdd)
+        {
+            var attrInfo = SetInfoDB.Instance.GetSetOption(info, pos, level);
+            if (attrInfo != null)
+            {
+                if(isAdd) PlusOptionAttribute(attrInfo);
+                else MinusOptionAttribute(attrInfo);
+            }
         }
         private void CalcGenericFirst(BaseItemInfo info,bool add)
         {
@@ -199,6 +446,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             {
                 armorInfo = info.UniqueAttackDefInfo;
             }
+            armorValues.SetValues(armorInfo);
 
             var enchant = slot.GetEnchant();
             var level = info.Level;
@@ -313,11 +561,14 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         }
         private void AddAttr(AttrType type, int value, AttrValueType valueType = AttrValueType.ITEM)
         {
+            Logger.Instance.Log($"Added Attribute[{type}][{value}][{valueType}]");
             _attr[type].AddValue(value, valueType);
         }
 
         private void SubAttr(AttrType type, int value, AttrValueType valueType = AttrValueType.ITEM)
         {
+            Logger.Instance.Log($"Removed Attribute[{type}][{value}]");
+
             _attr[type].SubtractValue(value, valueType);
 
         }

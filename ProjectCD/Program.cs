@@ -1,6 +1,6 @@
 ﻿using ProjectCD;
 
-Console.WriteLine("___---|||Project Cherry Dragon|||---___");
+Console.WriteLine("___---|||Project Cherry Dragon|||---___\n\n\n");
 Main main = new Main();
 main.Initialize();
 

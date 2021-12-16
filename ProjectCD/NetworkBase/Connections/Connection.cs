@@ -84,6 +84,12 @@ namespace ProjectCD.NetworkBase.Connections
             State = ConnectionState.CONNECTED;
         }
 
+        public void OnWorldServerConnect(User user)
+        {
+            User = user;
+            State = ConnectionState.CONNECTED;
+        }
+
         public void EstablishConnection()
         {
             State = ConnectionState.ESTABLISHED;

@@ -21,6 +21,7 @@ namespace ProjectCD.Objects.NetObjects
         public readonly uint UserID;
 
         private Connection _gameServerConnection;
+        private Connection _worldServerConnection;
 
         private GameServer _gameServer;
         private WorldServer _worldServer;
@@ -74,6 +75,11 @@ namespace ProjectCD.Objects.NetObjects
             _gameServerConnection = connection;
         }
 
+        public void SetWorldServer(WorldServer server, Connection connection)
+        {
+            _worldServer = server;
+            _worldServerConnection = connection;
+        }
         public void SendPacket(Packet packet, ServerType type = ServerType.GAME)
         {
             switch (type)
@@ -93,6 +99,21 @@ namespace ProjectCD.Objects.NetObjects
         {
             return _gameServer;
         }
+
+        public Connection GetGameServerConnection()
+        {
+            return _gameServerConnection;
+        }
+
+        public Connection GetWorldServerConnection()
+        {
+            return _worldServerConnection;
+        }
+        public WorldServer GetConnectedWorldServer()
+        {
+            return _worldServer;
+        }
+
     }
 
     public enum UserConnectionState

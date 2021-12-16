@@ -7,14 +7,17 @@ using CD.Network.Server.Config;
 using CDShared.Logging;
 using ProjectCD.NetworkBase.Connections;
 using ProjectCD.Objects.Game.World;
+using ProjectCD.Servers.World;
 
 namespace ProjectCD.Servers.Game
 {
     public class GameServer : CDServer
     {
+        private readonly WorldServer _worldServer;
         private readonly FieldManager _fieldManager;
-        public GameServer(ServerConfig config) : base(config)
+        public GameServer(ServerConfig config, WorldServer worldServer) : base(config)
         {
+            _worldServer = worldServer;
             _fieldManager = new (this);
         }
 
@@ -26,6 +29,11 @@ namespace ProjectCD.Servers.Game
         public GameField GetField(uint mapCode)
         {
             return _fieldManager.GetField(mapCode);
+        }
+
+        public WorldServer GetWorldServer()
+        {
+            return _worldServer;
         }
         
     }

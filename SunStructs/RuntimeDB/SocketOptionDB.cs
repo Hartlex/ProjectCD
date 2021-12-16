@@ -16,11 +16,11 @@ namespace SunStructs.RuntimeDB
 
             var parser = new SocketInfoParser();
             _socketItemOptions = parser.ParseAllOptions(dataFolderPath);
-            Logger.Instance.LogOnLine($"{_socketItemOptions.Count} FieldInfos loaded!\n", LogType.SUCCESS);
+            Logger.Instance.LogOnLine($"{_socketItemOptions.Count} SocketOptions loaded!\n", LogType.SUCCESS);
 
             foreach (var socketItemOption in _socketItemOptions.Values)
             {
-                var key = (byte) socketItemOption.AttrIndex;
+                var key = (byte) socketItemOption.AttrOptionIndex;
                 if (_socketOptions.ContainsKey(key))
                 {
                     _socketOptions[key].Value[(int)socketItemOption.Level] = socketItemOption.Value;
@@ -28,7 +28,7 @@ namespace SunStructs.RuntimeDB
                 else
                 {
                     var info = new SocketOption(socketItemOption);
-                    _socketOptions.Add((byte)info.AttrIndex,info);
+                    _socketOptions.Add((byte)info.AttrOptionIndex,info);
                 }
 
             }

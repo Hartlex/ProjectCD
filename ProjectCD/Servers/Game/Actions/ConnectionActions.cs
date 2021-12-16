@@ -27,21 +27,25 @@ namespace ProjectCD.Servers.Game.Actions
 {
     internal class ConnectionActions
     {
+        private int _count;
         public ConnectionActions()
         {
             RegisterConnectionAction(118,OnAskEnterCharSelect);
             RegisterConnectionAction(31, OnAskEnterGame);
+            Logger.Instance.LogOnLine($"[GAME][CONNECTION] {_count} actions registered!", LogType.SUCCESS);
+            Logger.Instance.Log($"", LogType.SUCCESS);
         }
         private void RegisterConnectionAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.CONNECTION, subType, action);
+            _count++;
         }
 
 
         private void OnAskEnterCharSelect(ByteBuffer buffer, Connection connection)
         {
             var info = new AskEnterCharSelectInfo(ref buffer);
-            if (ServerManager.Instance.TryEnterGameServer(info, connection, out var user))
+            if (ServerManager.Instance.TryEnterGameServer(info, connection, out var user,out var worldServer))
             {
                 UserManager.Instance.AddUser(user,AddUserType.FROM_GAME);
                 connection.AppendCloseHandler((con) =>
@@ -55,6 +59,11 @@ namespace ProjectCD.Servers.Game.Actions
                 var packet = new AckEnterCharSelect(outInfo);
                 connection.Send(packet);
 
+                var worldIP = worldServer.GetLocalEndPoint().Address.ToString();
+                var port = worldServer.GetLocalEndPoint().Port;
+                ConnectToWorldInfo worldInfo = new(worldIP, port);
+                var worldPacket = new ConnectToWorldCmd(worldInfo);
+                connection.Send(worldPacket);
 
             }
         }

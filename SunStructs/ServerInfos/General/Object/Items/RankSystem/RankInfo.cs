@@ -9,7 +9,7 @@ namespace SunStructs.ServerInfos.General.Object.Items.RankSystem
 {
     public class RankInfo : AttrInfo
     {
-        public RankInfo(AttrType attrType, AttrValueKind valueKind, int value) : base(attrType, valueKind, value)
+        public RankInfo(byte attrType, AttrValueKind valueKind, int value) : base(attrType, valueKind, value)
         {
         }
     }

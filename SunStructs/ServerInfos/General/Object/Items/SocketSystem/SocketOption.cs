@@ -5,7 +5,7 @@ namespace SunStructs.ServerInfos.General.Object.Items.SocketSystem
 {
     public class SocketOption
     {
-        public AttrType AttrIndex;
+        public byte AttrOptionIndex;
         public ushort SocketItemCode;
         public string Name;
         public uint NCode;
@@ -14,7 +14,7 @@ namespace SunStructs.ServerInfos.General.Object.Items.SocketSystem
 
         public SocketOption(SocketItemOption socketItemOption)
         {
-            AttrIndex = socketItemOption.AttrIndex;
+            AttrOptionIndex = socketItemOption.AttrOptionIndex;
             SocketItemCode = socketItemOption.SocketItemCode;
             Name = socketItemOption.Name;
             NCode = socketItemOption.NCode;
@@ -26,7 +26,7 @@ namespace SunStructs.ServerInfos.General.Object.Items.SocketSystem
     public class SocketItemOption
     {
         public ushort SocketItemCode;
-        public AttrType AttrIndex;
+        public byte AttrOptionIndex;
         public string Name;
         public uint NCode;
         public SocketLevel Level;
@@ -37,7 +37,7 @@ namespace SunStructs.ServerInfos.General.Object.Items.SocketSystem
             var sb = new StringBuffer(info);
 
             SocketItemCode = sb.ReadUshort();
-            AttrIndex = (AttrType) sb.ReadInt();
+            AttrOptionIndex =  sb.ReadByte();
             Name = sb.ReadString();
             NCode = sb.ReadUint();
             Level = (SocketLevel)sb.ReadByte();

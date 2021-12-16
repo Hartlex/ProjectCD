@@ -5,9 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Slots;
 using ProjectCD.Objects.Game.Items;
+using ProjectCD.Objects.Game.Slots.Items;
+using ProjectCD.Objects.Game.Slots.Quick;
 using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Item.Dual;
+using static SunStructs.Definitions.Const;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
@@ -16,14 +20,22 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         private byte _inventoryTabs;
         private Inventory _inventory;
         private Equipment _equipment;
+        private TempInventory _tmpInventory;
+        private QuickSlotContainer _quickSlots;
+        private ulong _money;
 
         public void PlayerInventoryInit(ref SqlDataReader reader)
         {
+            _money = unchecked((ulong)reader.GetInt64(22));
             var inventoryBytes = (byte[])reader[38];
             var equipBytes = (byte[]) reader[40];
+            var tmpInvBytes = (byte[])reader[39];
+            var quickBytes = (byte[])reader[42];
             _inventoryTabs = 10;
             _inventory = new (_inventoryTabs, inventoryBytes, this);
             _equipment = new (equipBytes, this);
+            _tmpInventory = new(MAX_TMP_INVENTORY_SLOT_NUM, tmpInvBytes,this);
+            _quickSlots = new(MAX_QUICK_SLOT_NUM, quickBytes);
         }
 
         public bool ItemMove(ItemMoveInfo info)
@@ -49,5 +61,16 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             return null;
         }
 
+        public Inventory GetInventory()
+        {
+            return _inventory;
+        }
+
+        public ulong IncreaseMoney(ulong money)
+        {
+            _money += money;
+            return _money;
+        }
+        public ulong GetMoney(){ return _money;}
     }
 }

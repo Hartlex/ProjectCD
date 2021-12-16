@@ -14,7 +14,7 @@ namespace SunStructs.ServerInfos.General.Object.Items
         {
             Exercise = byte.Parse(info[start]);
             AttrInfo = new AttrInfo(
-                (AttrType) byte.Parse(info[start + 1]),
+                byte.Parse(info[start + 1]),
                 (AttrValueKind) byte.Parse(info[start + 2]),
                 int.Parse(info[start + 3])
             );

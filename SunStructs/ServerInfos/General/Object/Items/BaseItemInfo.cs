@@ -32,7 +32,7 @@ namespace SunStructs.ServerInfos.General.Object.Items
         public string BoneName;
         public string SaBoneType;
         public ItemSubType SubType;
-        public ushort SetOptionType;
+        public SetItemOption SetOptionType;
         public ushort SetType;
         public ushort Level;
         public byte Durability; //Count
@@ -136,7 +136,7 @@ namespace SunStructs.ServerInfos.General.Object.Items
             BoneName = info[19];
             SaBoneType = info[20];
             SubType =(ItemSubType) int.Parse(info[21]);
-            SetOptionType = ushort.Parse(info[22]);
+            SetOptionType = (SetItemOption) ushort.Parse(info[22]);
             SetType = ushort.Parse(info[23]);
             Level = ushort.Parse(info[24]);
             Durability = byte.Parse(info[25]);
@@ -308,4 +308,5 @@ namespace SunStructs.ServerInfos.General.Object.Items
             return SubType is ItemSubType.UNIQUE;
         }
     }
+    public enum SetItemOption { SET_ITEM_NONE, SET_ITEM_ACTIVE, SET_ITEM_SPECIAL, SET_ITEM_COUNT };
 }

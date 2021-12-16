@@ -14,10 +14,10 @@ namespace SunStructs.ServerInfos.General.Object.Items.SetSystem
         public readonly byte SubType;
         public readonly byte FullOptionNum;
         public readonly SetPartOptionInfos[] PartOptions = new SetPartOptionInfos[8]; //3
-        public readonly OptionInfo[] FullOptions = new OptionInfo[6];
+        public readonly AttrInfo[] FullOptions = new AttrInfo[6];
         public readonly ushort FullSetChangeItemCode;
-        public readonly ushort SpecialItemCode;
-        public readonly SetPartOptionInfos SpecialOption;   //5
+
+        public readonly SpecialOptionInfos SpecialOption;   //5
 
         public SetInfo(string[] info)
         {
@@ -36,20 +36,41 @@ namespace SunStructs.ServerInfos.General.Object.Items.SetSystem
                 FullOptions[i] = new (ref sb);
             }
             FullSetChangeItemCode = sb.ReadUshort();
-            SpecialItemCode = sb.ReadUshort();
-            SpecialOption = new (6, ref sb);
+            
+            SpecialOption = new (5, ref sb);
+        }
+
+        public bool IsFull(int numberOfItems)
+        {
+            return numberOfItems >= FullOptionNum;
         }
 
     }
 
+    public class SpecialOptionInfos
+    {
+        public readonly ushort SpecialItemCode;
+        public readonly EquipContainerPos EquipPosition;
+        public readonly AttrInfo[] Options;
+        public SpecialOptionInfos(int count, ref StringBuffer sb)
+        {
+            Options = new AttrInfo[count];
+            SpecialItemCode = sb.ReadUshort();
+            EquipPosition = (EquipContainerPos)sb.ReadByte();
+            for (int i = 0; i < count; i++)
+            {
+                Options[i] = new(ref sb);
+            }
+        }
+    }
     public class SetPartOptionInfos
     {
         public readonly EquipContainerPos EquipPosition;
-        public readonly OptionInfo[] Options;
+        public readonly AttrInfo[] Options;
 
         public SetPartOptionInfos(int count, ref StringBuffer sb)
         {
-            Options = new OptionInfo[count];
+            Options = new AttrInfo[count];
             EquipPosition = (EquipContainerPos) sb.ReadByte();
             for (int i = 0; i < count; i++)
             {
@@ -58,18 +79,15 @@ namespace SunStructs.ServerInfos.General.Object.Items.SetSystem
         }
     }
 
-    public class OptionInfo
+    public enum SetItemOptionLevel
     {
-        public readonly AttrType AttrType;
-        public readonly byte UseType;
-        public readonly int Value;
+        SET_ITEM_OPTION_LEVEL_NONE,
+        SET_ITEM_OPTION_LEVEL_FIRST,
+        SET_ITEM_OPTION_LEVEL_SECOND,
+        SET_ITEM_OPTION_LEVEL_THIRD,
+        SET_ITEM_OPTION_LEVEL_FULL,
+    };
 
-        public OptionInfo(ref StringBuffer sb)
-        {
-            AttrType = (AttrType) sb.ReadByte();
-            UseType = sb.ReadByte();
-            Value = sb.ReadByte();
-        }
-    }
+
 
 }

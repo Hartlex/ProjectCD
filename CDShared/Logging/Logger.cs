@@ -21,6 +21,11 @@ namespace CDShared.Logging
                 
         }
 
+        public void LogLine(LogType type = LogType.INFO)
+        {
+            Console.ForegroundColor = GetColor(type);
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
         public void Log(object obj,LogType type = LogType.INFO)
         {
             Log(obj.ToString() ?? string.Empty, type);

@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="PacketInfos\Game\Item\Client\" />
     <Folder Include="PacketInfos\Game\Quest\Client\" />
   </ItemGroup>
 

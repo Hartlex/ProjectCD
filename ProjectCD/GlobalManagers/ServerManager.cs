@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CD.Network.Server.Config;
 using CDShared.Generics;
+using CDShared.Logging;
 using ProjectCD.GlobalManagers.Config;
 using ProjectCD.GlobalManagers.PacketParsers;
 using ProjectCD.NetworkBase.Connections;
@@ -32,6 +33,8 @@ namespace ProjectCD.GlobalManagers
 
         public void Initialize()
         {
+            Logger.Instance.Log("Starting servers...",LogType.SYSTEM_MESSAGE);
+            Logger.Instance.LogLine(LogType.SYSTEM_MESSAGE);
             _authServer = new AuthServer(ConfigManager.Instance.GetLoginServerConfig());
             _gameServers = new ();
             var configs = ConfigManager.Instance.GetGameServerConfigs();
@@ -50,12 +53,13 @@ namespace ProjectCD.GlobalManagers
                         config.GetAcceptedSessions(),
                         config.GetHandlePacket()
                     );
-                    _gameServers[config.GetId()].Add(new (serverConfig));
+                    _gameServers[config.GetId()].Add(new (serverConfig,_worldServers[config.GetId()]));
 
                     _channelInfos.Add(new ChannelInfo("Channel "+(i+1),i,config.GetId()));
                 }
             }
-
+            Logger.Instance.LogLine(LogType.SYSTEM_MESSAGE);
+            Logger.Instance.Log("\n",LogType.SUCCESS);
         }
 
         public AnsServerListInfo GetServerListInfo()
@@ -108,12 +112,15 @@ namespace ProjectCD.GlobalManagers
             }
         }
 
-        public bool TryEnterGameServer(AskEnterCharSelectInfo info,Connection connection, out User user)
+        public bool TryEnterGameServer(AskEnterCharSelectInfo info,Connection connection, out User? user, out WorldServer? worldServer)
         {
             user = null;
+            worldServer = null;
             if (!_gameServersWaitList.TryGetValue(info.UserId, out var server)) return false;
             if (!server.IsOnWaitList(info.ClientSerial, out user)) return false;
             if (!server.TryAddUser(user)) return false;
+            worldServer = server.GetWorldServer();
+
             user.SetGameServer(server,connection);
             connection.AppendCloseHandler((con) =>
             {

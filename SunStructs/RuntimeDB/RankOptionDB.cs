@@ -9,12 +9,12 @@ namespace SunStructs.RuntimeDB
 {
     public class RankOptionDB : Singleton<RankOptionDB>
     {
-        private Dictionary<ItemType,Dictionary<AttrType,RankOption>>  _rankOptionDictionary;
+        private Dictionary<ItemType,Dictionary<byte,RankOption>>  _rankOptionDictionary;
         public void Init(string dataFolderPath)
         {
             var parser = new RankOptionParser();
             _rankOptionDictionary = parser.ParseAllOptions(dataFolderPath);
-            Logger.Instance.LogOnLine($"{_rankOptionDictionary.Count} FieldInfos loaded!\n", LogType.SUCCESS);
+            Logger.Instance.LogOnLine($"{_rankOptionDictionary.Count} RankOptions loaded!\n", LogType.SUCCESS);
         }
 
         //public byte GetRankOptionIndex(Item item, )

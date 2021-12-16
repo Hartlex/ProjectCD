@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.Generics;
@@ -42,6 +43,23 @@ namespace ProjectCD.GlobalManagers
                 Logger.Instance.Log($"[{GetType().Name}] User[{user.UserID}] removed! (Reason: {type})",LogType.FULL);
 #endif
             }
+        }
+
+        public bool TryGetUser(Connection otherConnection, out User? user)
+        {
+            foreach (var activeUser in _activeUsers.Values)
+            {
+                if (!(activeUser.GetGameServerConnection().workSocket.RemoteEndPoint is IPEndPoint gameEndPoint)) continue;
+                if (!(otherConnection.workSocket.RemoteEndPoint is IPEndPoint endPoint)) continue;
+                if (Equals(endPoint.Address, gameEndPoint.Address))
+                {
+                    user = activeUser;
+                    return true;
+                }
+            }
+
+            user = null;
+            return false;
         }
     }
     public enum RemoveUserType{

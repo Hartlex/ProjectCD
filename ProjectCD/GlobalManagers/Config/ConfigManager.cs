@@ -17,14 +17,17 @@ namespace ProjectCD.GlobalManagers.Config
 
         public void LoadConfigurations()
         {
+            Logger.Instance.Log("Loading configurations...",LogType.SYSTEM_MESSAGE);
+            Logger.Instance.LogLine(LogType.SYSTEM_MESSAGE);
             try
             {
                 LoadLoginServerConfig();
                 LoadCompatibleClientVersion();
                 LoadDatabaseConfig();
                 LoadGameServerConfig();
-                
-                Logger.Instance.Log("All Configurations loaded!",LogType.SUCCESS);
+
+                Logger.Instance.LogLine(LogType.SYSTEM_MESSAGE);
+                Logger.Instance.Log("\n");
             }
             catch (Exception e)
             {

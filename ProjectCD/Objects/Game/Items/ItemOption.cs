@@ -1,5 +1,6 @@
 ﻿using CDShared.ByteLevel;
 using CDShared.Logging;
+using ProjectCD.Objects.Game.Slots.Items;
 using SunStructs.Definitions;
 using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General.Object.Items.EnchantSystem;
@@ -100,7 +101,7 @@ internal class ItemOption
     }
     public void SetRankOption(Rank rank, RankOption rankOption)
     {
-        var value = (byte)rankOption.AttrType;
+        var value = (byte)rankOption.AttrOptionIndex;
 
         switch (rank)
         {
@@ -140,7 +141,7 @@ internal class ItemOption
             default:
                 throw new ArgumentOutOfRangeException(nameof(rank), rank, null);
         }
-        _ranks[(int)rank] = new (rankOption.AttrType,rankOption.ValueKind,rankOption.RankValues[(int)rank]);
+        _ranks[(int)rank] = new (rankOption.AttrOptionIndex,rankOption.ValueKind,rankOption.RankValues[(int)rank]);
     }
     public RankInfo GeRankOption(Rank rank)
     {
@@ -190,7 +191,7 @@ internal class ItemOption
         }
 
         bool n = _sockets[(int)id]  == null;
-        _sockets[(int) id] = new ((AttrType) option.AttrIndex, option.NumericType, option.Value[(int) level]);
+        _sockets[(int) id] = new (option.AttrOptionIndex, option.NumericType, option.Value[(int) level]);
         if (n)
         {
             _socketCount++;
@@ -229,7 +230,7 @@ internal class ItemOption
         for (int i = (int) RANK_D; i < (int) _rank; i++)
         {
             var option = RankOptionDB.Instance.GetRankOption(_owner.GetItemType(), (Rank)i);
-            _ranks[i] = new RankInfo(option.AttrType, option.ValueKind, option.RankValues[i]);
+            _ranks[i] = new RankInfo(option.AttrOptionIndex, option.ValueKind, option.RankValues[i]);
         }
 
         _enchantGrade = (EnchantGrade) BitManip.Get28to31(_option2);
@@ -246,7 +247,7 @@ internal class ItemOption
             }
 
             var socketInfo = SocketOptionDB.Instance.GetSocketItemOption(code);
-            _sockets[i] = new SocketInfo((AttrType) socketInfo.AttrIndex, socketInfo.NumericType, socketInfo.Value);
+            _sockets[i] = new SocketInfo(socketInfo.AttrOptionIndex, socketInfo.NumericType, socketInfo.Value);
         }
         _etherMounted = BitManip.Get27(_option3) == 1;
     }

@@ -24,4 +24,8 @@ namespace SunStructs.Packets.GameServerPackets.Connection
     {
         public AckEnterGame(AckEnterGameInfo info) : base(131, info) { }
     }
+    public class ConnectToWorldCmd : ConnectionPacket
+    {
+        public ConnectToWorldCmd(ConnectToWorldInfo info) : base(21, info) { }
+    }
 }

@@ -1,9 +1,13 @@
 ﻿using CDShared.ByteLevel;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
+using ProjectCD.Objects.Game.Items;
+using SunStructs.Definitions;
+using SunStructs.RuntimeDB;
+using SunStructs.ServerInfos.General.Object.Items;
 
-namespace ProjectCD.Objects.Game.Items
+namespace ProjectCD.Objects.Game.Slots.Items
 {
-    internal class ItemSlotContainer
+    public class ItemSlotContainer
     {
         protected Player Owner;
         private readonly Dictionary<int, ItemSlot> _slots;
@@ -137,6 +141,92 @@ namespace ProjectCD.Objects.Game.Items
             container2.InsertItem(itemFrom, posFrom, true);
             InsertItem(itemTo, posTo, true);
             return false;
+        }
+
+        public int GetItemCountOfSet(ushort setCode)
+        {
+            var count = 0;
+            foreach (var itemSlot in _slots.Values)
+            {
+                if(itemSlot.IsEmpty()) continue;
+                if (itemSlot.GetBaseInfo()?.SetType == setCode) count++;
+            }
+
+            return count;
+        }
+
+        public Tuple<ushort,byte> GetSameSetItemSlots(BaseItemInfo relatedInfo, bool isAdd,out ItemSlot[] resultList)
+        {
+            resultList = new ItemSlot[150];
+            ushort resultCode = relatedInfo.SetType;
+            byte resultCount=0;
+
+            if (resultCode == 0) return new (resultCount,resultCount);
+
+            var retryState = false;
+
+            var isSpecial = relatedInfo.SetOptionType == SetItemOption.SET_ITEM_SPECIAL;
+            var changeableState = isSpecial;
+
+            for (int j = 0; j < _slots.Count; j += retryState == false ? 1 : 0)
+            {
+                retryState = false;
+                var itemSlot = _slots[j];
+                if(itemSlot == null) continue;
+                if(itemSlot.IsEmpty()) continue;
+                var itemInfo = itemSlot.GetBaseInfo();
+                if (itemInfo!.SetOptionType != SetItemOption.SET_ITEM_ACTIVE) continue;
+                if (itemInfo.SetType == resultCode)
+                {
+
+                    if (isAdd)
+                    {
+                        int i;
+                        for (i = 0; i < resultCount; i++)
+                        {
+                            if (itemInfo.BaseItemId == resultList[resultCount].GetBaseInfo()!.BaseItemId) break;
+                        }
+
+                        if (i >= resultCount)
+                        {
+                            resultList[resultCount] = itemSlot;
+                            resultCount++;
+                        }
+                    }
+                    else
+                    {
+                        if (itemInfo.BaseItemId != relatedInfo.BaseItemId)
+                        {
+                            resultList[resultCount] = itemSlot;
+                            resultCount++;
+                        }
+                    }
+                }
+                else if(changeableState && isSpecial)
+                {
+                    if (!SetInfoDB.Instance.TryGetSetInfo(relatedInfo.SetType, out var setInfo)) continue;
+
+                    changeableState = false;
+
+                    if (relatedInfo.BaseItemId == setInfo.SpecialOption.SpecialItemCode)
+                    {
+                        resultCode = itemInfo.SetType;
+                        resultCount = 0;
+                        resultList = new ItemSlot[150];
+                        retryState = true;
+                        continue;
+                    }
+                }
+
+            }
+
+            return new Tuple<ushort, byte>(resultCode, resultCount);
+;        }
+
+        public virtual bool TryGetItemOfTypeAt(EquipContainerPos pos, ushort code,out ItemSlot? slot)
+        {
+            slot = _slots[(int)pos];
+            return _slots[(int)pos]?.GetCode() == code;
         }
     }
 

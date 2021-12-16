@@ -12,7 +12,6 @@ namespace ProjectCD.NetworkBase.General
         protected CDServerBase(ServerConfig config)
         {
             _config = config;
-            Logger.Instance.Log("\nServer starting...");
             _listener = new ClientListener(config.GetPort(),OnConnect, config.GetHandlePacket());
             Logger.Instance.Log($"Server on Port:{config.GetPort()} started!",LogType.SUCCESS);
         }

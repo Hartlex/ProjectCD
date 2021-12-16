@@ -37,7 +37,7 @@ namespace SunStructs.RuntimeDB.Parsers
             var socketItemOption = new SocketItemOption(info);
             _socketItemOptions.Add(socketItemOption.SocketItemCode,socketItemOption);
 #if DEBUG
-            Logger.Instance.LogOnLine($"Loaded Socket[{socketItemOption.AttrIndex}]");
+            Logger.Instance.LogOnLine($"Loaded Socket[{socketItemOption.AttrOptionIndex}]");
 #endif
         }
     }

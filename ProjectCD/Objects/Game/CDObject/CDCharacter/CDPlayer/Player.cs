@@ -2,6 +2,7 @@
 using ProjectCD.NetworkBase.Connections;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeChildren;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Slots;
 using ProjectCD.Objects.Game.World;
 using ProjectCD.Objects.NetObjects;
 using SunStructs.Definitions;
@@ -15,6 +16,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
     public partial class Player : Character
     {
         private readonly PlayerGeneral _general;
+        private readonly PlayerPVPInfo _pvp;
+        private readonly PlayerGuildInfo _guild;
         private readonly PlayerStyleManager _styleManager;
         private readonly CharType _charType;
         private readonly User _user;
@@ -26,6 +29,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             var id = unchecked((uint)reader.GetInt32(1));
             SetID(id);
             _general = new (ref reader);
+            _pvp = new(ref reader);
+            _guild = new(ref reader);
             _styleManager = new(unchecked((ushort) reader.GetInt32(25)));
 
 
@@ -45,12 +50,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 _general.Experience,
                 _general.RemainSkillPoint,
                 _general.RemainStatPoint,
-                _general.Money,
+                GetMoney(),
                 _styleManager.GetSelectedStyleCode(),
                 (ushort)GetMaxHP(),
-                (ushort)GetHP(),
+                (ushort)GetMaxHP(),
                 (ushort)GetMaxMP(),
-                (ushort)GetMP(),
+                (ushort)GetMaxMP(),
                 0,
                 0,
                 0,
@@ -84,7 +89,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 0,
                 0,
                 (ushort)GetMaxSD(),
-                (ushort)GetSD()
+                (ushort)GetMaxSD()
             ),_inventory.GetShiftedBytes());
         }
 
@@ -100,6 +105,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         public void SendPacket(Packet packet)
         {
             _user.SendPacket(packet);
+        }
+
+        public string GetName()
+        {
+            return _general.Name;
         }
     }
 }

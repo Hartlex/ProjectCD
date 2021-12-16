@@ -1,4 +1,4 @@
-﻿namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
+﻿namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Slots;
 
 public class PlayerStyleManager
 {

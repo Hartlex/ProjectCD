@@ -72,5 +72,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             return _money;
         }
         public ulong GetMoney(){ return _money;}
+
+        public QuickSlotContainer GetQuickSlotContainer()
+        {
+            return _quickSlots;
+        }
     }
 }

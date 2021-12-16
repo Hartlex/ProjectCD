@@ -21,6 +21,11 @@ namespace ProjectCD.Servers.Game.Actions
         {
             RegisterItemAction(211,OnAskMoveItem);
             RegisterItemAction(190,OnAskBindItem);
+            RegisterItemAction(192, OnAskBindSkillToQuick);
+            RegisterItemAction(59, OnAskBindItemToQuick);
+            RegisterItemAction(53, OnAskUnbindQuick);
+            RegisterItemAction(31, OnC2SAskMoveQuick);
+
             Logger.Instance.LogOnLine($"[GAME][ITEM] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
@@ -64,5 +69,33 @@ namespace ProjectCD.Servers.Game.Actions
             connection.Send(outPacket);
         }
 
+        private void OnAskBindSkillToQuick(ByteBuffer buffer, Connection connection)
+        {
+            var info = new BindSkillToQuickInfo(ref buffer);
+            connection.User.Player.GetQuickSlotContainer().SetSkillRef(info.QuickPos, info.SkillCode);
+            var outPacket = new AckSkillToQuick(info);
+            connection.Send(outPacket);
+        }
+
+        private void OnAskBindItemToQuick(ByteBuffer buffer, Connection connection)
+        {
+            var info = new BindItemToQuickInfo(ref buffer);
+            var itemId = connection.User.Player.GetInventory().GetItem(info.InvPos)!.GetItemId();
+            connection.User.Player.GetQuickSlotContainer().SetItemRef(info.QuickPos,info.InvPos,itemId);
+        }
+        private void OnAskUnbindQuick(ByteBuffer buffer, Connection connection)
+        {
+            var info = new UnbindQuickInfo(ref buffer);
+            connection.User.Player.GetQuickSlotContainer().ClearSlot(info.Pos);
+            var outPacket = new AckUnbindQuick(info);
+            connection.Send(outPacket);
+        }
+        private void OnC2SAskMoveQuick(ByteBuffer buffer, Connection connection)
+        {
+            var info = new MoveQuickInfo(ref buffer);
+            connection.User.Player.GetQuickSlotContainer().MoveSlot(info.Pos1, info.Pos2);
+            var outPacket = new AckMoveQuick(info);
+            connection.Send(outPacket);
+        }
     }
 }

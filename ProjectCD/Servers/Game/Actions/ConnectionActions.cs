@@ -75,11 +75,7 @@ namespace ProjectCD.Servers.Game.Actions
             var player = Database.Instance.CreatePlayerFromDB(connection.User, info.CharSlot);
             connection.AppendCloseHandler(player.OnDisconnect);
             connection.User.SelectCharacter(player);
-            if (!connection.User.GetConnectedGameServer().GetField(player.GetCurrentMapCode())
-                .EnterField(player, player.GetPos()))
-            {
-                return;
-            }
+
 
             var fullInfo = player.GetFullCharInfoZone();
             var charPacket = new FullCharInfoCmd(fullInfo);

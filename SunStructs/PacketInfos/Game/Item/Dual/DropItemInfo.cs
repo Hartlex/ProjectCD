@@ -3,12 +3,12 @@ using SunStructs.Definitions;
 
 namespace SunStructs.PacketInfos.Game.Item.Dual
 {
-    public class AskDropItemInfo : DualPacketInfo
+    public class DropItemInfo : DualPacketInfo
     {
         public readonly SlotContainerIndex Index;
         public readonly int Pos;
 
-        public AskDropItemInfo(ref ByteBuffer buffer) : base(ref buffer)
+        public DropItemInfo(ref ByteBuffer buffer) : base(ref buffer)
         {
             Index = (SlotContainerIndex) buffer.ReadByte();
             Pos = buffer.ReadByte();

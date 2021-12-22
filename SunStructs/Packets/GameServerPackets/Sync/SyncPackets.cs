@@ -38,4 +38,13 @@ namespace SunStructs.Packets.GameServerPackets.Sync
         public ItemEnterFieldBrd(ItemEnterFieldInfo info) : base(93, info) { }
     }
 
+    public class AllFieldItemInfoBrd : SyncPacket
+    {
+        public AllFieldItemInfoBrd(AllFieldItemInfo info) : base(97,info){ }
+    }
+    public class ItemLeaveFieldBrd : SyncPacket
+    {
+        public ItemLeaveFieldBrd(ItemLeaveFieldInfo info) : base(2, info) { }
+    }
+
 }

@@ -561,13 +561,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         }
         private void AddAttr(AttrType type, int value, AttrValueType valueType = AttrValueType.ITEM)
         {
-            Logger.Instance.Log($"Added Attribute[{type}][{value}][{valueType}]");
+            //Logger.Instance.Log($"Added Attribute[{type}][{value}][{valueType}]");
             _attr[type].AddValue(value, valueType);
         }
 
         private void SubAttr(AttrType type, int value, AttrValueType valueType = AttrValueType.ITEM)
         {
-            Logger.Instance.Log($"Removed Attribute[{type}][{value}]");
+            //Logger.Instance.Log($"Removed Attribute[{type}][{value}]");
 
             _attr[type].SubtractValue(value, valueType);
 

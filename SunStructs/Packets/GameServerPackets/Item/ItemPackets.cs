@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SunStructs.PacketInfos;
+using SunStructs.PacketInfos.Game.Item.Client;
 using SunStructs.PacketInfos.Game.Item.Dual;
 using SunStructs.PacketInfos.Game.Item.Server;
 using SunStructs.PacketInfos.Game.Sync.Server;
@@ -57,6 +58,20 @@ namespace SunStructs.Packets.GameServerPackets.Item
     public class AckDeleteItem : ItemPacket
     {
         public AckDeleteItem() : base(119, new EmptyPacketInfo()) { }
+    }
+    public class AckDropItem : ItemPacket
+    {
+        public AckDropItem(DropItemInfo info) : base(19, info) { }
+    }
+
+    public class AckDivideItem : ItemPacket
+    {
+        public AckDivideItem() : base(77,new EmptyPacketInfo()){}
+    }
+
+    public class AckMergeItem : ItemPacket
+    {
+        public AckMergeItem(MergeItemInfo info) :base(183,info){}
     }
 
 }

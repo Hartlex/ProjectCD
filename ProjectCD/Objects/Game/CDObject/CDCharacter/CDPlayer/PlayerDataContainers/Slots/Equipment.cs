@@ -85,7 +85,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
 
         private void EquipItem(ItemSlot slot)
         {
-            Logger.Instance.Log("Equiping Item");
+            //Logger.Instance.Log("Equiping Item");
             ItemAttributeCalculator itemCalc = new ItemAttributeCalculator(Owner.GetAttributes(), this,true);
             itemCalc.Equip(slot,true,false);
 
@@ -93,7 +93,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
 
         private void UnEquipItem(ItemSlot slot)
         {
-            Logger.Instance.Log("Unequiping Item");
+            //Logger.Instance.Log("Unequiping Item");
             ItemAttributeCalculator itemCalc = new ItemAttributeCalculator(Owner.GetAttributes(), this, true);
             itemCalc.UnEquip(slot, true, false);
         }

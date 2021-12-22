@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectCD.Objects.Game.CDObject.CDCharacter;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.Items;
 using ProjectCD.Objects.Game.World;
 using SunStructs.Definitions;
@@ -47,17 +48,51 @@ namespace ProjectCD.Objects.Game.CDObject
         {
             base.OnEnterField(field, pos, angle);
 
-            var outInfo = new ItemEnterFieldInfo(_fromMonsterKey, new ItemRenderInfo(
-                GetKey(),
-                _owner?.GetKey() ?? 0,
-                (byte) _fieldItemType,
-                _money,
-                _item?.GetBytes() ?? new byte[27],
-                pos
-            ));
+            var outInfo = new ItemEnterFieldInfo(_fromMonsterKey,GetRenderInfo());
 
             var packet = new ItemEnterFieldBrd(outInfo);
             field.Broadcast(packet);
+        }
+
+        public override void OnLeaveField()
+        {
+            var outInfo = new ItemLeaveFieldInfo(GetKey());
+            var packet = new ItemLeaveFieldBrd(outInfo);
+            GetCurrentField()!.Broadcast(packet);
+            base.OnLeaveField();
+
+        }
+
+        public bool CanPick(Player player)
+        {
+            return _owner?.Equals(player) ?? true;
+        }
+
+        public bool IsMoney()
+        {
+            return _fieldItemType == FieldItemType.MONEY;
+        }
+
+        public ulong GetMoney()
+        {
+            return _money;
+        }
+
+        public Item? GetItem()
+        {
+            return _item;
+        }
+
+        public ItemRenderInfo GetRenderInfo()
+        {
+            return new ItemRenderInfo(
+                GetKey(),
+                _owner?.GetKey() ?? 0, 
+                (byte) _fieldItemType,
+                _money,
+                _item?.GetBytes() ?? new byte[27],
+                GetPos()
+                );
         }
     }
 

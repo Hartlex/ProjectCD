@@ -350,6 +350,10 @@ namespace CDShared.ByteLevel
             return _head;
         }
 
+        public void ResetHead()
+        {
+            _head = 0;
+        }
         public byte[] GetData()
         {
             return _data;

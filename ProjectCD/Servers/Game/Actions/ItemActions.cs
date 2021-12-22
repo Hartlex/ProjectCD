@@ -14,6 +14,7 @@ using SunStructs.Formulas.Item;
 using SunStructs.PacketInfos;
 using SunStructs.PacketInfos.Game.Item.Client;
 using SunStructs.PacketInfos.Game.Item.Dual;
+using SunStructs.PacketInfos.Game.Item.Server;
 using SunStructs.Packets;
 using SunStructs.Packets.GameServerPackets.Item;
 using SunStructs.RuntimeDB.Parsers;
@@ -35,6 +36,9 @@ namespace ProjectCD.Servers.Game.Actions
             RegisterItemAction(176, OnAskSellItem);
             RegisterItemAction(187, OnAskDeleteItem);
             RegisterItemAction(63, OnAskDropItem);
+            RegisterItemAction(228, OnAskPickupItem);
+            RegisterItemAction(57, OnAskDivideItem);
+            RegisterItemAction(87, OnAskMergeItem);
 
             Logger.Instance.LogOnLine($"[GAME][ITEM] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
@@ -153,10 +157,91 @@ namespace ProjectCD.Servers.Game.Actions
         private void OnAskDropItem(ByteBuffer buffer, Connection connection)
         {
             var player = connection.User.Player;
-            var info = new AskDropItemInfo(ref buffer);
+            var info = new DropItemInfo(ref buffer);
             if (player.TryDropItem(info, out var droppedItem)== ItemResult.RC_ITEM_SUCCESS)
             {
                 player.GetCurrentField().DropItemFromPlayer(player,droppedItem!);
+
+                var packet = new AckDropItem(info);
+
+                connection.Send(packet);
+            }
+        }
+
+        private void OnAskPickupItem(ByteBuffer buffer, Connection connection)
+        {
+            var info = new AskPickupItemInfo(ref buffer);
+            var player = connection.User.Player;
+
+            var field = player.GetCurrentField();
+
+
+            if (field == null)
+            {
+                Logger.Instance.Log($"[CRITICAL ERROR][ItemActions][OnAskPickupItem][User:{player.GetKey()}] Field was null!");
+                return;
+            }
+            
+            var result = field.PlayerPickupItem(player, info.ObjectKey,out var slotInfos);
+
+            switch (result)
+            {
+                case ItemResult.RC_ITEM_SUCCESS:
+                    var outInfo = new AckItemPickupInfo(slotInfos!);
+                    var packet = new AckItemPickup(outInfo);
+                    connection.Send(packet);
+                    break;
+            }
+
+        }
+
+        private void OnAskDivideItem(ByteBuffer buffer, Connection connection)
+        {
+            var info = new AskDivideInfo(ref buffer);
+
+            var result = connection.User.Player.TryDivideItem(info);
+            switch (result)
+            {
+                case ItemResult.RC_ITEM_SUCCESS:
+                    var packet = new AckDivideItem();
+                    connection.Send(packet);
+                    break;
+                default:
+                    var testPacket = new TestPacket((byte) GamePacketType.ITEM, 45,
+                        new TestPacketInfo(new[] {(byte) result}));
+                    connection.Send(testPacket);
+                    break;
+            }
+        }
+
+        private void OnAskMergeItem(ByteBuffer buffer, Connection connection)
+        {
+            var info = new MergeItemInfo(ref buffer);
+
+            var result = connection.User.Player.TryMergeItem(ref info);
+            Logger.Instance.Log(info.Amount);
+            switch (result)
+            {
+                
+                case ItemResult.RC_ITEM_SUCCESS:
+                    //var b = new ByteBuffer();
+                    //info.GetBytes(ref b);
+                    //b.ResetHead();
+                    //var packet = new AckItemMove(new ItemMoveInfo(ref b));
+                    //connection.Send(packet);
+
+                    //for (byte i = 179; i < 255; i++)
+                    //{
+                        //var b = new ByteBuffer();
+                        //info.GetBytes(ref b);
+                        //var testpacket = new TestPacket((byte)GamePacketType.ITEM, 183, new TestPacketInfo(b.GetData()));
+                        //connection.Send(testpacket);
+
+                    //}
+                    var packet = new AckMergeItem(info);
+                    connection.Send(packet);
+
+                    break;
             }
         }
     }

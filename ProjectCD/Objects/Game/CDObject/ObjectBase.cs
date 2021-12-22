@@ -37,6 +37,7 @@ public abstract class ObjectBase
     public virtual void OnEnterField(Field field, SunVector pos, ushort angle = 0)
     {
         _currentField = field;
+        _position = pos;
     }
 
     public virtual void OnLeaveField()
@@ -49,6 +50,20 @@ public abstract class ObjectBase
         return _currentField;
     }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is ObjectBase objBase && Equals(objBase);
+    }
+
+    protected bool Equals(ObjectBase other)
+    {
+        return _objectID == other._objectID;
+    }
+
+    public override int GetHashCode()
+    {
+        return (int) _objectID;
+    }
 }
 
 public enum ObjectKey

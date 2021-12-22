@@ -96,7 +96,6 @@ namespace ProjectCD.NetworkBase.General
                 // Retrieve the state object and the handler socket  
                 // from the asynchronous state object.  
 
-
                 int bytesRead = handler.EndReceive(ar);
                 if (bytesRead > 0)
                 {

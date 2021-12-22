@@ -38,7 +38,12 @@ namespace ProjectCD.Servers.Game.Actions
         private void AskEnterField(ByteBuffer buffer, Connection connection)
         {
             var checksum = buffer.ReadBlock(16);
-
+            var player = connection.User.Player;
+            if (!connection.User.GetConnectedGameServer().GetField(player.GetCurrentMapCode())
+                    .EnterField(player, player.GetPos()))
+            {
+                return;
+            }
             var guildPacket = new AllPlayersGuildInfoCmd(new TestPacketInfo(new byte[1]));
             var equipPacket = new AllPlayersEquipInfoCmd(new TestPacketInfo(new byte[1]));
             var enterPacket = new AckEnterWorld(new AckEnterWorldInfo(connection.User.Player.GetPos()));
@@ -57,6 +62,8 @@ namespace ProjectCD.Servers.Game.Actions
         {
             var info = new JumpInfo(ref buffer);
             connection.User.Player.OnJump(info);
+
+            connection.User.Player.GetCurrentField()?.SendPlayerAllInfos(connection.User.Player);
         }
 
         private void OnMouseMove(ByteBuffer buffer, Connection connection)

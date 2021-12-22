@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using CDShared.ByteLevel;
 using CDShared.Logging;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Slots;
@@ -57,7 +58,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             return true;
         }
 
-        private ItemSlotContainer GetItemSlotContainer(SlotContainerIndex index)
+        private ItemSlotContainer? GetItemSlotContainer(SlotContainerIndex index)
         {
             switch (index)
             {
@@ -160,7 +161,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             return RC_ITEM_SUCCESS;
         }
 
-        public ItemResult TryDropItem(AskDropItemInfo info,out Item? droppedItem)
+        public ItemResult TryDropItem(DropItemInfo info,out Item? droppedItem)
         {
             droppedItem = null;
             var container = GetItemSlotContainer(info.Index);
@@ -174,6 +175,53 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
             _inventory.DeleteItem(info.Pos);
             droppedItem = item;
+            return RC_ITEM_SUCCESS;
+
+        }
+
+        public ItemResult TryDivideItem(AskDivideInfo info)
+        {
+            var slot1 = _inventory.GetSlot(info.FromPos);
+            var slot2 = _inventory.GetSlot(info.ToPos);
+
+            var item = slot1.GetItem();
+            if(item==null) return RC_ITEM_INVALIDPOS;
+
+            if (!slot2.IsEmpty()) return RC_ITEM_INVALIDPOS;
+
+            var b = new ByteBuffer(item.GetBytes());
+            var slot1Item = new Item(ref b);
+            b.ResetHead();
+            var slot2Item= new Item(ref b);
+
+            slot1Item.SetAmount((byte) info.FromCount);
+            slot2Item.SetAmount((byte) info.ToCount);
+
+            slot1.SetItem(slot1Item);
+            slot2.SetItem(slot2Item);
+
+            return RC_ITEM_SUCCESS;
+        }
+
+        public ItemResult TryMergeItem(ref MergeItemInfo info)
+        {
+            var container1 = GetItemSlotContainer(info.FromIndex);
+            var container2 = GetItemSlotContainer(info.ToIndex);
+            if (container1 == null || container2 == null) return RC_ITEM_INVALIDPOS;
+            var item1 = container1.GetSlot(info.FromPos).GetItem();
+            var item2 = container2.GetSlot(info.ToPos).GetItem();
+            if (item1 == null || item2 == null) return RC_ITEM_INVALIDPOS;
+
+            if(item1.GetItemId() != item2.GetItemId()) return RC_ITEM_ITEMCODENOTEQUAL;
+            var amount = info.Amount == 0 ? item1.GetAmount() : info.Amount;
+            item2.SetAmount((byte) (item2.GetAmount()+amount));
+
+            if(amount==item1.GetAmount())
+                container1.GetSlot(info.FromPos).RemoveItem();
+            else if (amount < item1.GetAmount())
+                item1.DecreaseAmount(amount);
+        
+            info.Amount = item2.GetAmount();
             return RC_ITEM_SUCCESS;
 
         }

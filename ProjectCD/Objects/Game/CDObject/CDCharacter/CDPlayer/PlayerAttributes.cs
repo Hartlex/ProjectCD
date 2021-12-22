@@ -23,7 +23,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             uint recoverMP = 10;
             uint recoverSD = 10;
 
-            _attributes = new();
+            _attributes = new(this);
             var strength = unchecked((ushort) reader.GetInt16(9));
             var vitality = unchecked((ushort) reader.GetInt16(10));
             var agility = unchecked((ushort) reader.GetInt16(11));
@@ -76,6 +76,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _mp =  _attributes[ATTR_MAX_MP].GetValue32();
             _sd =  _attributes[ATTR_MAX_SD].GetValue32();
 
+            _attributes.Update();
         }
 
         public override ushort GetSTR() { return _attributes[ATTR_STR].GetValue16(); }
@@ -98,6 +99,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         public PlayerAttr GetAttributes()
         {
             return _attributes;
+        }
+
+        public float GetMoveSpeedRatio()
+        {
+            return _attributes[ATTR_MOVE_SPEED].GetValue();
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.Logging;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
+using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Sync.Client;
 using SunStructs.PacketInfos.Game.Sync.Server;
 using SunStructs.Packets.GameServerPackets.Sync;
@@ -15,6 +17,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
     public partial class Player
     {
+        private MoveStateControl _moveStateControl;
         private uint _fieldCode;
         private float _angle;
         private ushort _tileID;
@@ -22,6 +25,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
         public void PlayerMovementInit(ref SqlDataReader reader)
         {
+            _moveStateControl = new MoveStateControl(this, CharMoveState.CMS_RUN);
             var posX = reader.GetFloat(30);
             var posY = reader.GetFloat(31);
             var posZ = reader.GetFloat(32);
@@ -37,7 +41,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _tileID = info.TileIndex;
             _moveState = info.MoveState;
 
-            var brdInfo = new KeyboardMoveBrdInfo(GetID(), info.CurrentPosition, info.TileIndex, info.Angle,
+            var brdInfo = new KeyboardMoveBrdInfo(GetKey(), info.CurrentPosition, info.TileIndex, info.Angle,
                 info.MoveState);
             var packet = new MoveSyncBrd(brdInfo);
             GetCurrentField()?.SendToAllBut(packet,this);

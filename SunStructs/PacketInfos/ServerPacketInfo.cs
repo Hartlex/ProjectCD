@@ -12,7 +12,7 @@ namespace SunStructs.PacketInfos
         }
         public abstract void GetBytes(ref ByteBuffer buffer);
     }
-    public class EmptyPacket : ServerPacketInfo
+    public class EmptyPacketInfo : ServerPacketInfo
     {
         public override void GetBytes(ref ByteBuffer buffer)
         {
@@ -33,4 +33,7 @@ namespace SunStructs.PacketInfos
             buffer.WriteBlock(_bytes);
         }
     }
+
+
+
 }

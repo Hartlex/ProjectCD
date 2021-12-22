@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SunStructs.Formulas.Char;
+using SunStructs.ServerInfos.General.Object.Items;
+using SunStructs.ServerInfos.General.Object.Items.RankSystem;
 
 namespace SunStructs.Formulas.Item
 {
@@ -78,6 +81,16 @@ namespace SunStructs.Formulas.Item
         public static int CalcPhyDef(int phyDef, byte enchant, ushort level)
         {
             return phyDef + GetArmorEnchantWeightForEnchant(enchant) + enchant * GetArmorEnchantWeightForLV(level);
+        }
+
+        public static uint GetItemPriceForBuy(ushort level, Rank rank, int enchant, byte divine)
+        {
+            var rankPrice = NumericValues.GetPriceWeightForRank(rank);
+            var enchantPrice = NumericValues.GetPriceWeightForEnchant(enchant);
+            float price = rankPrice * enchantPrice * level;
+            if (divine != 0)
+                price *= 4;
+            return (uint) price;
         }
     }
 }

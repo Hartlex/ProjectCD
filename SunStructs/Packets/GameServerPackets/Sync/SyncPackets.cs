@@ -33,5 +33,9 @@ namespace SunStructs.Packets.GameServerPackets.Sync
     {
         public MoveSyncBrd(KeyboardMoveBrdInfo info) : base(61, info) { }
     }
+    public class ItemEnterFieldBrd : SyncPacket
+    {
+        public ItemEnterFieldBrd(ItemEnterFieldInfo info) : base(93, info) { }
+    }
 
 }

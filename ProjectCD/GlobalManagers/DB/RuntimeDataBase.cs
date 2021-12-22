@@ -2,6 +2,7 @@
 using CDShared.Generics;
 using CDShared.Logging;
 using SunStructs.RuntimeDB;
+using SunStructs.RuntimeDB.Parsers;
 
 namespace ProjectCD.GlobalManagers.DB
 {
@@ -18,13 +19,15 @@ namespace ProjectCD.GlobalManagers.DB
             BaseNpcDB.Instance.Init(dataFolderPath);
             BaseMapDB.Instance.Init(dataFolderPath);
             PortalDB.Instance.Init(dataFolderPath);
-            //AreaDB.Instance.Init(dataFolderPath);
+            AreaDB.Instance.Init(dataFolderPath);
+            ExtraNPCInfoDB.Instance.Init(dataFolderPath);
             RankOptionDB.Instance.Init(dataFolderPath);
             SocketOptionDB.Instance.Init(dataFolderPath);
             StateInfoDB.Instance.Init(dataFolderPath);
-            //NpcShopDB.Instance.Init(dataFolderPath);
+            NPCShopDB.Instance.Init(dataFolderPath);
             EnchantInfoDB.Instance.Init(dataFolderPath);
             ExpInfoDB.Instance.Init(dataFolderPath);
+            ItemTypeDB.Instance.Init(dataFolderPath);
             //TileInfoDB.Instance.Init();
             //RespawnInfoDB.Instance.Init(dataFolderPath);
             QuestInfoDB.Instance.Init(dataFolderPath);

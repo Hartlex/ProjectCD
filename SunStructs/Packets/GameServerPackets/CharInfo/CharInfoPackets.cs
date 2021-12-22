@@ -22,7 +22,7 @@ namespace SunStructs.Packets.GameServerPackets.CharInfo
 
     public class AckDuplicateName : CharInfoPacket
     {
-        public AckDuplicateName(EmptyPacket empty) : base(12, empty) { }
+        public AckDuplicateName(EmptyPacketInfo empty) : base(12, empty) { }
     }
 
     public class AckCreateCharacter : CharInfoPacket
@@ -37,7 +37,7 @@ namespace SunStructs.Packets.GameServerPackets.CharInfo
 
     public class AckDeleteCharacter : CharInfoPacket
     {
-        public AckDeleteCharacter(EmptyPacket info) : base(7, info) { }
+        public AckDeleteCharacter(EmptyPacketInfo info) : base(7, info) { }
     }
 
     public class NakDeleteCharacter : CharInfoPacket

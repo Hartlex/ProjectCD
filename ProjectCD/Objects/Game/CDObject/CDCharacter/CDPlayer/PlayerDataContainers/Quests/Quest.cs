@@ -55,7 +55,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
                 if (itemCode == 0) break;
                 var itemAmount = _info.AcquireActionInfo.GiveItemNum[i];
     
-                var itemInfo = BaseItemDB.Instance.GetBaseItemInfo(itemCode);
+                BaseItemDB.Instance.TryGetBaseItemInfo(itemCode,out var itemInfo);
                 var item = new Item(itemInfo);
                 item.SetAmount(itemAmount);
                 result.Add(item);

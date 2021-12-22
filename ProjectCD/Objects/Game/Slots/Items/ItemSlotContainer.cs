@@ -93,7 +93,8 @@ namespace ProjectCD.Objects.Game.Slots.Items
         {
             return pos >= GetMaxSlotNum() ? null : _slots[pos].GetItem();
         }
-        public void DeleteItem(int pos)
+
+        public virtual void DeleteItem(int pos)
         {
             _slots[pos].RemoveItem();
         }

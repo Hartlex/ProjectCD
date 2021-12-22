@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SunStructs.Definitions;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 {
@@ -18,5 +19,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         public virtual uint GetMP() {return 0; }
         public virtual uint GetMaxHP() {return 0; }
         public virtual uint GetMaxMP() {return 0; }
+
+        public Character(uint key) : base(key)
+        {
+            SetObjectType(ObjectType.CHARACTER_OBJECT);
+        }
     }
 }

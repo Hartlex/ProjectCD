@@ -30,6 +30,6 @@ namespace SunStructs.Definitions
         public const int MAX_SKILL_SLOT_NUM = 100;
         public const int MAX_WAREHOUSE_SLOT_NUM = 5 * 5 * 5;
         public const int MAX_QUICK_SLOT_NUM = 48;
-
+        public const float SPEED_MULTIPLIER = 0.001f;
     }
 }

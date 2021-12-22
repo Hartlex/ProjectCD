@@ -7,21 +7,21 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 {
     public abstract class Attributes
     {
-        private readonly Attribute[] _attributes;
-        private readonly Attribute[] _reduceDefenseRate = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
-        private readonly Attribute[] _magicalAttPower = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
-        private readonly Attribute[] _bonusDefense = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
-        private readonly Attribute[] _magicalDefPower = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
-        private readonly Attribute[] _bonusDamage = new Attribute[(int )ArmorType.ARMOR_TYPE_MAX];
-        private readonly Attribute[] _bonusDamagePercent = new Attribute[(int )ArmorType.ARMOR_TYPE_MAX];
-        private readonly Attribute[] _reduceDamage = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
+        protected readonly Attribute[] Attrs;
+        protected readonly Attribute[] ReduceDefenseRate = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
+        protected readonly Attribute[] MagicalAttPower = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
+        protected readonly Attribute[] BonusDefense = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
+        protected readonly Attribute[] MagicalDefPower = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
+        protected readonly Attribute[] BonusDamage = new Attribute[(int )ArmorType.ARMOR_TYPE_MAX];
+        protected readonly Attribute[] BonusDamagePercent = new Attribute[(int )ArmorType.ARMOR_TYPE_MAX];
+        protected readonly Attribute[] ReduceDamage = new Attribute[(int )AttackType.ATTACK_TYPE_MAX];
 
         protected Attributes(AttrProfile profile)
         {
-            _attributes = new Attribute[(int) AttrType.ATTR_MAX];
+            Attrs = new Attribute[(int) AttrType.ATTR_MAX];
             foreach (var attribute in profile.GetAttrTypes())
             {
-                _attributes[(int) attribute] = new ();
+                Attrs[(int) attribute] = new ();
             }
             RegisterBonusDefenseRatio();
             RegisterBonusDefense();
@@ -34,86 +34,86 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 
         private void RegisterBonusDamage()
         {
-            _bonusDamage[(int) ArmorType.ARMOR_HARD] = _attributes[(int) AttrType.ATTR_ADD_ARMOR_HARD_DAMAGE];
-            _bonusDamage[(int) ArmorType.ARMOR_MEDIUM] = _attributes[(int) AttrType.ATTR_ADD_ARMOR_MEDIUM_DAMAGE];
-            _bonusDamage[(int) ArmorType.ARMOR_SOFT] = _attributes[(int) AttrType.ATTR_ADD_ARMOR_SOFT_DAMAGE];
-            _bonusDamage[(int) ArmorType.ARMOR_SIEGE] = _attributes[(int) AttrType.ATTR_ADD_ARMOR_SIEGE_DAMAGE];
-            _bonusDamage[(int) ArmorType.ARMOR_UNARMOR] = _attributes[(int) AttrType.ATTR_ADD_ARMOR_UNARMOR_DAMAGE];
+            BonusDamage[(int) ArmorType.ARMOR_HARD] = Attrs[(int) AttrType.ATTR_ADD_ARMOR_HARD_DAMAGE];
+            BonusDamage[(int) ArmorType.ARMOR_MEDIUM] = Attrs[(int) AttrType.ATTR_ADD_ARMOR_MEDIUM_DAMAGE];
+            BonusDamage[(int) ArmorType.ARMOR_SOFT] = Attrs[(int) AttrType.ATTR_ADD_ARMOR_SOFT_DAMAGE];
+            BonusDamage[(int) ArmorType.ARMOR_SIEGE] = Attrs[(int) AttrType.ATTR_ADD_ARMOR_SIEGE_DAMAGE];
+            BonusDamage[(int) ArmorType.ARMOR_UNARMOR] = Attrs[(int) AttrType.ATTR_ADD_ARMOR_UNARMOR_DAMAGE];
             
         }
         private void RegisterBonusDamageRatio()
         {
-            _bonusDamagePercent[(int)ArmorType.ARMOR_HARD] = _attributes[(int)AttrType.ATTR_ADD_RATIO_ARMOR_HARD_DAMAGE];
-            _bonusDamagePercent[(int)ArmorType.ARMOR_MEDIUM] = _attributes[(int)AttrType.ATTR_ADD_RATIO_ARMOR_MEDIUM_DAMAGE];
-            _bonusDamagePercent[(int)ArmorType.ARMOR_SOFT] = _attributes[(int)AttrType.ATTR_ADD_RATIO_ARMOR_SOFT_DAMAGE];
-            _bonusDamagePercent[(int)ArmorType.ARMOR_SIEGE] = _attributes[(int)AttrType.ATTR_ADD_RATIO_ARMOR_SIEGE_DAMAGE];
-            _bonusDamagePercent[(int)ArmorType.ARMOR_UNARMOR] = _attributes[(int)AttrType.ATTR_ADD_RATIO_ARMOR_UNARMOR_DAMAGE];
+            BonusDamagePercent[(int)ArmorType.ARMOR_HARD] = Attrs[(int)AttrType.ATTR_ADD_RATIO_ARMOR_HARD_DAMAGE];
+            BonusDamagePercent[(int)ArmorType.ARMOR_MEDIUM] = Attrs[(int)AttrType.ATTR_ADD_RATIO_ARMOR_MEDIUM_DAMAGE];
+            BonusDamagePercent[(int)ArmorType.ARMOR_SOFT] = Attrs[(int)AttrType.ATTR_ADD_RATIO_ARMOR_SOFT_DAMAGE];
+            BonusDamagePercent[(int)ArmorType.ARMOR_SIEGE] = Attrs[(int)AttrType.ATTR_ADD_RATIO_ARMOR_SIEGE_DAMAGE];
+            BonusDamagePercent[(int)ArmorType.ARMOR_UNARMOR] = Attrs[(int)AttrType.ATTR_ADD_RATIO_ARMOR_UNARMOR_DAMAGE];
 
         }
         private void RegisterBonusDefense()
         {
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_ALL_OPTION] = _attributes[(int)AttrType.ATTR_ADD_ALL_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_MELEE] = _attributes[(int)AttrType.ATTR_ADD_MELEE_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_RANGE] = _attributes[(int)AttrType.ATTR_ADD_RANGE_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_WATER] = _attributes[(int)AttrType.ATTR_ADD_WATER_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_FIRE] = _attributes[(int)AttrType.ATTR_ADD_FIRE_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_WIND] = _attributes[(int)AttrType.ATTR_ADD_WIND_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_EARTH] = _attributes[(int)AttrType.ATTR_ADD_EARTH_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_DARKNESS] = _attributes[(int)AttrType.ATTR_ADD_DARKNESS_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_DIVINE] = _attributes[(int)AttrType.ATTR_ADD_DIVINE_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = _attributes[(int)AttrType.ATTR_ADD_PHYSICAL_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = _attributes[(int)AttrType.ATTR_ADD_MAGICAL_DEFENSE_POWER];
-            _bonusDefense[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = _attributes[(int)AttrType.ATTR_ADD_ALL_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_ALL_OPTION] = Attrs[(int)AttrType.ATTR_ADD_ALL_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_MELEE] = Attrs[(int)AttrType.ATTR_ADD_MELEE_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_RANGE] = Attrs[(int)AttrType.ATTR_ADD_RANGE_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_WATER] = Attrs[(int)AttrType.ATTR_ADD_WATER_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_FIRE] = Attrs[(int)AttrType.ATTR_ADD_FIRE_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_WIND] = Attrs[(int)AttrType.ATTR_ADD_WIND_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_EARTH] = Attrs[(int)AttrType.ATTR_ADD_EARTH_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_DARKNESS] = Attrs[(int)AttrType.ATTR_ADD_DARKNESS_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_DIVINE] = Attrs[(int)AttrType.ATTR_ADD_DIVINE_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = Attrs[(int)AttrType.ATTR_ADD_PHYSICAL_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = Attrs[(int)AttrType.ATTR_ADD_MAGICAL_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = Attrs[(int)AttrType.ATTR_ADD_ALL_DEFENSE_POWER];
         }
         private void RegisterMagicAttackPower()
         {
-            _magicalAttPower[(int)AttackType.ATTACK_TYPE_WATER] = _attributes[(int)AttrType.ATTR_MAGICAL_WATER_ATTACK_POWER];
-            _magicalAttPower[(int)AttackType.ATTACK_TYPE_FIRE] = _attributes[(int)AttrType.ATTR_MAGICAL_FIRE_ATTACK_POWER];
-            _magicalAttPower[(int)AttackType.ATTACK_TYPE_WIND] = _attributes[(int)AttrType.ATTR_MAGICAL_WIND_ATTACK_POWER];
-            _magicalAttPower[(int)AttackType.ATTACK_TYPE_EARTH] = _attributes[(int)AttrType.ATTR_MAGICAL_EARTH_ATTACK_POWER];
-            _magicalAttPower[(int)AttackType.ATTACK_TYPE_DARKNESS] = _attributes[(int)AttrType.ATTR_MAGICAL_DARKNESS_ATTACK_POWER];
-            _magicalAttPower[(int)AttackType.ATTACK_TYPE_DIVINE] = _attributes[(int)AttrType.ATTR_MAGICAL_DIVINE_ATTACK_POWER];
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_WATER] = Attrs[(int)AttrType.ATTR_MAGICAL_WATER_ATTACK_POWER];
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_FIRE] = Attrs[(int)AttrType.ATTR_MAGICAL_FIRE_ATTACK_POWER];
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_WIND] = Attrs[(int)AttrType.ATTR_MAGICAL_WIND_ATTACK_POWER];
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_EARTH] = Attrs[(int)AttrType.ATTR_MAGICAL_EARTH_ATTACK_POWER];
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_DARKNESS] = Attrs[(int)AttrType.ATTR_MAGICAL_DARKNESS_ATTACK_POWER];
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_DIVINE] = Attrs[(int)AttrType.ATTR_MAGICAL_DIVINE_ATTACK_POWER];
         }
         private void RegisterMagicalDefPower()
         {
-            _magicalDefPower[(int)AttackType.ATTACK_TYPE_WATER] = _attributes[(int)AttrType.ATTR_MAGICAL_WATER_DEFENSE_POWER];
-            _magicalDefPower[(int)AttackType.ATTACK_TYPE_FIRE] = _attributes[(int)AttrType.ATTR_MAGICAL_FIRE_DEFENSE_POWER];
-            _magicalDefPower[(int)AttackType.ATTACK_TYPE_WIND] = _attributes[(int)AttrType.ATTR_MAGICAL_WIND_DEFENSE_POWER];
-            _magicalDefPower[(int)AttackType.ATTACK_TYPE_EARTH] = _attributes[(int)AttrType.ATTR_MAGICAL_EARTH_DEFENSE_POWER];
-            _magicalDefPower[(int)AttackType.ATTACK_TYPE_DARKNESS] = _attributes[(int)AttrType.ATTR_MAGICAL_DARKNESS_DEFENSE_POWER];
-            _magicalDefPower[(int)AttackType.ATTACK_TYPE_DIVINE] = _attributes[(int)AttrType.ATTR_MAGICAL_DIVINE_DEFENSE_POWER];
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_WATER] = Attrs[(int)AttrType.ATTR_MAGICAL_WATER_DEFENSE_POWER];
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_FIRE] = Attrs[(int)AttrType.ATTR_MAGICAL_FIRE_DEFENSE_POWER];
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_WIND] = Attrs[(int)AttrType.ATTR_MAGICAL_WIND_DEFENSE_POWER];
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_EARTH] = Attrs[(int)AttrType.ATTR_MAGICAL_EARTH_DEFENSE_POWER];
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_DARKNESS] = Attrs[(int)AttrType.ATTR_MAGICAL_DARKNESS_DEFENSE_POWER];
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_DIVINE] = Attrs[(int)AttrType.ATTR_MAGICAL_DIVINE_DEFENSE_POWER];
         }
         private void RegisterBonusDefenseRatio()
         {
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_ALL_OPTION] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_MELEE] = _attributes[(int)AttrType.ATTR_DEL_MELEE_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_RANGE] = _attributes[(int)AttrType.ATTR_DEL_RANGE_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_WATER] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_FIRE] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_WIND] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_EARTH] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_DARKNESS] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_DIVINE] = _attributes[(int)AttrType.ATTR_DEL_DIVINE_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
-            _reduceDefenseRate[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = _attributes[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_ALL_OPTION] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_MELEE] = Attrs[(int)AttrType.ATTR_DEL_MELEE_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_RANGE] = Attrs[(int)AttrType.ATTR_DEL_RANGE_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_WATER] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_FIRE] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_WIND] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_EARTH] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_DARKNESS] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_DIVINE] = Attrs[(int)AttrType.ATTR_DEL_DIVINE_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = Attrs[(int)AttrType.ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
         }
         private void RegisterReduceDamage()
         {
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_ALL_OPTION] = _attributes[(int)AttrType.ATTR_DEL_ALL_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_MELEE] = _attributes[(int)AttrType.ATTR_DEL_MELEE_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_RANGE] = _attributes[(int)AttrType.ATTR_DEL_RANGE_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_WATER] = _attributes[(int)AttrType.ATTR_DEL_WATER_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_FIRE] = _attributes[(int)AttrType.ATTR_DEL_FIRE_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_WIND] = _attributes[(int)AttrType.ATTR_DEL_WIND_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_EARTH] = _attributes[(int)AttrType.ATTR_DEL_EARTH_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_DARKNESS] = _attributes[(int)AttrType.ATTR_DEL_DARKNESS_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_DIVINE] = _attributes[(int)AttrType.ATTR_DEL_DIVINE_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = _attributes[(int)AttrType.ATTR_DEL_PHYSICAL_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = _attributes[(int)AttrType.ATTR_DEL_MAGICAL_DAMAGE];
-            _reduceDamage[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = _attributes[(int)AttrType.ATTR_DEL_MAGICAL_ALL_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_ALL_OPTION] = Attrs[(int)AttrType.ATTR_DEL_ALL_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_MELEE] = Attrs[(int)AttrType.ATTR_DEL_MELEE_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_RANGE] = Attrs[(int)AttrType.ATTR_DEL_RANGE_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_WATER] = Attrs[(int)AttrType.ATTR_DEL_WATER_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_FIRE] = Attrs[(int)AttrType.ATTR_DEL_FIRE_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_WIND] = Attrs[(int)AttrType.ATTR_DEL_WIND_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_EARTH] = Attrs[(int)AttrType.ATTR_DEL_EARTH_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_DARKNESS] = Attrs[(int)AttrType.ATTR_DEL_DARKNESS_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_DIVINE] = Attrs[(int)AttrType.ATTR_DEL_DIVINE_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = Attrs[(int)AttrType.ATTR_DEL_PHYSICAL_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = Attrs[(int)AttrType.ATTR_DEL_MAGICAL_DAMAGE];
+            ReduceDamage[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = Attrs[(int)AttrType.ATTR_DEL_MAGICAL_ALL_DAMAGE];
         }
-        public Attribute this[AttrType key] => _attributes[(int)key];
+        public Attribute this[AttrType key] => Attrs[(int)key];
 
         public ushort GetValue16(AttrType key)
         {
@@ -125,16 +125,19 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         }
         public void SetBaseValue(AttrType key, ushort value)
         {
-            _attributes[(int) key].SetValue(value);
+            Attrs[(int) key].SetValue(value);
         }
         public void SetBaseValue(AttrType key, uint value)
         {
-            _attributes[(int)key].SetValue(value);
+            Attrs[(int)key].SetValue(value);
         }
 
-        public void Update()
+        public abstract void Update();
+
+        public abstract void UpdateEx();
+        public void FullUpdate()
         {
-            foreach (var attribute in _attributes)
+            foreach (var attribute in Attrs)
             {
                 attribute?.Update();
             }
@@ -142,41 +145,41 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 
         public int GetBonusDamage(ArmorType type)
         {
-            return _bonusDamage[(int) type].GetValue();
+            return BonusDamage[(int) type].GetValue();
         }
 
         public int GetBonusPercentDamage(ArmorType type)
         {
-            return _bonusDamagePercent[(int) type].GetValue();
+            return BonusDamagePercent[(int) type].GetValue();
         }
 
         public int GetReducePhysicalTargetDefenseRatio()
         {
-            return _attributes[(int)AttrType.ATTR_DEL_PHYSICAL_TARGET_DEFENSE_RATIO].GetValue();
+            return Attrs[(int)AttrType.ATTR_DEL_PHYSICAL_TARGET_DEFENSE_RATIO].GetValue();
         }
 
         public int GetReduceDamage(AttackType type)
         {
-            return _reduceDamage[(int) type].GetValue();
+            return ReduceDamage[(int) type].GetValue();
         }
 
         public int GetMagicalAttackPower(AttackType type, AttrValueType valueType = CALC)
         {
-            return _magicalAttPower[(int) type].GetValue(valueType);
+            return MagicalAttPower[(int) type].GetValue(valueType);
         }
 
         public int GetMagicalDefense(AttackType attackType, AttrValueType valueType = CALC)
         {
-            return _magicalDefPower[(int)attackType].GetValue(valueType);
+            return MagicalDefPower[(int)attackType].GetValue(valueType);
         }
 
         public int GetBonusDefense(AttackType type)
         {
-            return _bonusDefense[(int)type].GetValue();
+            return BonusDefense[(int)type].GetValue();
         }
         public int GetBonusDefenseRatio(AttackType type)
         {
-            return _bonusDamagePercent[(int)type].GetValue();
+            return BonusDamagePercent[(int)type].GetValue();
         }
 
 

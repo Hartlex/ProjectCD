@@ -23,7 +23,7 @@ namespace ProjectCD.Servers.Game
 
         protected override void OnConnect(Connection connection)
         {
-            
+            Logger.Instance.Log("Gameserver Connection");
         }
 
         public GameField GetField(uint mapCode)

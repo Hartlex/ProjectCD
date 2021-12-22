@@ -1,5 +1,7 @@
 ﻿using ProjectCD.Objects.Game.Items;
 using ProjectCD.Objects.Game.Slots.Items;
+using SunStructs.Definitions;
+using SunStructs.PacketInfos.Game.Item.Client;
 using SunStructs.PacketInfos.Game.Item.Server;
 using SunStructs.RuntimeDB;
 
@@ -25,10 +27,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
             return true;
 
         }
-        public bool InsertItem(ushort itemId, int count, out ItemSlotInfo[] slotInfos)
+        public bool InsertItem(ushort itemId, int count, out ItemSlotInfo[]? slotInfos)
         {
             var items = new List<Item>();
-            var itemInfo = BaseItemDB.Instance.GetBaseItemInfo(itemId);
+            slotInfos = null;
+
+            if (!BaseItemDB.Instance.TryGetBaseItemInfo(itemId, out var itemInfo)) return false;
             while (count > 0)
             {
                 var item = new Item(itemInfo);
@@ -108,18 +112,28 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
                 var slot = GetSlot(i);
                 if (slot.IsEmpty()) continue;
                 if (slot.GetItem().GetItemId() != itemId) continue;
-                if (slot.GetItem().GetAmount() >= amount)
+                if (slot.GetItem().GetAmount() > amount)
                 {
                     slot.GetItem().DecreaseAmount((byte)amount);
+                    return true;
+                }
+
+                if (slot.GetItem().GetAmount() == amount)
+                {
+                    slot.RemoveItem();
+                    return true;
                 }
                 else
                 {
                     amount -= slot.GetItem().GetAmount();
                     slot.RemoveItem();
+
                 }
             }
 
             return true;
         }
+        
+
     }
 }

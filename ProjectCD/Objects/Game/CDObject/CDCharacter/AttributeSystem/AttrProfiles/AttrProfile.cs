@@ -219,7 +219,56 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttrProfil
                 ATTR_CUR_SD,
 
                 //Ratios end
+                ATTR_INCREASE_ENCHANT_RATIO, // 77:ÀÎÃ¾Æ® ¼º°ø·ü Áõ°¡
 
+        ATTR_PREMIUMSERVICE_PCBANG,                    // PC¹æ È¿°ú
+
+        //_NA_006731_20130521_ENCHANT_ADD_OPTION
+        ATTR_ENEMY_CRITICAL_RATIO_CHANGE,                  // 96:ÇÇ°Ý ½Ã »ó´ëÀÇ Å©¸®Æ¼ÄÃ È®·ü Áõ°¨
+
+        //_NA_006680_20130426_ITEM_OPTION_ADD_AND_MODIFY
+        ATTR_ATTACK_DAMAGE_ABSORB_SD_RATIO,             // 98:°¡ÇØ µ¥¹ÌÁö SD ÀüÈ¯·®
+        ATTR_ATTACK_DAMAGE_ABSORB_HP_RATIO,             // 99:°¡ÇØ µ¥¹ÌÁö HP ÀüÈ¯·®
+
+        //_NA_006937_20131030_ABILITY_AND_STATE_CHANGE_CRITICAL
+        ATTR_ENEMY_CRITICAL_DAMAGE_CHANGE,           // 100:ÇÇ°Ý ½Ã »ó´ëÀÇ Å©¸®Æ¼ÄÃ µ¥¹ÌÁö Áõ°¨
+
+        //_NA_007330_20140620_GUILD_SYSTEM_EXTENSION
+        ATTR_CRAFT_COST_RATIO,                         // 101:Á¦ÀÛ ºñ¿ë Áõ°¨
+        ATTR_CRAFT_PREVENT_EXTINCTION_MATERIAL_RATIO,  // 102:Á¦ÀÛ ½ÇÆÐ½Ã Àç·á ¼Ò¸ê ¹æÁö È®·ü Áõ°¨
+        ATTR_ENCHANT_COST_RATIO,                       // 103:ÀÎÃ¦Æ® ºñ¿ë Áõ°¨
+        ATTR_ENCHANT_PREVENT_DESTROY_N_DOWNGRADE_ITEM_RATIO, // 104:ÀÎÃ¦Æ® ½ÇÆÐ½Ã ¾ÆÀÌÅÛ ¼Ò¸ê, ´Ù¿î ¹æÁö È®·ü Áõ°¨
+        ATTR_RECOVER_POTION_COOLTIME_RATIO,            // 105:È¸º¹ Æ÷¼Ç ÄðÅ¸ÀÓ Áõ°¨
+        ATTR_RECOVER_POTION_RECOVERY_RATIO,            // 106:È¸º¹ Æ÷¼Ç È¸º¹·® Áõ°¨
+        ATTR_QUEST_REWARD_EXP_RATIO,                   // 107:Äù½ºÆ® º¸»ó °æÇèÄ¡ Áõ°¨
+        ATTR_MAX_DAMAGE_RATIO,                         // 108:ÃÖ´ë µ¥¹ÌÁö ¹ß»ýÈ®·ü Áõ°¨
+        ATTR_DOMINATION_MAPOBJECT_DAMAGE_RATIO,        // 109:°ø¼º ¿ÀºêÁ§Æ® µ¥¹ÌÁö Áõ°¨
+        ATTR_SHOP_REPAIR_HEIM_RATIO,                   // 110:»óÁ¡ ¼ö¸® ÇÏÀÓ Áõ°¨
+        ATTR_SHOP_BUY_HEIM_RATIO,                      // 111:»óÁ¡ ±¸¸Å ÇÏÀÓ Áõ°¨
+
+        //_NA_007514_20140828_NEW_CHARACTER_WITCHBLADE
+        ATTR_MAX_FP,                                   // 112: À§Ä¡ºí·¹ÀÌµå ÃÖ´ëFP
+        ATTR_RECOVERY_FP,                               // 113: À§Ä¡ºí·¹ÀÌµå FPÈ¸º¹·® (°ø°Ý½Ã)
+        ATTR_INCREASE_DAMAGE_RATIO,                     // 114: µ¥¹ÌÁö Áõ°¡ 
+
+        //_NA_008124_20150313_AWAKENING_SYSTEM
+        ATTR_AWAKENING_PROBABILITY,                     // 115: °¢¼º È®·ü Áõ°¨
+
+        //_NA_008486_20150914_TOTAL_BALANCE
+        ATTR_DEBUFF_DURATION,                          // 116: ÀÚ½ÅÀÇ µð¹öÇÁ±â¼ú È¿°ú Áö¼Ó½Ã°£ °­È­(¹Ð¸®¼¼ÄÁµå)
+
+        //_NA_008540_20151027_ADD_ITEMOPTION_ELITE4
+        ATTR_DECREASE_DAMAGE_NPC,                      // 117: npc°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_BERSERKER,                // 118: ¹ö¼­Ä¿°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_DRAGONKNIGHT,             // 119: µå·¡°ï³ªÀÌÆ®°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_VALKYRIE,                 // 120: ¹ßÅ°¸®°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_ELEMENTALIST,             // 121: ¿¤¸®¸àÅ»¸®½ºÆ®°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_SHADOW,                   // 122: ¼¨µµ¿ì°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_MYSTIC,                   // 123: ¹Ì½ºÆ½ÀÌ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_HELLROID,                 // 124: Çï·ÎÀÌµå°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+        ATTR_DECREASE_DAMAGE_WITCHBLADE                // 125: À§Ä¡ºí·¹ÀÌµå°¡ ÁÖ´Â µ¥¹ÌÁö °¨¼Ò
+
+      // character attribute fields
 
             };
         }

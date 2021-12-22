@@ -141,6 +141,7 @@ internal class ItemOption
             default:
                 throw new ArgumentOutOfRangeException(nameof(rank), rank, null);
         }
+        SetRank(rank);
         _ranks[(int)rank] = new (rankOption.AttrOptionIndex,rankOption.ValueKind,rankOption.RankValues[(int)rank]);
     }
     public RankInfo GeRankOption(Rank rank)
@@ -229,7 +230,7 @@ internal class ItemOption
         _rank = (Rank)BitManip.Get9to12(_option1);
         for (int i = (int) RANK_D; i < (int) _rank; i++)
         {
-            var option = RankOptionDB.Instance.GetRankOption(_owner.GetItemType(), (Rank)i);
+            var option = RankOptionDB.Instance.GetRandomRankOption(_owner.GetItemType(), (Rank)i);
             _ranks[i] = new RankInfo(option.AttrOptionIndex, option.ValueKind, option.RankValues[i]);
         }
 
@@ -274,5 +275,6 @@ internal class ItemOption
 
         return result;
     }
+
 
 }

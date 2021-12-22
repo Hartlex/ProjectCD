@@ -279,19 +279,6 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
         }
     }
 
-    public class ExtraNPCInfo
-    {
-        public ushort MapCode;
-        public uint FieldId;
-        public NPCType NPCType;
-        public uint NPCCode;
-        public SunVector NPCPos;
-        public SunVector NPCDir;
-        public int MoveType;
-        public SunVector MovePos;
-        public float Range;
-    }
-
     public enum NPCType
     {
         NONE,

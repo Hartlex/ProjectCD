@@ -8,8 +8,10 @@ using ProjectCD.Objects.Game.Slots.Items;
 using SunStructs.Definitions;
 using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General.Object.Items;
+using SunStructs.ServerInfos.General.Object.Items.EnchantSystem;
 using SunStructs.ServerInfos.General.Object.Items.RankSystem;
 using SunStructs.ServerInfos.General.Object.Items.SocketSystem;
+using static SunStructs.Definitions.ItemTradesellType;
 
 namespace ProjectCD.Objects.Game.Items
 {
@@ -26,12 +28,13 @@ namespace ProjectCD.Objects.Game.Items
             _durability = buffer.ReadByte();
             _type = (ItemParseType)buffer.ReadByte();
             _option = new (ref buffer,this);
-            _info = BaseItemDB.Instance.GetBaseItemInfo(_itemCode);
+            BaseItemDB.Instance.TryGetBaseItemInfo(_itemCode,out _info);
         }
         public Item(BaseItemInfo info)
         {
+            _itemCode = info.BaseItemId;
             _info = info;
-            _durability = info.Durability;
+            _durability = info.Durability == 0 ? 1 : info.Durability;
             _type = ItemParseType.EQUIP;
             _option = new ItemOption(this);
         }
@@ -116,6 +119,11 @@ namespace ProjectCD.Objects.Game.Items
             return _option.GetRankValues();
         }
 
+        public void SetRankOption(Rank rank, RankOption option)
+        {
+            _option.SetRankOption(rank,option);
+        }
+
         public SocketInfo[]? GetSockets()
         {
             return _option.GetSockets();
@@ -131,9 +139,51 @@ namespace ProjectCD.Objects.Game.Items
             return (byte) _option.GetEnchant();
         }
 
+        public void SetEnchant(EnchantGrade grade)
+        {
+            _option.SetEnchant(grade);
+        }
         public bool IsDivine()
         {
             return _option.IsDivine();
+        }
+
+        public void SetDivine(byte b)
+        {
+            _option.SetDivine(b);
+        }
+
+        public Rank GetRank()
+        {
+            return _option.GetRank();
+        }
+
+        public byte GetDivine()
+        {
+            return (byte) (_option.IsDivine() ? 1 :0);
+        }
+
+        public bool CanTradeSellDrop(ItemTradesellType type)
+        {
+            var calcSet = _info.TradeSellType;
+
+            if (IsEtheria() || IsShell())
+                calcSet |= (ushort) ITEM_TRADESELL_SELL;
+            if (type == ITEM_TRADESELL_DOALL) return true;
+            if (type == ITEM_TRADESELL_DONTALL) return false;
+
+            return (calcSet & (int) type) == 0;
+
+        }
+
+        private bool IsEtheria()
+        {
+            return false;
+        }
+
+        private bool IsShell()
+        {
+            return false;
         }
     }
 }

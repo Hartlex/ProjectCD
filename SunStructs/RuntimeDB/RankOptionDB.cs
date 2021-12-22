@@ -31,7 +31,7 @@ namespace SunStructs.RuntimeDB
         //    return possibleOptions[rand].OptionIndex;
         //}
 
-        public RankOption GetRankOption(ItemType type,Rank rank)
+        public RankOption GetRandomRankOption(ItemType type,Rank rank)
         {
             var options = _rankOptionDictionary[type];
             var possibleOptions =

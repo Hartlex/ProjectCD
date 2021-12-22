@@ -73,7 +73,7 @@ namespace ProjectCD.Servers.Game.Actions
                 resultCode = Database.Instance.DeleteCharacter(user.UserID, info.Slot);
                 if (resultCode == CharDestroyResult.RC_CHAR_DESTROY_SUCCESS)
                 {
-                    var ackPacket = new AckDeleteCharacter(new EmptyPacket());
+                    var ackPacket = new AckDeleteCharacter(new EmptyPacketInfo());
                     connection.Send(ackPacket);
                     return;
                 }

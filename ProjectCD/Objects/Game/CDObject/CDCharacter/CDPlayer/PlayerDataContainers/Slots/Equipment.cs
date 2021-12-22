@@ -77,6 +77,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
             return true;
         }
 
+        public override void DeleteItem(int pos)
+        {
+            UnEquipItem(GetSlot(pos));
+            base.DeleteItem(pos);
+        }
+
         private void EquipItem(ItemSlot slot)
         {
             Logger.Instance.Log("Equiping Item");

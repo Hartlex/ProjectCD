@@ -5,9 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using CD.Network.Server.Config;
 using CDShared.Logging;
+using ProjectCD.GlobalManagers;
 using ProjectCD.Objects.Game.CDObject;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
+using ProjectCD.Objects.Game.Items;
 using ProjectCD.Servers.Game;
+using SunStructs.Definitions;
+using SunStructs.PacketInfos.Game.Item.Server;
+using SunStructs.Packets;
 using SunStructs.Packets.GameServerPackets.Sync;
 using SunStructs.ServerInfos.General;
 using SunStructs.ServerInfos.General.World;
@@ -34,12 +39,12 @@ namespace ProjectCD.Objects.Game.World
             var pSuccess = true;
             if (obj is Player player)
             {
-                pSuccess = _activePlayers.TryAdd(player.GetID(), player);
+                pSuccess = _activePlayers.TryAdd(player.GetKey(), player);
 #if DEBUG
-                Logger.Instance.Log($"Player[{player.GetID()}] joined Field[{_baseFieldInfo.MapCode}]");
+                Logger.Instance.Log($"Player[{player.GetKey()}] joined Field[{_baseFieldInfo.MapCode}]");
 #endif
             } 
-            var oSuccess = _activeObjects.TryAdd(obj.GetID(), obj) && pSuccess;
+            var oSuccess = _activeObjects.TryAdd(obj.GetKey(), obj) && pSuccess;
 
             obj.OnEnterField(this,pos);
             return oSuccess && pSuccess;
@@ -49,13 +54,13 @@ namespace ProjectCD.Objects.Game.World
         {
             if (obj is Player player)
             {
-                _activePlayers.Remove(player.GetID());
+                _activePlayers.Remove(player.GetKey());
 #if DEBUG
-                Logger.Instance.Log($"Player[{player.GetID()}] left Field[{_baseFieldInfo.MapCode}]");
+                Logger.Instance.Log($"Player[{player.GetKey()}] left Field[{_baseFieldInfo.MapCode}]");
 #endif
             }
             obj.OnLeaveField();
-            return _activeObjects.Remove(obj.GetID());
+            return _activeObjects.Remove(obj.GetKey());
         }
 
         public void SendToAllBut(MoveSyncBrd packet,Player player)
@@ -63,6 +68,23 @@ namespace ProjectCD.Objects.Game.World
             foreach (var activePlayer in _activePlayers.Values)
             {
                 activePlayer.SendPacket(packet);
+            }
+        }
+
+        public void DropItemFromPlayer(Player player, Item item)
+        {
+            var fieldItem = (FieldItem) ObjectFactory.Instance.CreateObject(ObjectType.ITEM_OBJECT)!;
+            fieldItem.SetOwner(player);
+            fieldItem.SetItem(item);
+
+            EnterField(fieldItem, SunVector.GetRandomPosAround(player.GetPos(), 2));
+        }
+
+        public void Broadcast(Packet packet)
+        {
+            foreach (var player in _activePlayers.Values)
+            {
+                player.SendPacket(packet);
             }
         }
     }

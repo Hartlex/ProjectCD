@@ -13,26 +13,26 @@ namespace ProjectCD.NetworkBase.General
 
         private readonly Action<Connection> _onConnect;
         private readonly Action<ByteBuffer, Connection> _onReceive;
-        public ClientListener(int port, Action<Connection> onConnect, Action<ByteBuffer, Connection> onReceive)
+        public ClientListener(IPAddress address, int port, Action<Connection> onConnect, Action<ByteBuffer, Connection> onReceive)
         {
             _onConnect = onConnect;
             _onReceive = onReceive;
-            Task.Factory.StartNew(() => StartListening(port));
+            Task.Factory.StartNew(() => StartListening(address,port));
         }
 
 
-        public void StartListening(int port)
+        public void StartListening(IPAddress ipAddress, int port)
         {
-            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
-            // Create a TCP/IP socket.  
-            Socket listener = new Socket(ipAddress.AddressFamily,
-                SocketType.Stream, ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and listen for incoming connections.  
             try
             {
+                IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
+
+                // Create a TCP/IP socket.  
+                Socket listener = new Socket(ipAddress.AddressFamily,
+                    SocketType.Stream, ProtocolType.Tcp);
                 listener.Bind(localEndPoint);
                 listener.Listen();
 
@@ -111,11 +111,9 @@ namespace ProjectCD.NetworkBase.General
 
 
             }
-            catch (Exception e)
+            catch (SocketException e)
             {
-                Logger.Instance.Log("Error at ReadCallback!");
-                Logger.Instance.Log(e);
-
+                
             }
 
 

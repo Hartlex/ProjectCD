@@ -16,17 +16,9 @@ namespace SunStructs.RuntimeDB
             Logger.Instance.LogOnLine($"{_baseItemInfos.Count} Items loaded!\n", LogType.SUCCESS);
         }
 
-        public BaseItemInfo GetBaseItemInfo(ushort itemId)
+        public bool TryGetBaseItemInfo(ushort itemId,out BaseItemInfo? info)
         {
-            try
-            {
-                return _baseItemInfos[itemId];
-            }
-            catch (KeyNotFoundException e)
-            {
-                Logger.Instance.Log(e.ToString(),LogType.ERROR);
-                return null;
-            }
+            return _baseItemInfos.TryGetValue(itemId, out info);
         }
 
     }

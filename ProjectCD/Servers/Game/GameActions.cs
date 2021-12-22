@@ -14,12 +14,14 @@ namespace ProjectCD.Servers.Game
         private CharInfoActions _charInfoActions = null!;
         private SyncActions _syncActions = null!;
         private ItemActions _itemActions = null!;
+        private ZoneActions _zoneActions = null!;
         public void Initialize()
         {
             _connectionActions = new();
             _charInfoActions = new();
             _syncActions = new();
             _itemActions = new();
+            _zoneActions = new();
         }
     }
 }

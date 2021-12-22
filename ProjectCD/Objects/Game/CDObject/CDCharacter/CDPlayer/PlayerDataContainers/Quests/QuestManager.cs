@@ -162,7 +162,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
             var items = new List<Item>();
             foreach (var addItemInfo in addItemInfos)
             {
-                var itemInfo = BaseItemDB.Instance.GetBaseItemInfo((ushort)addItemInfo.Key);
+                BaseItemDB.Instance.TryGetBaseItemInfo((ushort)addItemInfo.Key,out var itemInfo);
                 var item = new Item(itemInfo);
                 if(!itemInfo.IsArmor() && !itemInfo.IsWeapon())
                     item.SetAmount((byte)addItemInfo.Value);

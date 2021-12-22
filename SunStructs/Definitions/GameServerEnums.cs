@@ -375,7 +375,22 @@ namespace SunStructs.Definitions
         WASTE=0,
         EQUIP=10,
     }
-
+    public enum ItemTradesellType
+    {
+        ITEM_TRADESELL_DOALL = (0),            //< 0
+        ITEM_TRADESELL_TRADE = (1 << 0),       //< 1
+        ITEM_TRADESELL_SELL = (1 << 1),        //< 2
+        ITEM_TRADESELL_DROP = (1 << 2),        //< 4
+        ITEM_TRADESELL_SLOT = (1 << 3),        //< 8
+        ITEM_TRADESELL_DELETE = (1 << 4),      //< 16	
+        ITEM_TRADESELL_WAREHOUSE = (1 << 5),       //< 32
+        ITEM_TRADESELL_USED_ITEM = (1 << 6),       //< 64
+        ITEM_TRADESELL_CASH_PRESENT = (1 << 7),        //< 128		//__NA001087_080618_APPEND_CASHITEM_PRESENT_PROTECTION_FUNTION__
+        ITEM_TRADESELL_GUILDWAREHOUSE = (1 << 8),      //< 256     
+        ITEM_TRADESELL_ONLY_WAREHOUSE = (1 << 9),       //< 512     //_NA_20100520_ADD_ITEM_CANNOT_MOVE_OPTION : Ã¢°í ÀÌµ¿¸¸ ºÒ°¡´É ¿É¼Ç
+        ITEM_TRADESEEL_DROP_CAN_PKDROP = (1 << 10),      //< 1024    //_NA_006052_20120904_CANNOT_DROP_CAN_PKDROP : ¹Ù´Ú¿¡ µå·Ó ºÒ°¡´É ÇÏ°í PK µå·Ó ½Ã °¡´É
+        ITEM_TRADESELL_DONTALL = ushort.MaxValue, //< 65535
+    };
     public enum CharType
     {
         CHAR_NONE = 0,
@@ -542,6 +557,39 @@ namespace SunStructs.Definitions
         ARMOR_UNARMOR,
 
         ARMOR_TYPE_MAX
+    };
+
+    public enum ObjectState
+    {
+        OBJECT_STATE_IDLE = 0,
+        OBJECT_STATE_WALK,
+        OBJECT_STATE_RUN,
+        OBJECT_STATE_ATTACK,
+        OBJECT_STATE_DAMAGE,
+        OBJECT_STATE_THRUST,
+    };
+
+    public enum CharMoveState
+    {
+        CMS_WALK,
+        CMS_RUN,
+        CMS_SWIPE,
+        CMS_KNOCKBACK,
+        CMS_KNOCKBACK_DOWN,
+        CMS_SIDESTEP,
+        CMS_BACKSTEP,
+        CMS_TUMBLING_FRONT,         // ¹ßÅ°¸® ´ë½¬
+        CMS_TUMBLING_LEFT,          // ¹ßÅ°¸® ¿·±¸¸£±â
+        CMS_TUMBLING_RIGHT,
+        CMS_SHOULDER_CHARGE,        // ¹ö¼­¹ö ¼ñ´õÂ÷Áö
+        CMS_SLIDING,                // µå·¡°ï ½½¶óÀÌµù
+        CMS_TELEPORT,               // ¿¤¸® ÀÜ»óÅÚ·¹Æ÷Æ®
+        CMS_TUMBLING_BACK,          // ¹ßÅ°¸® ¹é´ë½¬
+        CMS_MONSTER_ATTACKJUMP,     // ¸ó½ºÅÍ Á¡ÇÁ °ø°Ý
+        CMS_LUCKY_MONSTER_RUNAWAY,  // ·°Å°¸ó½ºÅÍ µµ¸Á°¡´Â ¼Óµµ
+        CMS_STOP,
+        CMS_KNOCKBACK2,             //__NA001048_080514_APPEND_ABILITY_KNOCKBACK2__
+        CMS_MAX,
     };
 }
     

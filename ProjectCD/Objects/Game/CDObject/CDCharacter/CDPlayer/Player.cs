@@ -21,13 +21,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         private readonly PlayerStyleManager _styleManager;
         private readonly CharType _charType;
         private readonly User _user;
-        public Player(ref SqlDataReader reader,User user)
+        public Player(ref SqlDataReader reader,User user) : base(unchecked((uint)reader.GetInt32(1)))
         {
             _user = user;
             _charType = (CharType) reader.GetByte(3);
             SetObjectType(ObjectType.PLAYER_OBJECT);
-            var id = unchecked((uint)reader.GetInt32(1));
-            SetID(id);
             _general = new (ref reader);
             _pvp = new(ref reader);
             _guild = new(ref reader);

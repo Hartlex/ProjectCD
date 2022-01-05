@@ -58,7 +58,7 @@ namespace ProjectCD.Objects.Game.CDObject
         {
             var outInfo = new ItemLeaveFieldInfo(GetKey());
             var packet = new ItemLeaveFieldBrd(outInfo);
-            GetCurrentField()!.Broadcast(packet);
+            GetCurrentField()?.Broadcast(packet);
             base.OnLeaveField();
 
         }

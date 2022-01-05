@@ -1,4 +1,5 @@
-﻿using CDShared.Logging;
+﻿using CDShared.ByteLevel;
+using CDShared.Logging;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem;
 using ProjectCD.Objects.Game.Items;
 using ProjectCD.Objects.Game.Slots.Items;
@@ -114,6 +115,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
 
             return false;
         }
+
+
     }
     public enum EquipGroup 
     {

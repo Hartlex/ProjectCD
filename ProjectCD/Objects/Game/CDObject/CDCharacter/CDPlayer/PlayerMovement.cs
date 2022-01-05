@@ -7,9 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using CDShared.Logging;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
+using ProjectCD.Objects.Game.World;
 using SunStructs.Definitions;
+using SunStructs.PacketInfos;
 using SunStructs.PacketInfos.Game.Sync.Client;
 using SunStructs.PacketInfos.Game.Sync.Server;
+using SunStructs.Packets;
+using SunStructs.Packets.GameServerPackets.CharInfo;
 using SunStructs.Packets.GameServerPackets.Sync;
 using SunStructs.ServerInfos.General;
 
@@ -41,10 +45,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _tileID = info.TileIndex;
             _moveState = info.MoveState;
 
-            var brdInfo = new KeyboardMoveBrdInfo(GetKey(), info.CurrentPosition, info.TileIndex, info.Angle,
-                info.MoveState);
-            var packet = new MoveSyncBrd(brdInfo);
-            GetCurrentField()?.SendToAllBut(packet,this);
+            //var brdInfo = new KeyboardMoveBrdInfo(GetKey(), info.CurrentPosition, info.TileIndex, info.Angle,
+            //    info.MoveState);
+            //var packet = new MoveSyncBrd(brdInfo);
+            //GetCurrentField()?.SendToAllBut(packet,this);
         }
 
         public void OnMouseMove(MouseMoveInfo info)
@@ -72,6 +76,31 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         {
             return _fieldCode;
         }
+
+        public void SetNewFieldAndPos(uint fieldCode, SunVector pos)
+        {
+            _fieldCode = fieldCode;
+            SetPos(pos);
+        }
+
+        public override void OnEnterField(Field field, SunVector pos, ushort angle = 0)
+        {
+            base.OnEnterField(field, pos, angle);
+            var playerRenderPacket = new AllPlayerRenderInfoCmd(new (new[] {GetRenderInfo()}));
+            var equipPacket = new AllPlayersEquipInfoCmd(new (new[] {GetEquipRenderInfo()}));
+
+            GetCurrentField()?.Broadcast(playerRenderPacket,equipPacket);
+        }
+
+        public override void OnLeaveField()
+        {
+            var outInfo = new PlayerLeaveFieldInfo(GetKey());
+            var packet = new PlayerLeaveFieldBrd(outInfo);
+            GetCurrentField()?.Broadcast(packet);
+
+            base.OnLeaveField();
+        }
+
         private void MapCoordinates()
         {
             var pos = GetPos();

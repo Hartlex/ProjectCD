@@ -591,5 +591,30 @@ namespace SunStructs.Definitions
         CMS_KNOCKBACK2,             //__NA001048_080514_APPEND_ABILITY_KNOCKBACK2__
         CMS_MAX,
     };
+
+    public enum PlayerBehaveState
+    {
+        PLAYER_BEHAVE_IDLE_STATE,               //< ±âº»°ª
+        PLAYER_BEHAVE_TRADE_STATE,              //< °Å·¡ »óÅÂ
+        PLAYER_BEHAVE_VENDOR_ESTABLISHER_STATE,
+        PLAYER_BEHAVE_VENDOR_OBSERVER_STATE,
+        PLAYER_BEHAVE_NPCSHOP_STATE,
+
+        PLAYER_BEHAVE_PARTY_THINKING_LEAVE,     //< ÆÄÆ¼¸¦ ³ª°¥ °ÍÀÎ°¡ °í¹ÎÁß
+        PLAYER_BEHAVE_PARTY_THINKING_JOIN,      //< ÆÄÆ¼ÃÊ´ë¿¡ ÀÀÇÒ °ÍÀÎ°¡ °í¹ÎÁß
+        PLAYER_BEHAVE_SYSTEM_LOCK,
+        PLAYER_BEHAVE_BANK_STATE,               // Ã¢°í ÀÌ¿ë
+        PLAYER_BEHAVE_UNEXPECTED_WAITING,       // ºñÁ¤»óÁ¾·á ´ë±âÁß //__NA_780_PREVENTION_PARTY_RETURN_ABUSE
+        PLAYER_BEHAVE_DIALOG_OPEN_STATE,
+        PLAYER_BEHAVE_SERVER_SELECTING_STATE,   // ¼­¹ö ¼±ÅÃÀ» À§ÇØ ´ë±âÁß... //__NA001334_090420_SERVER_SELECT_FACILITY__
+        //__KR_001355_20090624_GROUPINGSYSTEM_ALL
+        PLAYER_BEHAVE_GROUP_THINKING_LEAVE,     //< ±×·ìÀ» ³ª°¥ °ÍÀÎ°¡ °í¹ÎÁß
+        PLAYER_BEHAVE_GROUP_THINKING_JOIN,      //< ±×·ìÃÊ´ë¿¡ ÀÀÇÒ °ÍÀÎ°¡ °í¹ÎÁß
+        PLAYER_BEHAVE_SOCKET_COMPOSITE_STATE, // Àðµå ÇÕ¼º
+
+
+        PLAYER_BEHAVE_RESERVATION_BATTLE_GROUND_ZONE, // ÀüÀå ¿¹¾àÁß..
+
+    };
 }
     

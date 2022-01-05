@@ -341,6 +341,10 @@ namespace CDShared.ByteLevel
 
         #region PublicMethods
 
+        public void Skip(int i = 1)
+        {
+            _head += i;
+        }
         public bool IsDoneReading()
         {
             return _head >= _data.Length;

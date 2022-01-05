@@ -1,0 +1,44 @@
+Player render Info
+
+...
+movespeed
+attackspeed
+
+----------------------
+
+            byte1 = BitManip.Set0(byte1, 0); //behave state
+            byte1 = BitManip.Set1(byte1, 0); //..
+            byte1 = BitManip.Set2(byte1, 0); //..
+            byte1 = BitManip.Set3(byte1, 0); //..
+            byte1 = BitManip.Set4(byte1, 0); //behave state
+            byte1 = BitManip.Set5(byte1, 0); //pkState
+            byte1 = BitManip.Set6(byte1, 0); //pkState
+            byte1 = BitManip.Set7(byte1, 0); //purple attackable
+
+            byte2 = BitManip.Set0(byte2, 1); //charType
+            byte2 = BitManip.Set1(byte2, 0); //charType
+            byte2 = BitManip.Set2(byte2, 0); //charType
+            byte2 = BitManip.Set3(byte2, 0); //charState stand=0 sit=1
+            byte2 = BitManip.Set4(byte2, 0); //pc room ???
+            byte2 = BitManip.Set5(byte2, 0); //gm grade
+            byte2 = BitManip.Set6(byte2, 0); //gm grade
+            byte2 = BitManip.Set7(byte2, 0); //gm grade
+
+            byte3 = BitManip.Set0(byte3, 0); //???
+            byte3 = BitManip.Set1(byte3, 0); //???
+            byte3 = BitManip.Set2(byte3, 0); //???
+            byte3 = BitManip.Set3(byte3, 0); //???
+            byte3 = BitManip.Set4(byte3, 0); //???
+            byte3 = BitManip.Set5(byte3, 0); //???
+            byte3 = BitManip.Set6(byte3, 0); //???
+            byte3 = BitManip.Set7(byte3, 0); //???
+
+            byte4 = BitManip.Set0(byte4, 0); //invis
+            byte4 = BitManip.Set1(byte4, 0); //???
+            byte4 = BitManip.Set2(byte4, 0); //???
+            byte4 = BitManip.Set3(byte4, 0); //???
+            byte4 = BitManip.Set4(byte4, 0); //???
+            byte4 = BitManip.Set5(byte4, 0); //???
+            byte4 = BitManip.Set6(byte4, 0); //???
+            byte4 = BitManip.Set7(byte4, 0); //???
+----------------------

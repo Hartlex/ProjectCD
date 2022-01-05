@@ -39,7 +39,7 @@ namespace ProjectCD.Objects.Game.Items
         }
 
 
-        public static byte[] Shift(ItemSlotContainer container)
+        public static byte[] Shift(ItemSlotContainer container,bool withSize=true)
         {
             var result = new List<byte>();
             int shiftCount = 0;
@@ -93,7 +93,8 @@ namespace ProjectCD.Objects.Game.Items
                     shiftCount++;
             }
             result.Insert(0,(byte)itemCount);
-            result.InsertRange(0,BitConverter.GetBytes((ushort)result.Count));
+            if(withSize)
+                result.InsertRange(0,BitConverter.GetBytes((ushort)result.Count));
             return result.ToArray();
         }
     }

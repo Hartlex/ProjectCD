@@ -17,6 +17,7 @@ using SunStructs.Formulas.Item;
 using SunStructs.PacketInfos.Game.Item.Client;
 using SunStructs.PacketInfos.Game.Item.Dual;
 using SunStructs.PacketInfos.Game.Item.Server;
+using SunStructs.PacketInfos.Game.Sync.Server;
 using SunStructs.RuntimeDB;
 using SunStructs.RuntimeDB.Parsers;
 using SunStructs.ServerInfos.General.Object.Items;
@@ -213,6 +214,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             if (item1 == null || item2 == null) return RC_ITEM_INVALIDPOS;
 
             if(item1.GetItemId() != item2.GetItemId()) return RC_ITEM_ITEMCODENOTEQUAL;
+
             var amount = info.Amount == 0 ? item1.GetAmount() : info.Amount;
             item2.SetAmount((byte) (item2.GetAmount()+amount));
 
@@ -221,9 +223,20 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             else if (amount < item1.GetAmount())
                 item1.DecreaseAmount(amount);
         
-            info.Amount = item2.GetAmount();
+            if(info.Amount!=0)
+                info.Amount = item2.GetAmount();
             return RC_ITEM_SUCCESS;
 
+        }
+
+        public EquipRenderInfo GetEquipRenderInfo()
+        {
+            var bytes = _equipment.GetRenderInfo();
+            return new EquipRenderInfo()
+            {
+                PlayerKey = GetKey(),
+                EquipmentInfo = bytes
+            };
         }
     }
 }

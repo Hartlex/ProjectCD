@@ -39,6 +39,7 @@ namespace ProjectCD.Servers.Game.Actions
             RegisterItemAction(228, OnAskPickupItem);
             RegisterItemAction(57, OnAskDivideItem);
             RegisterItemAction(87, OnAskMergeItem);
+            RegisterItemAction(212, OnAskPickupMoney);
 
             Logger.Instance.LogOnLine($"[GAME][ITEM] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
@@ -182,7 +183,7 @@ namespace ProjectCD.Servers.Game.Actions
                 return;
             }
             
-            var result = field.PlayerPickupItem(player, info.ObjectKey,out var slotInfos);
+            var result = field.PlayerPickupItem(player, info.ObjectKey,out var slotInfos,out var money);
 
             switch (result)
             {
@@ -243,6 +244,32 @@ namespace ProjectCD.Servers.Game.Actions
 
                     break;
             }
+        }
+
+        private void OnAskPickupMoney(ByteBuffer buffer, Connection connection)
+        {
+            var info = new AskPickupMoneyInfo(ref buffer);
+            var player = connection.User.Player;
+
+            var field = player.GetCurrentField();
+
+
+            if (field == null)
+            {
+                Logger.Instance.Log($"[CRITICAL ERROR][ItemActions][OnAskPickupItem][User:{player.GetKey()}] Field was null!");
+                return;
+            }
+            var result = field.PlayerPickupItem(player, info.ObjectKey, out var slotInfos,out var money);
+
+            switch (result)
+            {
+                case ItemResult.RC_ITEM_SUCCESS:
+                    var outInfo = new AckMoneyPickupInfo(money);
+                    var packet = new AckMoneyPickup(outInfo);
+                    connection.Send(packet);
+                    break;
+            }
+
         }
     }
 }

@@ -20,11 +20,11 @@ namespace ProjectCD.Objects.NetObjects
         private byte[] _clientSerial=Array.Empty<byte>();
         public readonly uint UserID;
 
-        private Connection _gameServerConnection;
-        private Connection _worldServerConnection;
+        private Connection? _gameServerConnection;
+        private Connection? _worldServerConnection;
 
-        private GameServer _gameServer;
-        private WorldServer _worldServer;
+        private GameServer? _gameServer;
+        private WorldServer? _worldServer;
 
         public Player Player { get; private set; }
         public User(uint userID)
@@ -95,21 +95,21 @@ namespace ProjectCD.Objects.NetObjects
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
-        public GameServer GetConnectedGameServer()
+        public GameServer? GetConnectedGameServer()
         {
             return _gameServer;
         }
 
-        public Connection GetGameServerConnection()
+        public Connection? GetGameServerConnection()
         {
             return _gameServerConnection;
         }
 
-        public Connection GetWorldServerConnection()
+        public Connection? GetWorldServerConnection()
         {
             return _worldServerConnection;
         }
-        public WorldServer GetConnectedWorldServer()
+        public WorldServer? GetConnectedWorldServer()
         {
             return _worldServer;
         }

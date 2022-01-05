@@ -40,6 +40,14 @@ namespace ProjectCD.Servers.Game.Actions
             SunVector newPos =null;
             if (PortalDB.Instance.TryFindPortal(info.PortalID, out var portal))
             {
+                var fromField = connection.User.GetConnectedGameServer().GetField(portal.FromField);
+                if (fromField == null) return;
+                var toField = connection.User.GetConnectedGameServer().GetField(portal.ToField);
+                if(toField == null) return;
+
+                if (!fromField.LeaveField(connection.User.Player)) return;
+
+
                 if (!AreaDB.Instance.TryGetAreaPosition(portal.ToField, portal.ToArea, out newPos))
                 {
                     newPos = ExtraNPCInfoDB.Instance.GetRandomNPCPosOnMap(portal.ToField);
@@ -49,12 +57,14 @@ namespace ProjectCD.Servers.Game.Actions
                         return;
                     }
                 }
-            }
-            connection.User.Player.SetPos(newPos);
+                //if (!connection.User.Player.EnterField(toField,newPos)) return;
+                connection.User.Player.SetNewFieldAndPos(portal.ToField,newPos);
 
-            var outInfo = new AckZoneMoveInfo(portal.PortalId);
-            var outPacket = new AckZoneMove(outInfo);
-            connection.Send(outPacket);
+                var outInfo = new AckZoneMoveInfo(portal.PortalId);
+                var outPacket = new AckZoneMove(outInfo);
+                connection.Send(outPacket);
+            }
+
         }
     }
 }

@@ -49,7 +49,7 @@ namespace ProjectCD.GlobalManagers
         {
             foreach (var activeUser in _activeUsers.Values)
             {
-                if (!(activeUser.GetGameServerConnection().workSocket.RemoteEndPoint is IPEndPoint gameEndPoint)) continue;
+                if (!(activeUser.GetGameServerConnection()?.workSocket.RemoteEndPoint is IPEndPoint gameEndPoint)) continue;
                 if (!(otherConnection.workSocket.RemoteEndPoint is IPEndPoint endPoint)) continue;
                 if (Equals(endPoint.Address, gameEndPoint.Address))
                 {

@@ -73,5 +73,9 @@ namespace SunStructs.Packets.GameServerPackets.Item
     {
         public AckMergeItem(MergeItemInfo info) :base(183,info){}
     }
+    public class AckMoneyPickup : ItemPacket
+    {
+        public AckMoneyPickup(AckMoneyPickupInfo info) : base(108, info) { }
+    }
 
 }

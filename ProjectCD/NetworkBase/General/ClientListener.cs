@@ -28,8 +28,11 @@ namespace ProjectCD.NetworkBase.General
             // Bind the socket to the local endpoint and listen for incoming connections.  
             try
             {
-                IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-
+                //var tcplist = new TcpListener(IPAddress.Any,port);
+                //tcplist.Start();
+                //tcplist.BeginAcceptSocket(new AsyncCallback(AcceptCallback),new Connection());
+                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
+               
                 // Create a TCP/IP socket.  
                 Socket listener = new Socket(ipAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
@@ -110,7 +113,7 @@ namespace ProjectCD.NetworkBase.General
 
 
             }
-            catch (SocketException e)
+            catch (Exception e)
             {
                 
             }

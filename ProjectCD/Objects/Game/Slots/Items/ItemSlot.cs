@@ -57,6 +57,7 @@ namespace ProjectCD.Objects.Game.Slots.Items
             _item!.GetBytes(ref buffer,type);
         }
 
+
         public ushort GetCode()
         {
             return _item!.GetItemId();
@@ -91,6 +92,7 @@ namespace ProjectCD.Objects.Game.Slots.Items
     {
         MIN,
         TWENTY,
-        MAX
+        MAX,
+        RENDER
     }
 }

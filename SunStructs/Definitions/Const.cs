@@ -34,5 +34,7 @@ namespace SunStructs.Definitions
 
         public const float DISTANCE_SPACE_GET_ITEM = 7f;
         public const int MAX_FIELDITEM_INFO_SIZE = 80;
+        public const int MAX_PLAYER_RENDER_INFO_SIZE = 50;
+        public const int MAX_PET_NAME_LENGTH = 10;
     }
 }

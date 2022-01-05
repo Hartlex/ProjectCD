@@ -49,11 +49,27 @@ namespace ProjectCD.Objects.Game.Slots.Items
                 InsertItem(item, pos, true);
             }
         }
+        public byte[] GetRenderInfo()
+        {
+            //return BitShifter.Shift(this, false);
+            ByteBuffer buffer = new();
+            byte count = 0;
+            foreach (var itemSlot in _slots.Values)
+            {
+                if (itemSlot.IsEmpty()) continue;
+                itemSlot.GetBytes(ref buffer, ItemByteType.RENDER);
+                count++;
+            }
+            buffer.InsertByte(count);
+            return buffer.GetData();
+        }
 
         public byte[] GetShiftedBytes()
         {
             return BitShifter.Shift(this);
         }
+
+
         public int GetMaxSlotNum()
         {
             return _slots.Count;

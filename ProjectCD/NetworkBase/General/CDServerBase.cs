@@ -13,7 +13,7 @@ namespace ProjectCD.NetworkBase.General
         {
             _config = config;
             _listener = new ClientListener(config.GetIpEndPoint().Address, config.GetPort(),OnConnect, config.GetHandlePacket());
-            Logger.Instance.Log($"Server on EndPoint: {config.GetIpEndPoint()} started!",LogType.SUCCESS);
+            Logger.Instance.Log($"Server on EndPoint: {config.GetPort()} started!",LogType.SUCCESS);
         }
 
 

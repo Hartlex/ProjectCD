@@ -7,6 +7,7 @@ using ProjectCD.Objects.Game.World;
 using ProjectCD.Objects.NetObjects;
 using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Object.Character.Player;
+using SunStructs.PacketInfos.Game.Sync.Server;
 using SunStructs.Packets;
 using SunStructs.ServerInfos.General;
 using ObjectType = SunStructs.Definitions.ObjectType;
@@ -40,7 +41,20 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
         public void OnDisconnect(Connection connection)
         {
-            GetCurrentField()?.LeaveField(this);
+            LeaveField();
+        }
+
+        public bool LeaveField()
+        {
+           var field = GetCurrentField();
+           return field != null && field.LeaveField(this);
+        }
+
+        public bool EnterField(Field field,SunVector pos)
+        {
+            var currentField = GetCurrentField();
+            if (currentField != null) LeaveField();
+            return field.EnterField(this, pos);
         }
         public FullCharInfoZone GetFullCharInfoZone()
         {
@@ -91,6 +105,28 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             ),_inventory.GetShiftedBytes());
         }
 
+        public PlayerRenderInfo GetRenderInfo()
+        {
+            var info =new PlayerRenderInfo()
+            {
+                IsPlayerRenderInfo = 0,
+                PlayerKey = (ushort)GetKey(),
+                HP = (ushort) GetHP(),
+                MaxHP = (ushort) GetMaxHP(),
+                Level = GetLevel(),
+                Name = GetName(),
+                Position = GetPos(),
+                SelectedStyleCode = _styleManager.GetSelectedStyleCode(),
+                MoveSpeedRatio = 150,
+                AttackSpeedRatio = 150,
+            };
+            info.SetCharType(GetCharType());
+            info.SetFace(_general.FaceCode);
+            info.SetHeight(_general.HeightCode);
+            info.SetHair(_general.HairCode);
+            info.HideHelm(0);
+            return info;
+        }
         public CharType GetCharType()
         {
             return _charType;
@@ -103,6 +139,14 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         public void SendPacket(Packet packet)
         {
             _user.SendPacket(packet);
+        }
+
+        public void SendPackets(Packet[] packets)
+        {
+            foreach (var packet in packets)
+            {
+                SendPacket(packet);
+            }
         }
 
         public string GetName()

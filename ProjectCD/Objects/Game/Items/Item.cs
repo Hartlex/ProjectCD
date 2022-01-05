@@ -55,8 +55,12 @@ namespace ProjectCD.Objects.Game.Items
                 case ItemByteType.TWENTY:
                 case ItemByteType.MAX:
                     GetBaseBytes(ref buffer);
-                    
                     _option.GetBytes(ref buffer,type);
+                    break;
+                case ItemByteType.RENDER:
+                    buffer.WriteUInt16(_itemCode);
+                    buffer.WriteByte(GetEnchant());
+                    buffer.WriteByte(0);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

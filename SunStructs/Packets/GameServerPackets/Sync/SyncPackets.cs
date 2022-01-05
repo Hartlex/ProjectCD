@@ -21,7 +21,7 @@ namespace SunStructs.Packets.GameServerPackets.Sync
 
     public class AllPlayersEquipInfoCmd : SyncPacket
     {
-        public AllPlayersEquipInfoCmd(TestPacketInfo bytes) : base(15, bytes) { }
+        public AllPlayersEquipInfoCmd(AllPlayerEquipInfo bytes) : base(15, bytes) { }
     }
 
     public class AckEnterWorld : SyncPacket
@@ -46,5 +46,16 @@ namespace SunStructs.Packets.GameServerPackets.Sync
     {
         public ItemLeaveFieldBrd(ItemLeaveFieldInfo info) : base(2, info) { }
     }
+
+    public class AllPlayerRenderInfoCmd : SyncPacket
+    {
+        public AllPlayerRenderInfoCmd(AllPlayerRenderInfo info):base(122,info){}
+    }
+
+    public class PlayerLeaveFieldBrd : SyncPacket
+    {
+        public PlayerLeaveFieldBrd(PlayerLeaveFieldInfo info) : base(2,info){}
+    }
+
 
 }

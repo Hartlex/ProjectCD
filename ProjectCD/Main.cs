@@ -21,8 +21,9 @@ namespace ProjectCD
             Database.Instance.Initialize();
             RuntimeDataBase.Instance.Initialize();
             ObjectFactory.Instance.Initialize();
-            ServerManager.Instance.Initialize();
             ActionManager.Instance.Initialize();
+            ServerManager.Instance.Initialize();
+
             CommandActions.Instance.Init();
         }
     }

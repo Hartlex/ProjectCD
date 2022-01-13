@@ -96,9 +96,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         #endregion
 
 
-        public abstract float GetPhysicalAttackSpeed();
-        public abstract int GetAttSpeedRatio();
-        public abstract int GetMoveSpeedRatio();
+        public virtual float GetPhysicalAttackSpeed(){ return _attr[ATTR_ATTACK_SPEED].GetValue() / 100f; }
+        public virtual int GetAttSpeedRatio(){ return _attr[ATTR_ATTACK_SPEED].GetValue(); }
+        public virtual int GetMoveSpeedRatio() { return _attr[ATTR_MOVE_SPEED].GetValue(); }
 
         #endregion
 

@@ -119,26 +119,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         public ushort GetExpert1(){ return _attributes[ATTR_EXPERTY1].GetValue16(); }
         public ushort GetExpert2(){ return _attributes[ATTR_EXPERTY2].GetValue16(); }
 
-        public override float GetPhysicalAttackSpeed()
-        {
-            return _attributes[ATTR_ATTACK_SPEED].GetValue() / 100f;
-        }
-
-        public override int GetAttSpeedRatio()
-        {
-            return _attributes[ATTR_ATTACK_SPEED].GetValue();
-        }
-
         public PlayerAttr GetAttributes()
         {
             return _attributes;
         }
-
-        public override int GetMoveSpeedRatio()
-        {
-            return _attributes[ATTR_MOVE_SPEED].GetValue();
-        }
-        
 
         public void UpdateCalcRecover(bool hpUpdated, bool mpUpdated, bool sdUpdated)
         {

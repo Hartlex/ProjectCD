@@ -90,21 +90,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
         }
 
 
-        public override float GetPhysicalAttackSpeed()
-        {
-            return Attrs[AttrType.ATTR_ATTACK_SPEED].GetValue() / 100f;
-        }
-
-        public override int GetAttSpeedRatio()
-        {
-            return Attrs[AttrType.ATTR_ATTACK_SPEED].GetValue();
-        }
-
-        public override int GetMoveSpeedRatio()
-        {
-            return Attrs[AttrType.ATTR_MOVE_SPEED].GetValue();
-        }
-
         public bool IsHPMPRegenNPC()
         {
             switch (Info.Grade)

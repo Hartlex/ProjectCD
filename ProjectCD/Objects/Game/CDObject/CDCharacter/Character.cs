@@ -66,38 +66,34 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         protected void SetBaseAttributes(Attributes attr) { _attr = attr; }
 
-        //public uint GetHP(){ return _hp; }
-        //public uint GetMP(){ return _mp; }
-        //public uint GetSD(){ return _sd; }
+        #region HP MP SD
 
-        //public uint GetMaxHP(){ return _attr[ATTR_MAX_HP].GetValue32(); }
-        //public uint GetMaxMP(){ return _attr[ATTR_MAX_MP].GetValue32(); }
-        //public uint GetMaxSD(){ return _attr[ATTR_MAX_SD].GetValue32(); }
+        public uint GetHP() { return _hp; }
+        public uint GetMP() { return _mp; }
+        public uint GetSD() { return _sd; }
 
-        //public void SetHP(uint value)
-        //{
-        //    var maxHP = GetMaxHP();
-        //    _hp = Min(0, Max(maxHP, value));
-        //}
-        //public void SetMP(uint value)
-        //{
-        //    var maxMP = GetMaxMP();
-        //    _mp = Min(0, Max(maxMP, value));
-        //}
-        //public void SetSD(uint value)
-        //{
-        //    var maxSD = GetMaxSD();
-        //    _sd = Min(0, Max(maxSD, value));
-        //}
-        public abstract uint GetHP();
-        public abstract uint GetMP();
-        public abstract uint GetSD();
-        public abstract uint GetMaxHP();
-        public abstract uint GetMaxMP();
-        public abstract uint GetMaxSD();
-        public abstract void SetHP(uint value);
-        public abstract void SetMP(uint value);
-        public abstract void SetSD(uint value);
+        public uint GetMaxHP() { return _attr[ATTR_MAX_HP].GetValue32(); }
+        public uint GetMaxMP() { return _attr[ATTR_MAX_MP].GetValue32(); }
+        public uint GetMaxSD() { return _attr[ATTR_MAX_SD].GetValue32(); }
+
+        public void SetHP(uint value)
+        {
+            var maxHP = GetMaxHP();
+            _hp = Min(0, Max(maxHP, value));
+        }
+        public void SetMP(uint value)
+        {
+            var maxMP = GetMaxMP();
+            _mp = Min(0, Max(maxMP, value));
+        }
+        public void SetSD(uint value)
+        {
+            var maxSD = GetMaxSD();
+            _sd = Min(0, Max(maxSD, value));
+        }
+
+
+        #endregion
 
 
         public abstract float GetPhysicalAttackSpeed();

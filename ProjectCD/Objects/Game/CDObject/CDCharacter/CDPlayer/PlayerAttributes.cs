@@ -28,6 +28,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             uint recoverSD = 10;
 
             _attributes = new(this);
+            SetBaseAttributes(_attributes);
             var strength = unchecked((ushort) reader.GetInt16(9));
             var vitality = unchecked((ushort) reader.GetInt16(10));
             var agility = unchecked((ushort) reader.GetInt16(11));

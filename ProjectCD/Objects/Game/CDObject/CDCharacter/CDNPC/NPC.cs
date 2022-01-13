@@ -29,10 +29,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
 
         #region Private
 
-        private uint _hp;
-        private uint _mp;
-        private uint _sd;
-
         #endregion
 
 
@@ -70,6 +66,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
 
             Attrs = new NPCAttr(this, recoverHP, recoverMP, recoverSD);
             Attrs.Update();
+            SetBaseAttributes(Attrs);
 
             SetHP(Info.MaxHP);
             SetMP(Info.MaxMP);
@@ -92,52 +89,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
             );
         }
 
-        public override uint GetHP()
-        {
-            return _hp;
-        }
-
-        public override uint GetMP()
-        {
-            return _mp;
-        }
-
-        public override uint GetSD()
-        {
-            return _sd;
-        }
-
-        public override void SetHP(uint value)
-        {
-            var maxHP = GetMaxHP();
-            _hp = Min(0, Max(maxHP, value));
-        }
-
-        public override void SetMP(uint value)
-        {
-            var maxMP = GetMaxMP();
-            _mp = Min(0, Max(maxMP, value));
-        }
-
-        public override void SetSD(uint value)
-        {
-            var maxSD = GetMaxSD();
-            _sd = Min(0, Max(maxSD, value));
-        }
-
-        public override uint GetMaxHP()
-        {
-            return Attrs[AttrType.ATTR_MAX_HP].GetValue32();
-        }
-
-        public override uint GetMaxMP()
-        {
-            return Attrs[AttrType.ATTR_MAX_MP].GetValue32();
-        }
-        public override uint GetMaxSD()
-        {
-            return Attrs[AttrType.ATTR_MAX_SD].GetValue32();
-        }
 
         public override float GetPhysicalAttackSpeed()
         {

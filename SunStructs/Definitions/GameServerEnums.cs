@@ -616,5 +616,41 @@ namespace SunStructs.Definitions
         PLAYER_BEHAVE_RESERVATION_BATTLE_GROUND_ZONE, // ÀüÀå ¿¹¾àÁß..
 
     };
+
+    public enum CharDeadType
+    {
+        CHAR_DEAD_NOT_DEAD = 0,            //Á×Áö¾ÊÀ½.
+        CHAR_DEAD_NORMAL = 1,          //ÀÏ¹ÝÀûÀ¸·Î Á×À½
+        CHAR_DEAD_SUCTION = 2,         //Á×¾î¼­ HP/MP »¡¸².
+        CHAR_DEAD_SUMMON = 3,          //Á×¾î¼­ ¼ÒÈ¯µÇ¾î »ç¶óÁú »óÅÂ.
+    };
+
+    public enum NPCGrade
+    {
+        NPC_GENERAL = 1,   //  1 : ÀÏ¹Ý
+        NPC_ELITE = 2, //  2 : Á¤¿¹
+        NPC_LEADER = 3,    //  3 : ´ëÀå
+        NPC_MIDDLEBOSS = 4,    //  4 : Áßº¸½º
+        NPC_BOSS = 5,  //  5 : º¸½º
+        NPC_MERCHANT_NPC = 6,  //  6 : NPC(»óÀÎ)
+        NPC_SUMMON_NPC = 7,    //  7 : NPC(¼ÒÈ¯Ã¼)
+        NPC_MAPOBJECT_NPC = 8, //  8 : NPC(¸Ê¿ÀºêÁ§Æ®)
+        NPC_LUCKY_MONSTER = 9, //  9 : ·°Å°¸ó½ºÅÍ
+        NPC_TOTEM = 10,    // 10 : (WAVERIX)(080911)(REORDERING) È®ÀÎ °á°ú Å¬¶ó¸¸ »ç¿ëÁß (targetingÀÌ µÇÁö ¾Êµµ·Ï ÇÏ±â À§ÇÑ... Â¼ºñ...)
+        NPC_SSQ_MONSTER = 11,  // 11 : Å¸¶ôÇÑ»ç¿ø ¸ó½ºÅÍ __NA000896_080215_TASK_SURVIVAL_SOLOING_QUEST_CSCOMMON__	
+        NPC_CRYSTAL_WARP = 12,
+        NPC_DOMINATION_MAPOBJECT_NPC = 13, //  13 : Áö¿ªÁ¡·ÉÀü_¸Ê¿ÀºêÁ§Æ®_ÇÇ¾Æ½Äº°°¡´É (Áö¿ªÁ¡·ÉÀü ÀÌ¿Ü¿¡´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù)
+        //	 Å¬¶óÀÌ¾ðÆ®¿¡¼­ ÇØ´ç ¿ÀºêÁ§Æ® Ã³¸® »çÇ×
+        //		- ¾ÆÀÌµé,ºí·°,µ¥½º ¿¡´Ï¸ÞÀÌ¼Ç ¹«½Ã
+        //		- ÁÖÀÎ±æµå ¼ÂÆÃ(ÇÇ¾Æ½Äº°: °ø°Ý °¡´É ¿©ºÎ, Å¸°Ù Ã¢ Ãâ·Â ¿©ºÎ)
+        //     - ¸ø°¡´Â Å¸ÀÏÀ§¿¡ ÀÖ¾îµµ °ø°Ý °¡´É(±âº»ÀûÀ¸·Î Áö¿ªÁ¡·ÉÀü³»¿¡¼± ¸ø°¡´Â »óÈ²ÀÏ °æ¿ì °ø°ÝÇÒ ¼ö ¾ø½À´Ï´Ù)
+        //		- ÆÄ±«µÇ¾úÀ»¶§ ¹Ì´Ï¸Ê¿¡ ÆÄ±« ¾ÆÀÌÄÜ Ãâ·Â(ÆÄ±«µÇ±â Àü¿£ ¹Ì´Ï¸Ê¿¡ ¾Æ¹«Ç¥½Ãµµ ÇÏÁö ¾ÊÀ½)
+        //_NA_0_20100222_UNIT_TRIGGERS_FRIEND_MONSTER
+        NPC_FRIEND_MAPOBJECT_NPC = 14, //  14 : ÀÏ¹Ý ¸ó½ºÅÍ¿Í´Â Àû´ëÀû, Player¿Í ¿ìÈ£ ÀûÀÎ ¸Ê ¿ÀºêÁ§Æ®   
+        NPC_FRIEND_MONSTER = 15, //  15 : ÀÏ¹Ý ¸ó½ºÅÍ¿Í´Â Àû´ëÀû, Player¿Í ¿ìÈ£Çü ¿ÀºêÁ§Æ®
+        NPC_MOVE_SYNC_MERCHANT = 16, //  16 : Àå°Å¸® ÀÌµ¿ NPCµîÀ» À§ÇÑ Å¸ÀÔ(¼­¹ö¿Í À§Ä¡ µ¿±âÈ­) 
+        //       - ±âÈ¹¿¡¼­ ÇÊ¿ä·ÎÇÔ.
+        NPC_GRADE_MAX = 17,
+    };
+
 }
-    

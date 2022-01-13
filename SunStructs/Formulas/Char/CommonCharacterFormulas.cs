@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CDShared.Logging;
 using SunStructs.Definitions;
 using static SunStructs.Definitions.CharType;
+using static SunStructs.Definitions.Const;
 
 
 namespace SunStructs.Formulas.Char
@@ -39,6 +41,50 @@ namespace SunStructs.Formulas.Char
             return 0;
         }
 
+        public static int CalcHPRecover(CharType charType, ushort vit, CharCondition condition, ushort level)
+        {
+            float recoverValue = 0;
+            int recoverHp = 0;
+            float sitValue = 0;
+
+            switch (charType)
+            {
+                case CHAR_DRAGON:
+                    recoverValue = 4;
+                    sitValue = 3;
+                    break;
+                case CHAR_BERSERKER:
+                    recoverValue = 5;
+                    sitValue = 2;
+                    break;
+                case CHAR_SHADOW:
+                    recoverValue = 4;
+                    sitValue = 1;      
+                    break;
+                case CHAR_VALKYRIE:
+                    recoverValue = 3.5f;
+                    sitValue = 1.5f;
+                    break;
+                case CHAR_ELEMENTALIST:
+                    recoverValue = 3;
+                    sitValue = 3;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(charType), charType, null);
+            }
+
+            if (condition == CharCondition.CHAR_CONDITION_STANDUP)
+            {
+                recoverHp = (int) ((vit / recoverValue + level /0.5f -2 ) *2);
+            }
+            else if (condition == CharCondition.CHAR_CONDITION_SITDOWN)
+            {
+                recoverHp = (int) ((vit / recoverValue * 2 + level / 5.0f * 2 - 2) * sitValue);
+            }
+
+            return recoverHp < 0 ? 1 : recoverHp;
+        }
+
         public static uint CalcMP(in CharType charType, in ushort level, in ushort spirit)
         {
             switch (charType)
@@ -67,6 +113,31 @@ namespace SunStructs.Formulas.Char
             return 0;
         }
 
+        public static int CalcMPRecover(CharType charType, ushort spirit, CharCondition condition)
+        {
+            int recoverValue = 0;
+            float recoverRatio = 1.0f;
+
+            if (condition == CharCondition.CHAR_CONDITION_SITDOWN)
+                recoverRatio = 3;
+            switch (charType)
+            {
+                case CHAR_DRAGON: recoverValue = 1; break;
+
+                case CHAR_BERSERKER: return -1;    // 18
+                case CHAR_SHADOW: recoverValue = 1; break;
+
+                case CHAR_VALKYRIE: recoverValue = 1; break;
+                case CHAR_ELEMENTALIST: recoverValue = 1; break;
+                default:
+                    Logger.Instance.Log($"Wrong CharType[{charType}] for CalcMPRecover");
+                    return 0;
+            }
+
+            return (int) (spirit * recoverRatio / recoverValue / 5 + 1);
+        }
+
+
         public static uint CalcSD(in ushort level)
         {
             var l = (float) level;
@@ -75,7 +146,17 @@ namespace SunStructs.Formulas.Char
             return (uint)(50 + MathF.Pow(l, 3) / incValue / l);
 
         }
+        public static int CalcSDRecover(CharType charType, CharCondition condition, int charAction, ushort level)
+        {
+            if ((CHAR_ACTION_CONDITION_FIGHTING & charAction) != 0) return 0;
 
+            var maxSD = CalcSD(level);
+            if ((CHAR_ACTION_CONDITION_MOVING & charAction) != 0)
+                return (int)(maxSD / 30 * 2 + level / 5 * 2);
+            if (condition == CharCondition.CHAR_CONDITION_SITDOWN)
+                return (int)(maxSD / 30 * 2 + level / 5 * 2);
+            return (int)(maxSD / 30 + level / 5);
+        }
         public static int CalcMinMeleeAttackPower(CharType type, int str, int dex)
         {
             if (str < 0) str = 0;

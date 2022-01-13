@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CDShared.Generics;
 using CDShared.Logging;
 using ProjectCD.Objects.Game.CDObject;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.MOB;
 using SunStructs.Definitions;
 using static ProjectCD.Objects.Game.CDObject.ObjectKey;
 
@@ -42,7 +43,7 @@ namespace ProjectCD.GlobalManagers
                 case ObjectType.NPC_OBJECT:
                     break;
                 case ObjectType.MONSTER_OBJECT:
-                    break;
+                    return new Monster(_monsterKeyGen.GetKey());
                 case ObjectType.SUMMON_OBJECT:
                     break;
                 case ObjectType.MERCHANT_OBJECT:

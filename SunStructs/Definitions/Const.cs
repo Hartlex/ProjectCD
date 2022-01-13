@@ -36,5 +36,12 @@ namespace SunStructs.Definitions
         public const int MAX_FIELDITEM_INFO_SIZE = 80;
         public const int MAX_PLAYER_RENDER_INFO_SIZE = 50;
         public const int MAX_PET_NAME_LENGTH = 10;
+
+        public const int MAX_PACKET_DELAY_TIME = 500;
+
+        public const byte CHAR_ACTION_CONDITION_NONE = 0;
+        public const byte CHAR_ACTION_CONDITION_MOVING = 1;
+        public const byte CHAR_ACTION_CONDITION_FIGHTING = 2;
+
     }
 }

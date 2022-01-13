@@ -17,17 +17,9 @@ namespace SunStructs.RuntimeDB
             Logger.Instance.LogOnLine($"{_npcInfos.Count} NPCs loaded!\n", LogType.SUCCESS);
         }
 
-        public BaseNPCInfo GetBaseInfo(in ushort monsterId)
+        public bool TryGetBaseInfo(ushort monsterId, out BaseNPCInfo? info)
         {
-            try
-            {
-                return _npcInfos[monsterId];
-            }
-            catch (KeyNotFoundException e)
-            {
-                Logger.Instance.Log(e.ToString(),LogType.ERROR);
-                return null;
-            }
+            return _npcInfos.TryGetValue(monsterId, out info);
         }
     }
 }

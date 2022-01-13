@@ -15,6 +15,7 @@ using SunStructs.PacketInfos.Game.Sync.Server;
 using SunStructs.Packets;
 using SunStructs.Packets.GameServerPackets.Sync;
 using SunStructs.ServerInfos.General;
+using static SunStructs.Packets.GameServerPackets.Sync.SyncProtocol;
 
 namespace ProjectCD.Servers.Game.Actions
 {
@@ -23,18 +24,20 @@ namespace ProjectCD.Servers.Game.Actions
         private int _count;
         public SyncActions()
         {
-            RegisterSyncAction(141,AskEnterField);
-            RegisterSyncAction(43,OnKeyboardMove);
-            RegisterSyncAction(115, OnJump);
-            RegisterSyncAction(202, OnMouseMove);
-            RegisterSyncAction(69, OnJumpEnd);
-            RegisterSyncAction(123, OnMoveStop);
+            RegisterSyncAction(ASK_ENTER_FIELD, AskEnterField);
+            RegisterSyncAction(ON_KEYBOARD_MOVE, OnKeyboardMove);
+            RegisterSyncAction(ON_JUMP, OnJump);
+            RegisterSyncAction(ON_MOUSE_MOVE, OnMouseMove);
+            RegisterSyncAction(ON_JUMP_END, OnJumpEnd);
+            RegisterSyncAction(ON_MOVE_STOP, OnMoveStop);
+            RegisterSyncAction(ON_TARGET_MOVE, OnTargetMove);
+
             Logger.Instance.LogOnLine($"[GAME][SYNC] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
-        private void RegisterSyncAction(byte subType, Action<ByteBuffer, Connection> action)
+        private void RegisterSyncAction(SyncProtocol subType, Action<ByteBuffer, Connection> action)
         {
-            GamePacketParser.Instance.RegisterAction((byte)GamePacketType.SYNC, subType, action);
+            GamePacketParser.Instance.RegisterAction((byte)GamePacketType.SYNC,(byte) subType, action);
             _count++;
         }
 
@@ -85,6 +88,12 @@ namespace ProjectCD.Servers.Game.Actions
         {
             var info = new MoveStopInfo(ref buffer);
             connection.User.Player.OnMoveStop(info);
+        }
+
+        private void OnTargetMove(ByteBuffer buffer, Connection connection)
+        {
+            var info = new TargetMoveInfo(ref buffer);
+            connection.User.Player.OnTargetMove(info);
         }
 
         private void Test(Connection connection)

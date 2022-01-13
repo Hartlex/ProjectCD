@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using CDShared.ByteLevel;
 using CDShared.Logging;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
 using ProjectCD.Objects.Game.World;
@@ -12,6 +14,7 @@ using SunStructs.Definitions;
 using SunStructs.PacketInfos;
 using SunStructs.PacketInfos.Game.Sync.Client;
 using SunStructs.PacketInfos.Game.Sync.Server;
+using SunStructs.PacketInfos.Game.Sync.Server.WarPacket;
 using SunStructs.Packets;
 using SunStructs.Packets.GameServerPackets.CharInfo;
 using SunStructs.Packets.GameServerPackets.Sync;
@@ -44,27 +47,57 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _angle = info.Angle;
             _tileID = info.TileIndex;
             _moveState = info.MoveState;
-
-            //var brdInfo = new KeyboardMoveBrdInfo(GetKey(), info.CurrentPosition, info.TileIndex, info.Angle,
-            //    info.MoveState);
-            //var packet = new MoveSyncBrd(brdInfo);
-            //GetCurrentField()?.SendToAllBut(packet,this);
+               
+            GetCurrentField()?.QueueWarPacketInfo(new KeyboardMoveBrdInfo((ushort)GetKey(), info));
         }
 
         public void OnMouseMove(MouseMoveInfo info)
         {
             SetPos(info.CurrentPosition);
+
+            GetCurrentField()?.QueueWarPacketInfo(new MoveBrd(
+                GetKey(),
+                _moveState,
+                1,
+                info.CurrentPosition,
+                info.DestinationPosition
+                ));
+
         }
 
         public void OnMoveStop(MoveStopInfo info)
         {
             SetPos(info.CurrentPosition);
+
+            GetCurrentField()?.QueueWarPacketInfo(new MoveStopBrd(GetKey(),info.CurrentPosition));
+
+            //for (byte i = 138; i < 255; i++)
+            //{
+
+            //    var buffer = new ByteBuffer();
+            //    buffer.WriteUInt16(1);
+            //    buffer.WriteByte(i);
+            //    buffer.WriteUInt32(GetKey());
+            //    var pos = info.CurrentPosition + new SunVector(1, 0, 0);
+            //    pos.GetBytes(ref buffer);
+            //    var testPacket = new TestPacket((byte)GamePacketType.SYNC, 167, new TestPacketInfo(buffer.GetData()));
+
+            //    GetCurrentField()?.SendToAll(testPacket);
+            //    Logger.Instance.Log(i);
+            //    Thread.Sleep(2000);
+
+            //}
         }
 
         public void OnJump(JumpInfo info)
         {
             SetPos(info.LandPosition);
-            _moveState = info.MoveState;
+            GetCurrentField()?.QueueWarPacketInfo(new PlayerJumpBrd(GetKey(), info));
+
+            GetCurrentField()?.SpawnMonsterEx(2,info.LandPosition);
+            //var renderInfo = new MonsterRenderInfo(100, 2, GetPos(), 100, 100, 100, 100, 0);
+            //var packet = new BrdMonsterEnter(new MonsterRenderInfos(renderInfo));
+            //GetCurrentField()?.SendToAll(packet);
         }
 
         public void OnAfterJump(AfterJumpInfo info)
@@ -105,6 +138,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         {
             var pos = GetPos();
             File.AppendAllLines($".//mapdata//{_fieldCode}.txt",new []{$"{_tileID};{pos.GetX()};{pos.GetY()};{pos.GetZ()}" });
+        }
+
+        public void OnTargetMove(TargetMoveInfo info)
+        {
+            SetPos(info.CurrentPosition);
+
+            GetCurrentField()?.QueueWarPacketInfo(new TargetMoveBrd((ushort)GetKey(),info));
         }
     }
 }

@@ -5,8 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeChildren;
+using SunStructs.Definitions;
+using SunStructs.Formulas.Char;
+using static CDShared.Generics.SunCalc;
 using static ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttrValueType;
 using static SunStructs.Definitions.AttrType;
+using static SunStructs.Definitions.Const;
 using static SunStructs.Formulas.Char.CommonCharacterFormulas;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
@@ -79,31 +83,99 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _attributes.Update();
         }
 
-        public override ushort GetSTR() { return _attributes[ATTR_STR].GetValue16(); }
-        public override ushort GetVIT() { return _attributes[ATTR_VIT].GetValue16(); }
-        public override ushort GetDEX() { return _attributes[ATTR_DEX].GetValue16(); }
-        public override ushort GetINT() { return _attributes[ATTR_INT].GetValue16(); }
-        public override ushort GetSPR() { return _attributes[ATTR_SPR].GetValue16(); ; }
+        public ushort GetSTR() { return _attributes[ATTR_STR].GetValue16(); }
+        public ushort GetVIT() { return _attributes[ATTR_VIT].GetValue16(); }
+        public ushort GetDEX() { return _attributes[ATTR_DEX].GetValue16(); }
+        public ushort GetINT() { return _attributes[ATTR_INT].GetValue16(); }
+        public ushort GetSPR() { return _attributes[ATTR_SPR].GetValue16(); }
 
         public override uint GetHP() { return _hp; }
         public override uint GetMP() { return _mp; }
-        public uint GetSD() { return _sd; }
+        public override uint GetSD() { return _sd; }
+        public override void SetHP(uint value)
+        {
+            var maxHP = GetMaxHP();
+            _hp = Min(0, Max(maxHP, value));
+        }
+
+        public override void SetMP(uint value)
+        {
+            var maxMP = GetMaxMP();
+            _mp = Min(0, Max(maxMP, value));
+        }
+
+        public override void SetSD(uint value)
+        {
+            var maxSD = GetMaxSD();
+            _sd = Min(0, Max(maxSD, value));
+        }
+
 
         public override uint GetMaxHP() { return _attributes[ATTR_MAX_HP].GetValue32(); }
         public override uint GetMaxMP() { return _attributes[ATTR_MAX_MP].GetValue32(); }
-        public uint GetMaxSD(){ return _attributes[ATTR_MAX_SD].GetValue32(); }
+        public override uint GetMaxSD(){ return _attributes[ATTR_MAX_SD].GetValue32(); }
 
         public ushort GetExpert1(){ return _attributes[ATTR_EXPERTY1].GetValue16(); }
         public ushort GetExpert2(){ return _attributes[ATTR_EXPERTY2].GetValue16(); }
+
+        public override float GetPhysicalAttackSpeed()
+        {
+            return _attributes[ATTR_ATTACK_SPEED].GetValue() / 100f;
+        }
+
+        public override int GetAttSpeedRatio()
+        {
+            return _attributes[ATTR_ATTACK_SPEED].GetValue();
+        }
 
         public PlayerAttr GetAttributes()
         {
             return _attributes;
         }
 
-        public float GetMoveSpeedRatio()
+        public override int GetMoveSpeedRatio()
         {
             return _attributes[ATTR_MOVE_SPEED].GetValue();
+        }
+        
+
+        public void UpdateCalcRecover(bool hpUpdated, bool mpUpdated, bool sdUpdated)
+        {
+            var charType = GetCharType();
+            var condition = StatusManager.GetCondition();
+
+            int hpRecover = 0;
+            int mpRecover = 0;
+            int sdRecover = 0;
+
+            if (hpUpdated)
+            {
+                var vit = GetVIT();
+                hpRecover = CalcHPRecover(charType, vit, condition, GetLevel());
+            }
+
+            if (mpUpdated)
+            {
+                var spi = GetSPR();
+                mpRecover = CalcMPRecover(charType, spi, condition);
+            }
+
+            if (sdUpdated)
+            {
+                byte moveFlag = IsMoving() ? CHAR_ACTION_CONDITION_MOVING : CHAR_ACTION_CONDITION_NONE;
+                byte fightFlag = StatusManager.FindStatus(CharStateType.CHAR_STATE_FIGHTING,out var status) ? CHAR_ACTION_CONDITION_FIGHTING : CHAR_ACTION_CONDITION_NONE;
+
+                sdRecover = CalcSDRecover(charType, condition, (moveFlag | fightFlag), GetLevel());
+            }
+
+            if (hpUpdated || mpUpdated || sdUpdated)
+            {
+                _attributes.UpdateChangedRecoveries(
+                        hpUpdated,hpRecover,
+                        mpUpdated,mpRecover,
+                        sdUpdated,sdRecover
+                );
+            }
         }
     }
 }

@@ -3,26 +3,125 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.PartySystem;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.StateSystem;
 using SunStructs.Definitions;
+using SunStructs.PacketInfos.Game.Status.Server;
+using SunStructs.Packets;
+using SunStructs.Packets.GameServerPackets.Status;
+using static CDShared.Generics.SunCalc;
+using static SunStructs.Definitions.AttrType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 {
-    public class Character : ObjectBase
+    public abstract class Character : ObjectBase
     {
-        public virtual ushort GetSTR(){return 0;}
-        public virtual ushort GetVIT(){return 0;}
-        public virtual ushort GetDEX(){return 0;}
-        public virtual ushort GetINT(){return 0;}
-        public virtual ushort GetSPR(){return 0;}
+        #region Properties
 
-        public virtual uint GetHP() {return 0; }
-        public virtual uint GetMP() {return 0; }
-        public virtual uint GetMaxHP() {return 0; }
-        public virtual uint GetMaxMP() {return 0; }
+        #region protected
 
-        public Character(uint key) : base(key)
+        protected int ShieldHP;
+        protected int ShieldMP;
+        protected float DecreaseMPRatio;
+        protected float ShieldAbsorbRatio;
+        protected int FightingEnergyCount;
+        protected int UsedFightingEnergySize;
+
+        protected ulong DeadExp;
+        protected ObjectType KillerObjectType;
+        protected uint KillerObjectKey;
+        protected CharDeadType DeadType;
+
+        protected CooldownTable CooldownTable;
+        protected StatusManager StatusManager;
+
+        protected PartyState PartyState; //TODO move to Player?
+        #endregion
+
+        #region private
+
+        private bool _isMoving;
+
+        private uint _hp;
+        private uint _mp;
+        private uint _sd;
+        private Attributes _attr;
+
+        #endregion
+
+        #endregion
+
+
+        protected Character(uint key) : base(key)
         {
             SetObjectType(ObjectType.CHARACTER_OBJECT);
+            StatusManager = new (this);
+            _isMoving = false;
+        }
+
+
+        #region Attributes
+
+        protected void SetBaseAttributes(Attributes attr) { _attr = attr; }
+
+        //public uint GetHP(){ return _hp; }
+        //public uint GetMP(){ return _mp; }
+        //public uint GetSD(){ return _sd; }
+
+        //public uint GetMaxHP(){ return _attr[ATTR_MAX_HP].GetValue32(); }
+        //public uint GetMaxMP(){ return _attr[ATTR_MAX_MP].GetValue32(); }
+        //public uint GetMaxSD(){ return _attr[ATTR_MAX_SD].GetValue32(); }
+
+        //public void SetHP(uint value)
+        //{
+        //    var maxHP = GetMaxHP();
+        //    _hp = Min(0, Max(maxHP, value));
+        //}
+        //public void SetMP(uint value)
+        //{
+        //    var maxMP = GetMaxMP();
+        //    _mp = Min(0, Max(maxMP, value));
+        //}
+        //public void SetSD(uint value)
+        //{
+        //    var maxSD = GetMaxSD();
+        //    _sd = Min(0, Max(maxSD, value));
+        //}
+        public abstract uint GetHP();
+        public abstract uint GetMP();
+        public abstract uint GetSD();
+        public abstract uint GetMaxHP();
+        public abstract uint GetMaxMP();
+        public abstract uint GetMaxSD();
+        public abstract void SetHP(uint value);
+        public abstract void SetMP(uint value);
+        public abstract void SetSD(uint value);
+
+
+        public abstract float GetPhysicalAttackSpeed();
+        public abstract int GetAttSpeedRatio();
+        public abstract int GetMoveSpeedRatio();
+
+        #endregion
+
+
+        public void SendPacketAround(Packet packet)
+        {
+            GetCurrentField()?.SendToAll(packet);
+        }
+        public void SendAttrChange(AttrType attrType, int value)
+        {
+            var packet = new AttrChangeBrd(new (GetKey(), attrType, value));
+            SendPacketAround(packet);
+        }
+
+        public bool IsMoving()
+        {
+            return _isMoving;
         }
     }
+
+
 }

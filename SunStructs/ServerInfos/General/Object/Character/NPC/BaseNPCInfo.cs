@@ -1,4 +1,5 @@
 ﻿using CDShared.Parsing;
+using SunStructs.Definitions;
 
 namespace SunStructs.ServerInfos.General.Object.Character.NPC
 {
@@ -17,7 +18,7 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
         public readonly uint SD;
         public readonly uint NameCode;
         public readonly uint ICode;
-        public readonly byte Grade;
+        public readonly NPCGrade Grade;
         public readonly float GradeExpRatio;
         public readonly ushort Size;
         public readonly byte AIType;
@@ -116,7 +117,7 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
             NameCode = sb.ReadUint();
             ICode = sb.ReadUint();
             sb.Skip();
-            Grade = sb.ReadByte();
+            Grade = (NPCGrade) sb.ReadByte();
             GradeExpRatio = sb.ReadFloat();
             Size = sb.ReadUshort();
             AIType = sb.ReadByte();

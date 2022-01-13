@@ -9,6 +9,8 @@ using CDShared.ByteLevel;
 using CDShared.Logging;
 using ProjectCD.GlobalManagers;
 using ProjectCD.Objects.Game.CDObject;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.MOB;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.Items;
 using ProjectCD.Servers.Game;
@@ -16,9 +18,12 @@ using SunStructs.Definitions;
 using SunStructs.PacketInfos;
 using SunStructs.PacketInfos.Game.Item.Server;
 using SunStructs.PacketInfos.Game.Sync.Server;
+using SunStructs.PacketInfos.Game.Sync.Server.WarPacket;
 using SunStructs.Packets;
 using SunStructs.Packets.GameServerPackets.Sync;
+using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General;
+using SunStructs.ServerInfos.General.Object.Character.NPC;
 using SunStructs.ServerInfos.General.World;
 using static SunStructs.Definitions.Const;
 using static SunStructs.Definitions.ItemResult;
@@ -31,12 +36,15 @@ namespace ProjectCD.Objects.Game.World
         private readonly GameServer _server;
         private readonly Dictionary<uint, Player> _activePlayers;
         private readonly Dictionary<uint, ObjectBase> _activeObjects;
+        private readonly WarPacketScheduler _warPacketScheduler;
+
         public Field(BaseFieldInfo baseFieldInfo, GameServer server)
         {
             _baseFieldInfo = baseFieldInfo;
             _server = server;
             _activePlayers = new(MAX_PLAYERS_ON_MAP);
             _activeObjects = new(MAX_OBJECTS_ON_MAP);
+            _warPacketScheduler = new (this);
         }
 
         public virtual bool EnterField(ObjectBase obj, SunVector pos, ushort angle = 0)
@@ -68,15 +76,17 @@ namespace ProjectCD.Objects.Game.World
             obj.OnLeaveField();
             return _activeObjects.Remove(obj.GetKey());
         }
-
-        public void SendToAllBut(MoveSyncBrd packet,Player player)
+        public void SendToAll(Packet packet)
         {
             foreach (var activePlayer in _activePlayers.Values)
             {
                 activePlayer.SendPacket(packet);
             }
         }
-
+        public void QueueWarPacketInfo(WarPacketInfo warInfo)
+        {
+            _warPacketScheduler.AddInfo(warInfo);
+        }
         public void DropItemFromPlayer(Player player, Item item)
         {
             var fieldItem = (FieldItem) ObjectFactory.Instance.CreateObject(ObjectType.ITEM_OBJECT)!;
@@ -88,6 +98,15 @@ namespace ProjectCD.Objects.Game.World
             EnterField(fieldItem, SunVector.GetRandomPosAround(player.GetPos(), 2));
         }
 
+        public void SpawnMonsterEx(ushort monsterKey,SunVector pos)
+        {
+            var monster = (Monster)ObjectFactory.Instance.CreateObject(ObjectType.MONSTER_OBJECT)!;
+            if (!monster.Initialize(monsterKey, 0, 0, 0)) return;
+
+            EnterField(monster, pos);
+
+
+        }
         public ItemResult PlayerPickupItem(Player player, uint objectKey,out ItemSlotInfo[]? slotInfos,out ulong money)
         {
             slotInfos = null;
@@ -148,85 +167,7 @@ namespace ProjectCD.Objects.Game.World
             SendAll<EquipRenderInfo,AllPlayerEquipInfo,AllPlayersEquipInfoCmd>(player,equipRenderInfos, MAX_PLAYER_RENDER_INFO_SIZE);
 
         }
-        //private void SendAllFieldItemInfo(Player player, List<ItemRenderInfo> allRenderInfos)
-        //{
-        //    int count = allRenderInfos.Count;
-        //    int currentIndex = 0;
-        //    while (count > 0)
-        //    {
-        //        //Is allRenderInfos bigger than maxSize
-        //        var amount = count> MAX_FIELDITEM_INFO_SIZE ? MAX_FIELDITEM_INFO_SIZE : count;
-        //        count -= amount;
 
-        //        var infos = new ItemRenderInfo[amount];
-
-        //        allRenderInfos.CopyTo(infos);
-
-        //        //if there are still more left, delete the ones that are send this iteration
-        //        if (count > 0)
-        //        {
-        //            allRenderInfos.RemoveRange(currentIndex, amount);
-        //            currentIndex += amount;
-        //        }
-
-        //        var outInfo = new AllFieldItemInfo(infos);
-        //        var packet = new AllFieldItemInfoBrd(outInfo);
-        //        player.SendPacket(packet);
-        //    }
-        //}
-
-        //private void SendAllPlayerRenderInfo(Player player, List<PlayerRenderInfo> allRenderInfos)
-        //{
-        //    int count = allRenderInfos.Count;
-        //    int currentIndex = 0;
-        //    while (count > 0)
-        //    {
-        //        //Is allRenderInfos bigger than maxSize
-        //        var amount = count > MAX_PLAYER_RENDER_INFO_SIZE ? MAX_PLAYER_RENDER_INFO_SIZE : count;
-        //        count -= amount;
-
-        //        var infos = new PlayerRenderInfo[amount];
-
-        //        allRenderInfos.CopyTo(infos);
-
-        //        //if there are still more left, delete the ones that are send this iteration
-        //        if (count > 0)
-        //        {
-        //            allRenderInfos.RemoveRange(currentIndex, amount);
-        //            currentIndex += amount;
-        //        }
-
-        //        var outInfo = new AllPlayerRenderInfo(infos);
-        //        var packet = new AllPlayerRenderInfoCmd(outInfo);
-        //        player.SendPacket(packet);
-        //    }
-        //}
-        //private void SendAllPlayerEquipInfo(Player player, List<EquipRenderInfo> allRenderInfos)
-        //{
-        //    int count = allRenderInfos.Count;
-        //    int currentIndex = 0;
-        //    while (count > 0)
-        //    {
-        //        //Is allRenderInfos bigger than maxSize
-        //        var amount = count > MAX_PLAYER_RENDER_INFO_SIZE ? MAX_PLAYER_RENDER_INFO_SIZE : count;
-        //        count -= amount;
-
-        //        var infos = new EquipRenderInfo[amount];
-
-        //        allRenderInfos.CopyTo(infos);
-
-        //        //if there are still more left, delete the ones that are send this iteration
-        //        if (count > 0)
-        //        {
-        //            allRenderInfos.RemoveRange(currentIndex, amount);
-        //            currentIndex += amount;
-        //        }
-
-        //        var outInfo = new AllPlayerEquipInfo(infos);
-        //        var packet = new AllPlayersEquipInfoCmd(outInfo);
-        //        player.SendPacket(packet);
-        //    }
-        //}
         public void Broadcast(Packet packet)
         {
             foreach (var player in _activePlayers.Values)
@@ -243,7 +184,7 @@ namespace ProjectCD.Objects.Game.World
             }
         }
 
-        private void SendAll<ArrayType,PacketInfoType,PacketType>(Player player, List<ArrayType> allInfos,int MaxCount) where PacketType : Packet where PacketInfoType : ServerPacketInfo
+        private void SendAll<TArrayType,TPacketInfoType,TPacketType>(Player player, List<TArrayType> allInfos,int MaxCount) where TPacketType : Packet where TPacketInfoType : ServerPacketInfo
         {
             int count = allInfos.Count;
             int currentIndex = 0;
@@ -253,7 +194,7 @@ namespace ProjectCD.Objects.Game.World
                 var amount = count > MaxCount ? MaxCount : count;
                 count -= amount;
 
-                var infos = new ArrayType[amount];
+                var infos = new TArrayType[amount];
 
                 allInfos.CopyTo(infos);
 
@@ -264,12 +205,18 @@ namespace ProjectCD.Objects.Game.World
                     currentIndex += amount;
                 }
 
-                var outInfo = (PacketInfoType) Activator.CreateInstance(typeof(PacketInfoType), infos)!;
-                var packet = (PacketType) Activator.CreateInstance(typeof(PacketType), outInfo)!;
+                var outInfo = (TPacketInfoType) Activator.CreateInstance(typeof(TPacketInfoType), infos)!;
+                var packet = (TPacketType) Activator.CreateInstance(typeof(TPacketType), outInfo)!;
                 //var outInfo = new PacketInfoType(infos);
                 //var packet = new AllPlayersEquipInfoCmd(outInfo);
                 player.SendPacket(packet);
             }
+        }
+
+        public override string ToString()
+        {
+            return _baseFieldInfo.MapCode.ToString();
+
         }
     }
 

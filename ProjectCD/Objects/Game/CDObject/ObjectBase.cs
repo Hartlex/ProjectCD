@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectCD.GlobalManagers;
 using ProjectCD.Objects.Game.World;
 using SunStructs.Definitions;
 using SunStructs.ServerInfos.General;
@@ -20,6 +22,11 @@ public abstract class ObjectBase
         _objectID = key;
         _objectType = ObjectType.OBJECT_OBJECT;
         _position = new SunVector(0, 0, 0);
+    }
+
+    ~ObjectBase()
+    {
+        ObjectFactory.Instance.FreeObject(this);
     }
 
     public virtual void SetPos(SunVector pos){ _position = pos; }

@@ -15,6 +15,7 @@ namespace ProjectCD.Servers.Game
         private SyncActions _syncActions = null!;
         private ItemActions _itemActions = null!;
         private ZoneActions _zoneActions = null!;
+        private BattleActions _battleActions = null!;
         public void Initialize()
         {
             _connectionActions = new();
@@ -22,6 +23,7 @@ namespace ProjectCD.Servers.Game
             _syncActions = new();
             _itemActions = new();
             _zoneActions = new();
+            _battleActions = new();
         }
     }
 }

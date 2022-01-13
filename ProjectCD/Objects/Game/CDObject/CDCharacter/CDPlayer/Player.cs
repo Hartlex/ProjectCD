@@ -36,6 +36,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             PlayerAttributesInit(ref reader);
             PlayerMovementInit(ref reader);
             PlayerInventoryInit(ref reader);
+            PlayerSkillInit(ref reader);
             
         }
 

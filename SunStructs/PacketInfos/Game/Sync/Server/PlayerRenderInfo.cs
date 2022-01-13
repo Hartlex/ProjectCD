@@ -30,8 +30,8 @@ public class PlayerRenderInfo: ServerPacketInfo
     public byte Unk2;
     public PlayerRenderRiderInfo RenderRiderInfo = new PlayerRenderRiderInfo();
     public PlayerRenderCollectInfo RenderCollectInfo = new PlayerRenderCollectInfo();
-    public byte Unk3Count; //8 bytes
-    public TotalStateInfo StateInfo = new TotalStateInfo(Array.Empty<StateInfo>());
+    //public byte Unk3Count; //8 bytes
+    public TotalStateInfo StateInfo = new ();
     public byte Unk4Count; //1 byte
 
     public override void GetBytes(ref ByteBuffer buffer)
@@ -101,7 +101,7 @@ public class PlayerRenderInfo: ServerPacketInfo
         buffer.WriteByte(Unk2);
         RenderRiderInfo.GetBytes(ref buffer);
         RenderCollectInfo.GetBytes(ref buffer);
-        buffer.WriteByte(Unk3Count);
+        //buffer.WriteByte(Unk3Count); included in stateinfo
         StateInfo.GetBytes(ref buffer);
         buffer.WriteByte(Unk4Count);
     }

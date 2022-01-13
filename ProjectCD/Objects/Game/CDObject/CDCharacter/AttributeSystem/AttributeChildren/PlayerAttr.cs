@@ -23,8 +23,57 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
         
         public override void UpdateEx()
         {
-            throw new NotImplementedException();
+            var attackSpeedRatio = _owner.GetAttSpeedRatio();
+            var moveSpeedRatio = _owner.GetMoveSpeedRatio();
+            var maxHP = _owner.GetMaxHP();
+            var maxMP = _owner.GetMaxMP();
+            var maxSD = _owner.GetMaxSD();
+            var vitality = _owner.GetVIT();
+            var spirit = _owner.GetSPR();
+
+            Update();
+
+            var changedAttackSpeedRatio = _owner.GetAttSpeedRatio();
+            var changedMoveSpeedRatio = _owner.GetMoveSpeedRatio();
+
+            if (attackSpeedRatio != changedAttackSpeedRatio)
+            {
+                _owner.SendAttrChange(ATTR_ATTACK_SPEED,changedAttackSpeedRatio);
+            }
+
+            if (moveSpeedRatio != changedMoveSpeedRatio)
+            {
+                _owner.SendAttrChange(ATTR_MOVE_SPEED,changedMoveSpeedRatio);
+            }
+
+            var changedMaxHP = _owner.GetMaxHP();
+            var changedMaxMP = _owner.GetMaxMP();
+            var changedMaxSD = _owner.GetMaxSD();
+            bool updateHP = false;
+            bool updateMP = false;
+            bool updateSD = false;
+
+
+            if (maxHP != changedMaxHP)
+                _owner.SendAttrChange(ATTR_MAX_HP,(int) changedMaxHP);
+            if (maxMP != changedMaxMP)
+                _owner.SendAttrChange(ATTR_MAX_MP, (int)changedMaxMP);
+            if (maxSD != changedMaxSD)
+            {
+                _owner.SendAttrChange(ATTR_MAX_SD, (int)changedMaxSD);
+                updateSD = true;
+            }
+
+            var changeVit = _owner.GetVIT();
+            var changedSpi = _owner.GetSPR();
+            if (vitality != changeVit)
+                updateHP = true;
+            if (spirit != changedSpi)
+                updateMP = true;
+
+            _owner.UpdateCalcRecover(updateHP,updateMP,updateSD);
         }
+
 
 
         public sealed override void Update()
@@ -238,25 +287,26 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
                     Attrs[(int) ATTR_OPTION_MAGICAL_ATTACK_POWER].SetValue(value,i);
                 }
             }
+
             Attrs[(int)ATTR_OPTION_PHYSICAL_ATTACK_POWER].Update();
             Attrs[(int)ATTR_OPTION_MAGICAL_ATTACK_POWER].Update();
             Attrs[(int) ATTR_OPTION_ALL_ATTACK_POWER].Clear();
 
-            var averagePhyAttackPower = Attrs[(int) ATTR_BASE_MELEE_MIN_ATTACK_POWER].GetValue() +
+            var averagePhyAttackPower = (Attrs[(int) ATTR_BASE_MELEE_MIN_ATTACK_POWER].GetValue() +
                                      Attrs[(int) ATTR_BASE_MELEE_MAX_ATTACK_POWER].GetValue() +
                                      Attrs[(int) ATTR_BASE_RANGE_MIN_ATTACK_POWER].GetValue() +
-                                     Attrs[(int) ATTR_BASE_RANGE_MAX_ATTACK_POWER].GetValue();
+                                     Attrs[(int) ATTR_BASE_RANGE_MAX_ATTACK_POWER].GetValue())/4;
 
             Attrs[(int)ATTR_OPTION_PHYSICAL_ATTACK_POWER].AddValue(
                 (averagePhyAttackPower + Attrs[(int)ATTR_OPTION_PHYSICAL_ATTACK_POWER].GetValue()) *
                 Attrs[(int) ATTR_OPTION_PHYSICAL_ATTACK_POWER].GetValue(AttrValueType.CALC_RATIO) /100
                 ,AttrValueType.CALC);
 
-            var averageMagicAttackPower = Attrs[(int) ATTR_BASE_MAGICAL_MIN_ATTACK_POWER].GetValue() +
-                                          Attrs[(int) ATTR_BASE_MAGICAL_MAX_ATTACK_POWER].GetValue();
+            var averageMagicAttackPower = (Attrs[(int) ATTR_BASE_MAGICAL_MIN_ATTACK_POWER].GetValue() +
+                                          Attrs[(int) ATTR_BASE_MAGICAL_MAX_ATTACK_POWER].GetValue())/2;
 
             Attrs[(int)ATTR_OPTION_MAGICAL_ATTACK_POWER].AddValue(
-                (averagePhyAttackPower + Attrs[(int)ATTR_OPTION_MAGICAL_ATTACK_POWER].GetValue()) *
+                (averageMagicAttackPower + Attrs[(int)ATTR_OPTION_MAGICAL_ATTACK_POWER].GetValue()) *
                 Attrs[(int)ATTR_OPTION_MAGICAL_ATTACK_POWER].GetValue(AttrValueType.CALC_RATIO) / 100
                 , AttrValueType.CALC);
 
@@ -317,8 +367,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
             
             Attrs[(int)ATTR_OPTION_ALL_DEFENSE_POWER].Clear();
 
-            int averageDefPower = Attrs[(int)ATTR_BASE_MELEE_DEFENSE_POWER].GetValue() +
-                                  Attrs[(int)ATTR_BASE_RANGE_DEFENSE_POWER].GetValue();
+            int averageDefPower = (Attrs[(int)ATTR_BASE_MELEE_DEFENSE_POWER].GetValue() +
+                                  Attrs[(int)ATTR_BASE_RANGE_DEFENSE_POWER].GetValue())/2;
 
             Attrs[(int)ATTR_OPTION_PHYSICAL_DEFENSE_POWER].AddValue(
                 (averageDefPower + Attrs[(int)ATTR_OPTION_PHYSICAL_DEFENSE_POWER].GetValue()) *
@@ -357,5 +407,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
             Attrs[(int)ATTR_MAGICAL_ALL_ATTACK_POWER].Clear();
 
         }
+
+        
     }
 }

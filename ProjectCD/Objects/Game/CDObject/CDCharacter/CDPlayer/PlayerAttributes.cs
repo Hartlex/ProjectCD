@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeChildren;
 using SunStructs.Definitions;
 using SunStructs.Formulas.Char;
+using SunStructs.Packets.GameServerPackets.Status;
 using static CDShared.Generics.SunCalc;
 using static ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttrValueType;
 using static SunStructs.Definitions.AttrType;
@@ -18,15 +19,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
     public partial class Player
     {
         private PlayerAttr _attributes;
-        private uint _hp;
-        private uint _mp;
-        private uint _sd;
+
         public void PlayerAttributesInit(ref SqlDataReader reader)
         {
-            uint recoverHP = 10;
-            uint recoverMP = 10;
-            uint recoverSD = 10;
-
             _attributes = new(this);
             SetBaseAttributes(_attributes);
             var strength = unchecked((ushort) reader.GetInt16(9));
@@ -36,6 +31,14 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             var spirit = unchecked((ushort) reader.GetInt16(13));
             var skillStat1 = unchecked((ushort) reader.GetInt16(14));
             var skillStat2 = unchecked((ushort) reader.GetInt16(15));
+
+            var charType = GetCharType();
+            var condition = StatusManager.GetCondition();
+            var level = GetLevel();
+
+            var recoverHP = CalcHPRecover(charType, vitality, condition, level);
+            var recoverMP = CalcMPRecover(charType, spirit, condition);
+            var recoverSD = CalcSDRecover(charType,condition,Const.CHAR_ACTION_CONDITION_NONE,level);
 
 
             _attributes[ATTR_STR].SetValue(strength);
@@ -77,11 +80,19 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _attributes[ATTR_MAX_MP].Update();
             _attributes[ATTR_MAX_SD].Update();
 
-            _hp =  _attributes[ATTR_MAX_HP].GetValue32();
-            _mp =  _attributes[ATTR_MAX_MP].GetValue32();
-            _sd =  _attributes[ATTR_MAX_SD].GetValue32();
+            SetHP(_attributes[ATTR_MAX_HP].GetValue32());
+            SetMP(_attributes[ATTR_MAX_MP].GetValue32());
+            SetSD(_attributes[ATTR_MAX_SD].GetValue32());
 
             _attributes.Update();
+
+            if (charType == CharType.CHAR_BERSERKER)
+            {
+                SetMP(0);
+
+                SendPacket(new StatusRecoverMpBrd(new (GetKey(),GetMP())));
+            }
+
         }
 
         public ushort GetSTR() { return _attributes[ATTR_STR].GetValue16(); }
@@ -89,33 +100,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         public ushort GetDEX() { return _attributes[ATTR_DEX].GetValue16(); }
         public ushort GetINT() { return _attributes[ATTR_INT].GetValue16(); }
         public ushort GetSPR() { return _attributes[ATTR_SPR].GetValue16(); }
-
-        public override uint GetHP() { return _hp; }
-        public override uint GetMP() { return _mp; }
-        public override uint GetSD() { return _sd; }
-        public override void SetHP(uint value)
-        {
-            var maxHP = GetMaxHP();
-            _hp = Min(0, Max(maxHP, value));
-        }
-
-        public override void SetMP(uint value)
-        {
-            var maxMP = GetMaxMP();
-            _mp = Min(0, Max(maxMP, value));
-        }
-
-        public override void SetSD(uint value)
-        {
-            var maxSD = GetMaxSD();
-            _sd = Min(0, Max(maxSD, value));
-        }
-
-
-        public override uint GetMaxHP() { return _attributes[ATTR_MAX_HP].GetValue32(); }
-        public override uint GetMaxMP() { return _attributes[ATTR_MAX_MP].GetValue32(); }
-        public override uint GetMaxSD(){ return _attributes[ATTR_MAX_SD].GetValue32(); }
-
         public ushort GetExpert1(){ return _attributes[ATTR_EXPERTY1].GetValue16(); }
         public ushort GetExpert2(){ return _attributes[ATTR_EXPERTY2].GetValue16(); }
 

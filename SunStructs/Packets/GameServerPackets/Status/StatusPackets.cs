@@ -11,7 +11,9 @@ namespace SunStructs.Packets.GameServerPackets.Status
 {
     public enum StatusProtocol
     {
-        ATTR_CHANGE_BRD = 157
+        ATTR_CHANGE_BRD = 157,
+        CHANGE_HP = 16,
+        CHANGE_MP = 50
     }
     public class StatusPacket : Packet
     {
@@ -23,5 +25,13 @@ namespace SunStructs.Packets.GameServerPackets.Status
     public class AttrChangeBrd : StatusPacket
     {
         public AttrChangeBrd(AttrChangeInfo info) : base(ATTR_CHANGE_BRD, info) { }
+    }
+    public class StatusRecoverHpBrd : StatusPacket
+    {
+        public StatusRecoverHpBrd(ChangeHPInfo info) : base(CHANGE_HP, info) { }
+    }
+    public class StatusRecoverMpBrd : StatusPacket
+    {
+        public StatusRecoverMpBrd(ChangeMPInfo info) : base(CHANGE_MP, info) { }
     }
 }

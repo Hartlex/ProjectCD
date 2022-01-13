@@ -19,12 +19,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         private bool _doingAction;
         private SunTimer _actionTimer;
 
+
         public void PlayerSkillInit(ref SqlDataReader reader)
         {
             _doingAction = false;
             _actionTimer = new ();
         }
-
         public void SetActionDelay(long delay)
         {
             _actionTimer.SetTimer(delay);
@@ -74,5 +74,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 Logger.Instance.Log($"Player[{GetKey()}][SetAttackDelay] has an attack speed of 0!",LogType.ERROR);
             }
         }
+
     }
 }

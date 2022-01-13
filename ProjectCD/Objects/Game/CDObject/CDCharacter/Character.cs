@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CDShared.Generics;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.PartySystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.StateSystem;
@@ -22,12 +24,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         #region protected
 
-        protected int ShieldHP;
-        protected int ShieldMP;
-        protected float DecreaseMPRatio;
-        protected float ShieldAbsorbRatio;
-        protected int FightingEnergyCount;
-        protected int UsedFightingEnergySize;
+
+
 
         protected ulong DeadExp;
         protected ObjectType KillerObjectType;
@@ -47,6 +45,16 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         private uint _hp;
         private uint _mp;
         private uint _sd;
+
+        private int _shieldHP;
+        private int _shieldMP;
+        private float _decreaseMPRatio;
+        private float _shieldAbsorbRatio;
+        private int _fightingEnergyCount;
+        private int _usedFightingEnergySize;
+
+        private ulong _deadExp;
+
         private Attributes _attr;
 
         #endregion
@@ -92,6 +100,167 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             _sd = Min(0, Max(maxSD, value));
         }
 
+        public virtual uint IncreaseHP(uint value)
+        {
+            var curHP = GetHP();
+            var calcHP = curHP +value;
+            var maxHP = GetMaxHP();
+
+            var hp = Max(maxHP, calcHP);
+            value = hp - curHP;
+
+            SetHP(hp);
+
+            if (value != 0)
+                StatusManager.ChangeHP();
+
+            return value;
+        }
+        public virtual uint DecreaseHP(int value, int limitHP)
+        {
+            var curHp = (int)GetHP();
+            bool IsDead = false;
+
+            if (curHp == 0) return 0;
+
+            value = ApplyMagicShield(value);
+            if (limitHP > 0 && limitHP > (curHp - value))
+            {
+                if (curHp > limitHP)
+                    value = (curHp - limitHP);
+                else
+                    value = 0;
+            }
+
+            if (curHp <= value)
+            {
+                value = curHp;
+                SetHP(0);
+                OnDead();
+                IsDead = true;
+            }
+            else
+            {
+                uint hp = (uint) (curHp - value);
+                SetHP(hp);
+            }
+
+            if (IsDead)
+            {
+                int chance = GlobalRandom.Rand(0, 100);
+                if (chance < _attr[ATTR_RESURRECTION_RATIO].GetValue())
+                {
+                    OnResurrection(0, 1, 1);
+                }
+            }
+
+            return (uint) value;
+        }
+
+        public virtual uint IncreaseMP(uint value)
+        {
+            var curMP = GetMP();
+            var calcMP = curMP + value;
+            var maxMP = GetMaxMP();
+
+            var mp = Max(maxMP, calcMP);
+            value = mp - curMP;
+
+            SetMP(mp);
+
+            return value;
+        }
+        public virtual uint DecreaseMp(uint value)
+        {
+            var curMP = GetMP();
+            if (curMP <= value)
+            {
+                value = curMP;
+                SetMP(0);
+            }
+            else
+            {
+                var mp = curMP - value;
+                SetMP(mp);
+            }
+
+            return value;
+        }
+
+        public virtual uint IncreaseSD(uint value)
+        {
+            var curSD = GetSD();
+            var maxSD = GetMaxSD();
+            var calcSD = curSD + value;
+
+            var newSD = Max(maxSD, calcSD);
+            var allocStatus = curSD == 0 && newSD != 0;
+            var realIncrement = newSD - curSD;
+
+            SetSD(newSD);
+            if (allocStatus)
+            {
+                if (StatusManager.AllocStatus(CharStateType.CHAR_STATE_ETC_EXIST_SHELD_POINT, out var status))
+                {
+                    status!.SendStatusAddBRD();
+                }
+            }
+
+            return realIncrement;
+        }
+        public virtual uint DecreaseSD(uint value)
+        {
+            var curSD = GetSD();
+            if (curSD <= value)
+            {
+                value = curSD;
+                SetSD(0);
+                StatusManager.Remove(CharStateType.CHAR_STATE_ETC_EXIST_SHELD_POINT);
+            }
+            else
+            {
+                var newSD = curSD - value;
+                SetSD(newSD);
+            }
+
+            return value;
+        }
+
+        #region Shield
+
+        public int ApplyMagicShield(int damage)
+        {
+            if (_shieldMP == 0) return damage;
+            if (_decreaseMPRatio == 0) return damage;
+
+            var decreaseMP = 0;
+
+            decreaseMP = (int) (damage * _decreaseMPRatio);
+
+            if (GetMP() < decreaseMP)
+                return damage;
+
+            int absorbDamage = (int) (damage * _shieldAbsorbRatio);
+
+            absorbDamage = Max(_shieldHP, absorbDamage);
+            absorbDamage = Min(0, absorbDamage);
+            absorbDamage = Max(damage, absorbDamage);
+
+            _shieldHP -= absorbDamage;
+
+            SetMP((uint) (GetMP()-decreaseMP));
+
+            if (_shieldHP <= 0)
+            {
+                _shieldHP = 0;
+                StatusManager.Remove(CharStateType.CHAR_STATE_MAGIC_SHIELD);
+            }
+
+            return damage - absorbDamage;
+        }
+
+        #endregion
+
 
         #endregion
 
@@ -117,6 +286,45 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         {
             return _isMoving;
         }
+
+        #region Dead/Alive/Exp
+
+        public virtual ulong AddExp(ulong exp,uint TargetObjKey,float bonusRatio,bool sendPacket){return 0;}
+        public bool IsAlive()
+        {
+            return GetHP() > 0;
+        }
+
+        public bool IsDead()
+        {
+            return !IsAlive();
+        }
+
+        public virtual void OnDead()
+        {
+
+        }
+
+        public virtual bool OnResurrection(float recoverExpRatio, float recoverHPRatio, float recoverMPRatio, Player? healer=null)
+        {
+            if (IsAlive()) return false;
+
+            ulong recoverExp = (ulong) (_deadExp * recoverExpRatio);
+            AddExp(recoverExp, 0, 0, false);
+
+            var newHP = (uint) (GetMaxHP() * recoverHPRatio);
+            var newMP = (uint) (GetMaxMP() * recoverMPRatio);
+            var newSD = GetMaxSD();
+
+            SetHP(newHP);
+            SetMP(newMP);
+            SetSD(newSD);
+
+            return true;
+        }
+
+        #endregion
+
     }
 
 

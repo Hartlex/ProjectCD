@@ -9,6 +9,7 @@ using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Object.Character.Player;
 using SunStructs.PacketInfos.Game.Sync.Server;
 using SunStructs.Packets;
+using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General;
 using ObjectType = SunStructs.Definitions.ObjectType;
 
@@ -22,6 +23,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         private readonly PlayerStyleManager _styleManager;
         private readonly CharType _charType;
         private readonly User _user;
+
+        private ulong _nextExp;
+
         public Player(ref SqlDataReader reader,User user) : base(unchecked((uint)reader.GetInt32(1)))
         {
             _user = user;
@@ -38,6 +42,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             PlayerInventoryInit(ref reader);
             PlayerSkillInit(ref reader);
             
+            SetNextExp();
         }
 
         public void OnDisconnect(Connection connection)
@@ -154,5 +159,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         {
             return _general.Name;
         }
+
+        #region Level
+
+        public void SetNextExp() { _nextExp = GetAccumulatedExp((ushort) (GetLevel() + 1)); }
+        public ulong GetAccumulatedExp(ushort level) { return ExpInfoDB.Instance.GetRequiredExp(level); }
+
+        #endregion
     }
 }

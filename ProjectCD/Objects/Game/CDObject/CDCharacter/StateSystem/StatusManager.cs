@@ -31,5 +31,21 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.StateSystem
             status = null;
             return false;
         }
+
+        public void ChangeHP()
+        {
+            
+        }
+
+        public bool Remove(CharStateType charState)
+        {
+            return false;
+        }
+
+        public bool AllocStatus(CharStateType charState, out BaseStatus? status)
+        {
+            status = null;
+            return false;
+        }
     }
 }

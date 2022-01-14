@@ -48,8 +48,6 @@ namespace SunStructs.ServerInfos.General.Skill
         public readonly byte MaxTargetNum;
         public readonly byte SkillAcquire;
         public readonly BaseAbilityInfo[] BaseAbilityInfos;
-        
-        private readonly Dictionary<AbilityID,BaseAbilityInfo> _abilityInfos = new();
 
         public BaseSkillInfo(string[] info) : base(
             ushort.Parse(info[1]),
@@ -106,10 +104,6 @@ namespace SunStructs.ServerInfos.General.Skill
             };
             SkillAcquire = byte.Parse(info[101]);
 
-            foreach (var baseAbilityInfo in BaseAbilityInfos)
-            {
-                _abilityInfos.Add(baseAbilityInfo.AbilityId,baseAbilityInfo);
-            }
         }
         public bool IsNonStopSkill()
         {
@@ -117,12 +111,6 @@ namespace SunStructs.ServerInfos.General.Skill
         }
 
 
-        public BaseAbilityInfo GetAbilityInfo(AbilityID abilityCode)
-        {
-            if (_abilityInfos.ContainsKey(abilityCode))
-                return _abilityInfos[abilityCode];
-            return null;
-        }
 
         public BaseAbilityInfo GetAbilityInfo(byte index)
         {

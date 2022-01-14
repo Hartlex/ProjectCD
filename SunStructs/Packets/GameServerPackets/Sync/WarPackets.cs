@@ -16,7 +16,9 @@ namespace SunStructs.Packets.GameServerPackets.Sync
         PLAYER_JUMP_BRD=44,
         MOVE_STOP=140,
         TARGET_MOVE_BRD =19,
-        MOVE_BRD = 169
+        MOVE_BRD = 169,
+        STATUS_ADD = 137,
+        STATUS_REMOVE =164
     }
     public class ComposeWarPacket : SyncPacket
     {

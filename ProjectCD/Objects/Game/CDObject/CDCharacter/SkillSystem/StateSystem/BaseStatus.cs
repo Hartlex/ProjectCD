@@ -59,16 +59,17 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
         public int GetPeriodTime() { return _period; }
         public int GetApplicationTime() { return _applicationTime; }
         public long GetExpireTime(){ return _expireTime; }
-
+        public CharStateType GetStateType() { return _stateType; }
         public Character? GetCharacter() { return _owner; }
         public virtual bool IsNotifyStatus(){ return false; }
         public virtual bool IsAbilityStatus(){ return false; }
         public virtual bool CanRemove(){ return true; }
         
+
         #endregion
 
         #region Setters
-
+        
         public void SetStateID(CharStateType stateType) { _stateType = stateType; }
         public void SetExpiredTime(long expireTime){ _expireTime = expireTime; }
 

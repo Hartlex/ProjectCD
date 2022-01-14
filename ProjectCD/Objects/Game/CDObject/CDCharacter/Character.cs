@@ -9,7 +9,7 @@ using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.PartySystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem;
-using ProjectCD.Objects.Game.CDObject.CDCharacter.StateSystem;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem;
 using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Status.Server;
 using SunStructs.Packets;

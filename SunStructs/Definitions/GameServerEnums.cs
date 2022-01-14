@@ -70,6 +70,7 @@ namespace SunStructs.Definitions
         CHAOS_STATE_PREV_CHAO,      // ÇÁ¸® Ä«¿À
         CHAOS_STATE_CHAO,           // Ä«¿À
     };
+    [Flags]
     public enum ObjectType
     {
         OBJECT_OBJECT = (1 << 1),
@@ -652,5 +653,6 @@ namespace SunStructs.Definitions
         //       - ±âÈ¹¿¡¼­ ÇÊ¿ä·ÎÇÔ.
         NPC_GRADE_MAX = 17,
     };
+
 
 }

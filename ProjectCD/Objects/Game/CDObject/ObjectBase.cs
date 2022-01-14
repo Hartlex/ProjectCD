@@ -29,18 +29,17 @@ public abstract class ObjectBase
         ObjectFactory.Instance.FreeObject(this);
     }
 
+    public abstract bool Update(long currentTick);
     public virtual void SetPos(SunVector pos){ _position = pos; }
     public SunVector GetPos(){return _position;}
     public ObjectType GetObjectType() { return _objectType; }
 
     public bool IsObjectType(ObjectType type)
     {
-        return _objectType == type;
+        return (_objectType & type)==type;
     }
     public void SetObjectType(ObjectType type) { _objectType = type; }
     public uint GetKey() { return _objectID; }
-    public void SetID(uint id) { _objectID = id; }
-
     public virtual void OnEnterField(Field field, SunVector pos, ushort angle = 0)
     {
         _currentField = field;

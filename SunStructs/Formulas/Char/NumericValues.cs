@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SunStructs.Definitions;
+﻿using SunStructs.Definitions;
 using SunStructs.ServerInfos.General.Object.Items.RankSystem;
 using static SunStructs.Definitions.CharMoveState;
 using static SunStructs.Definitions.Const;
+using static SunStructs.Definitions.NPCGrade;
 using static SunStructs.ServerInfos.General.Object.Items.RankSystem.Rank;
 
 namespace SunStructs.Formulas.Char
@@ -82,6 +78,32 @@ namespace SunStructs.Formulas.Char
             };
 
             return 0;
+        }
+
+        public static float GetStatusRatioAsNPCGrade(NPCGrade grade)
+        {
+            switch (grade)
+            {
+                case NPC_GENERAL: return 1.0f;
+                case NPC_ELITE: return 0.8f;
+                case NPC_LEADER: return 1.0f;
+                case NPC_MIDDLEBOSS: return 0.6f;
+                case NPC_BOSS: return 0.4f;
+                case NPC_MERCHANT_NPC: return 0.1f;
+                case NPC_SUMMON_NPC: return 0.1f;
+                case NPC_MAPOBJECT_NPC: return 0.1f;
+                case NPC_CRYSTAL_WARP: return 0.1f;
+                case NPC_DOMINATION_MAPOBJECT_NPC: return 0.1f;
+                case NPC_LUCKY_MONSTER: return 0;
+                // NOTE: f110719.4L, added an unmanaged default value;
+                case NPC_TOTEM: return 1.0f;
+                case NPC_SSQ_MONSTER: return 1.0f;
+                case NPC_FRIEND_MAPOBJECT_NPC: return 1.0f;
+                case NPC_FRIEND_MONSTER: return 1.0f;
+                case NPC_MOVE_SYNC_MERCHANT: return 1.0f;
+            };
+
+            return 1.0f;
         }
     }
 }

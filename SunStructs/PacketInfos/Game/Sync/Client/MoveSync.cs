@@ -71,7 +71,6 @@ namespace SunStructs.PacketInfos.Game.Sync.Client
             CurrentPosition = new SunVector(ref buffer);
         }
     }
-
     public class TargetMoveInfo : ClientPacketInfo
     {
         public readonly uint TargetKey;

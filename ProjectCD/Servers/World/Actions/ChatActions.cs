@@ -12,7 +12,7 @@ using ProjectCD.NetworkBase.Connections;
 using SunStructs.PacketInfos.World.Chat.Client;
 using SunStructs.PacketInfos.World.Chat.Server;
 using SunStructs.Packets;
-using SunStructs.Packets.WorldServerPacktes.Chat;
+using SunStructs.Packets.WorldServerPackets.Chat;
 
 namespace ProjectCD.Servers.World.Actions
 {

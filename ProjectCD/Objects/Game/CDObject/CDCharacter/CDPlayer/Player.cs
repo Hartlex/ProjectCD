@@ -28,6 +28,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
         public Player(ref SqlDataReader reader,User user) : base(unchecked((uint)reader.GetInt32(1)))
         {
+            base.Initialize();
             _user = user;
             _charType = (CharType) reader.GetByte(3);
             SetObjectType(ObjectType.PLAYER_OBJECT);
@@ -43,6 +44,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             PlayerSkillInit(ref reader);
             
             SetNextExp();
+
+            
         }
 
         public void OnDisconnect(Connection connection)

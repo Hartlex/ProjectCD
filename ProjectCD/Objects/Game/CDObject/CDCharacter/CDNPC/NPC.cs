@@ -48,6 +48,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
                 return false;
             }
              
+            base.Initialize();
 
             int recoverHP = 0;
             int recoverMP = 0;
@@ -115,6 +116,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
             var packet = new BrdMonsterEnter(new MonsterRenderInfos(GetRenderInfo()));
             GetCurrentField()?.SendToAll(packet);
 
+        }
+
+        public NPCGrade GetGrade()
+        {
+            return  Info.Grade;
         }
     }
 }

@@ -58,7 +58,10 @@ namespace ProjectCD.NetworkBase.Server
                 //var packetBytes = buffer.ReadBlock(size - 2);
                 if (_bib.TryFindAction(packetCategory, subPacketType, out var action))
                 {
+#if DEBUG
                     Logger.Instance.Log("GameServer: " + action.Method.Name);
+#endif 
+
                     action(buffer, connection);
                 }
                 else

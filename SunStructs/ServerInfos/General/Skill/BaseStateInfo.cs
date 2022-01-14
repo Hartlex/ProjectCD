@@ -8,8 +8,11 @@ namespace SunStructs.ServerInfos.General.Skill
         public string StateName;
         public uint NameCode;				
         public uint DescCode;			
-        public uint	IconCode;						
-        public byte Type;			
+        public uint	IconCode;
+        public byte DelType;
+        public byte Type;
+        public byte SDApply;
+        public byte RidingApply;
         public string EffectID;                
         public byte EffectPos;
 
@@ -23,9 +26,11 @@ namespace SunStructs.ServerInfos.General.Skill
             NameCode = sb.ReadUint();
             DescCode = sb.ReadUint();
             IconCode = sb.ReadUint();
-            sb.Skip(4);
+            sb.Skip(3);
+            DelType = sb.ReadByte();
             Type = sb.ReadByte();
-            sb.Skip(2);
+            SDApply = sb.ReadByte();
+            RidingApply = sb.ReadByte();
             EffectID = sb.ReadString();
             EffectPos = sb.ReadByte();
 

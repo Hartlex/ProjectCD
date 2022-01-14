@@ -30,7 +30,7 @@ namespace SunStructs.PacketInfos.Game.Battle.Client
             Unk4 = buffer.ReadByte();
             ClientSerial = buffer.ReadUInt32();
 
-            StyleRef = buffer.ReadByte();
+            StyleRef = (byte) (buffer.ReadByte()/4);
             TargetKey = buffer.ReadUInt32();
             CurrentPos = new SunVector(ref buffer);
             DestinationPos = new SunVector(ref buffer);

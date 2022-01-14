@@ -414,5 +414,6 @@ namespace SunStructs.Formulas.Char
         {
             return (int) (spr * 1.2f);
         }
+
     }
 }

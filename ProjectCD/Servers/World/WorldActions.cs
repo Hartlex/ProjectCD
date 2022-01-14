@@ -11,10 +11,12 @@ namespace ProjectCD.Servers.World
     public class WorldActions : Singleton<WorldActions>
     {
         private ChatActions _chatActions = null!;
+        private SyncActions _syncActions = null!;
 
         public void Initialize()
         {
-            _chatActions = new ChatActions();
+            _chatActions = new ();
+            _syncActions = new ();
         }
 
     }

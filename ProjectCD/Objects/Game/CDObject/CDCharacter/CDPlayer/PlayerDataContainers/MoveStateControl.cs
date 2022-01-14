@@ -9,10 +9,15 @@ using SunStructs.Formulas.Char;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers
 {
-    internal class MoveStateControl
+    public class MoveStateControl
     {
         private Character _owner;
         private CharMoveState _moveState;
+        private ushort _angle;
+        private uint _currentFieldCode;
+        private ushort _currentTileID;
+        private uint _currentSectorID;
+        private bool _isMoving;
         private float _baseMoveSpeed;
 
         public MoveStateControl(Character owner, CharMoveState moveState)
@@ -57,6 +62,36 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
             }
 
             return moveSpeed;
+        }
+
+        public bool IsMoving()
+        {
+            return _isMoving;
+        }
+
+        public void SetFieldCode(uint fieldCode)
+        {
+            _currentFieldCode = fieldCode;
+        }
+
+        public void SetAngle(ushort angle)
+        {
+            _angle = angle;
+        }
+
+        public void SetTileID(ushort tileID)
+        {
+            _currentTileID = tileID;
+        }
+
+        public uint GetCurrentMapCode()
+        {
+            return _currentFieldCode;
+        }
+
+        public void SetSectorID(uint sectorID)
+        {
+            _currentSectorID = sectorID;
         }
     }
 }

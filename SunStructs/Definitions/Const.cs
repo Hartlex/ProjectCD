@@ -39,9 +39,30 @@ namespace SunStructs.Definitions
 
         public const int MAX_PACKET_DELAY_TIME = 500;
 
+        //BitDefinitions
         public const byte CHAR_ACTION_CONDITION_NONE = 0;
         public const byte CHAR_ACTION_CONDITION_MOVING = 1;
         public const byte CHAR_ACTION_CONDITION_FIGHTING = 2;
+
+        #region TileBits
+
+        public const ushort PTA_SAFETY_ZONE = 0x0001;
+        public const ushort PTA_ONLY_JUMP = 0x0002;
+        public const ushort PTA_NO_WALK = 0x0004;
+        public const ushort PTA_EXTRA_TILE = 0x0008;
+        public const ushort PTA_CONFLICT_TILE = 0x0010;
+        public const ushort PTA_FREE_CONFLICT_TILE = 0x0020;
+        public const ushort PTA_PK_TILE = 0x0040;
+        public const ushort PTA_PLAYER_JUMP_TILE = 0x0080;
+        public const ushort PTA_PICK = 0x0100;
+        public const ushort PTA_PLAYER_FALLDOWN_TILE = 0x0200;
+        public const ushort PTA_DOMINATION_WAR_TILE = 0x0400;
+        public const ushort PTA_JUMP_CONTROL_A = 0x0800;
+        public const ushort PTA_JUMP_CONTROL_B = 0x1000;
+
+        #endregion
+
+
 
     }
 }

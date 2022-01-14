@@ -44,6 +44,11 @@ namespace ProjectCD.Objects.Game.CDObject
             _owner = owner;
         }
 
+        public override bool Update(long currentTick)
+        {
+            return true;
+        }
+
         public override void OnEnterField(Field field, SunVector pos, ushort angle = 0)
         {
             base.OnEnterField(field, pos, angle);

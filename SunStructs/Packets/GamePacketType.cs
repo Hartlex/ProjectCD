@@ -26,7 +26,7 @@
 
     public enum WorldPacketType
     {
-        WORLD = 253,
+        SYNC = 253,
         CHAT = 165,
         Unk1 = 163,
         Unk2 = 98,

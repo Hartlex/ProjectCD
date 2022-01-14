@@ -32,6 +32,7 @@ namespace ProjectCD.Servers.Game.Actions
         {
             RegisterConnectionAction(118,OnAskEnterCharSelect);
             RegisterConnectionAction(31, OnAskEnterGame);
+            RegisterConnectionAction(223,OnHeartbeat);
             Logger.Instance.LogOnLine($"[GAME][CONNECTION] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
@@ -93,6 +94,10 @@ namespace ProjectCD.Servers.Game.Actions
 
         }
 
+        private void OnHeartbeat(ByteBuffer buffer, Connection connection)
+        {
+
+        }
 
     }
 }

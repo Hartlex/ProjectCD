@@ -43,7 +43,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             cmd.Parameters.Add("@PkState", SqlDbType.TinyInt).Value = 0;
             cmd.Parameters.Add("@CharState", SqlDbType.TinyInt).Value = 0;
             cmd.Parameters.Add("@StateTime", SqlDbType.TinyInt).Value = 0;
-            cmd.Parameters.Add("@Region", SqlDbType.Int).Value = _fieldCode;
+            cmd.Parameters.Add("@Region", SqlDbType.Int).Value = GetCurrentMapCode();
             cmd.Parameters.Add("@LocationX", SqlDbType.SmallInt).Value = (short) GetPos().GetX();
             cmd.Parameters.Add("@LocationY", SqlDbType.SmallInt).Value = (short) GetPos().GetY();
 

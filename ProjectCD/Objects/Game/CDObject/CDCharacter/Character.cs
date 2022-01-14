@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CDShared.Generics;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.PartySystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.StateSystem;
@@ -33,18 +34,23 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         protected CharDeadType DeadType;
 
         protected CooldownTable CooldownTable;
+        protected MoveStateControl MoveStateControl;
         protected StatusManager StatusManager;
+        protected SkillManager SkillManager;
 
         protected PartyState PartyState; //TODO move to Player?
         #endregion
 
         #region private
 
-        private bool _isMoving;
+        
 
         private uint _hp;
         private uint _mp;
         private uint _sd;
+
+        private uint _reserveHP;
+        private uint _deadReserveHP;
 
         private int _shieldHP;
         private int _shieldMP;
@@ -54,7 +60,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         private int _usedFightingEnergySize;
 
         private ulong _deadExp;
-
+        private uint _summonerKey;
         private Attributes _attr;
 
         #endregion
@@ -65,10 +71,35 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         protected Character(uint key) : base(key)
         {
             SetObjectType(ObjectType.CHARACTER_OBJECT);
-            StatusManager = new (this);
-            _isMoving = false;
+            DeadType = CharDeadType.CHAR_DEAD_NOT_DEAD;
         }
 
+        protected void Initialize()
+        {
+            _shieldHP = 0;
+            _shieldMP = 0;
+            _decreaseMPRatio = 0;
+            _shieldAbsorbRatio = 0;
+            _fightingEnergyCount = 0;
+            _usedFightingEnergySize = 0;
+
+            _deadExp = 0;
+            _summonerKey = 0;
+
+            _reserveHP = 0;
+            _deadReserveHP = 0;
+            
+            StatusManager = new(this);
+            SkillManager = new(this);
+            MoveStateControl = new(this, CharMoveState.CMS_RUN);
+        }
+
+        public override bool Update(long currentTick)
+        {
+            StatusManager.Update(currentTick);
+            SkillManager.Update();     
+            return true;
+        }
 
         #region Attributes
 
@@ -259,6 +290,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             return damage - absorbDamage;
         }
 
+        public void SetShield(int shieldHP, int shieldMP, float hpRatio, float mpRatio)
+        {
+            _shieldHP = shieldHP;
+            _shieldMP = shieldMP;
+            _shieldAbsorbRatio = hpRatio;
+            _decreaseMPRatio = mpRatio;
+        }
         #endregion
 
 
@@ -271,7 +309,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         #endregion
 
-
         public void SendPacketAround(Packet packet)
         {
             GetCurrentField()?.SendToAll(packet);
@@ -281,10 +318,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             var packet = new AttrChangeBrd(new (GetKey(), attrType, value));
             SendPacketAround(packet);
         }
-
         public bool IsMoving()
         {
-            return _isMoving;
+            return MoveStateControl.IsMoving();
         }
 
         #region Dead/Alive/Exp
@@ -324,6 +360,52 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         }
 
         #endregion
+
+        public StatusManager GetStatusManager() { return StatusManager; }
+
+
+        #region Virtual Battle Methods
+        public virtual void SetTargetChar(Character attacker)
+        {
+
+        }
+        public bool CanBeAttacked()
+        {
+            return !IsDead() && StatusManager.CanBeAttacked();
+        }
+
+        public virtual UserRelationType IsFriend(Character target)
+        {
+            return UserRelationType.USER_RELATION_NEUTRALIST;
+        }
+
+        public virtual int GetResistBadStatusRatio(ushort stateID)
+        {
+            return 0;
+        }
+
+        public virtual bool CanResurrect(Character target)
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region AI
+
+        public virtual void AddBattlePoint(Character attacker, BattlePointType pointType, int value)
+        {
+        }
+
+        public virtual void ChangeState(AIStateID stateIDTrack)
+        {
+
+        }
+
+        #endregion
+
+
+
 
     }
 

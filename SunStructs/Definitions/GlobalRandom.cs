@@ -14,5 +14,10 @@ namespace SunStructs.Definitions
         {
             return _random.Next(min, max);
         }
+
+        public static bool IsSuccess(int ratio)
+        {
+            return _random.Next(0, 10000) / 100 < ratio;
+        }
     }
 }

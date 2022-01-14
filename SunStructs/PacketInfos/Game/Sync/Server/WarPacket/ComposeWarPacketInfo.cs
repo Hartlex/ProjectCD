@@ -18,11 +18,11 @@ namespace SunStructs.PacketInfos.Game.Sync.Server.WarPacket
         }
         public override void GetBytes(ref ByteBuffer buffer)
         {
-            buffer.WriteUInt16((ushort) _packetInfos.Length);
             foreach (var warPacketInfo in _packetInfos)
             {
                 warPacketInfo.GetBytes(ref buffer);
             }
+            buffer.InsertSize();
         }
     }
 
@@ -39,5 +39,6 @@ namespace SunStructs.PacketInfos.Game.Sync.Server.WarPacket
         {
             buffer.WriteByte((byte) Protocol);
         }
+
     }
 }

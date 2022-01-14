@@ -76,8 +76,36 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             SetPos(info.LandPosition);
             GetCurrentField()?.QueueWarPacketInfo(new PlayerJumpBrd(GetKey(), info));
 
-            GetCurrentField()?.SpawnMonsterEx(2,info.LandPosition);
+            //GetCurrentField()?.SpawnMonsterEx(2,info.LandPosition);
+            GetCurrentField()?.QueueWarPacketInfo(new StatusAddBrd(GetKey(),CharStateType.CHAR_STATE_STUN));
+            //var addBuffer = new ByteBuffer();
+            //addBuffer.WriteUInt16(100);
+            //addBuffer.WriteByte((byte)WarProtocol.STATUS_ADD);
+            //addBuffer.WriteUInt32(GetKey());
+            //addBuffer.WriteUInt16((ushort)CharStateType.CHAR_STATE_STUN);
+            //addBuffer.WriteByte((byte)WarProtocol.STATUS_ADD);
+            //addBuffer.WriteUInt32(GetKey());
+            //addBuffer.WriteUInt16((ushort)CharStateType.CHAR_STATE_FROZEN);
+            //var addStatusPacket = new TestPacket((byte)GamePacketType.SYNC, (byte)SyncProtocol.WAR_MESSAGE,
+            //    new TestPacketInfo(addBuffer.GetData()));
+            //GetCurrentField()?.SendToAll(addStatusPacket);
 
+            for (int i = 160; i < 255; i++)
+            {
+                var buffer = new ByteBuffer();
+                buffer.WriteUInt16(1);
+                buffer.WriteByte(i);
+                buffer.WriteUInt32(GetKey());
+                buffer.WriteUInt16((ushort)CharStateType.CHAR_STATE_STUN);
+
+                Logger.Instance.Log(i);
+
+
+                var testPacket = new TestPacket((byte)GamePacketType.SYNC, (byte)SyncProtocol.WAR_MESSAGE,
+                    new TestPacketInfo(buffer.GetData()));
+                GetCurrentField()?.SendToAll(testPacket);
+                Thread.Sleep(2000);
+            }
         }
 
         public void OnAfterJump(AfterJumpInfo info)

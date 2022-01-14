@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using CherryDragon.Prog.Helpers;
-using CherryDragon.Structures.General;
-using KaymakNetwork;
+﻿using System.Text;
+using CDShared.ByteLevel;
+using SunStructs.ServerInfos.General;
 
-namespace CherryDragon.Structures.ForPacket.Skill
+namespace SunStructs.PacketInfos.Game.Skill.Server
 {
-    public class SkillResultBase : PacketInfo
+    public class SkillResultBase : ServerPacketInfo
     {
         public readonly uint TargetKey;
         public byte EffectCount;
@@ -56,7 +50,7 @@ namespace CherryDragon.Structures.ForPacket.Skill
         }
     }
 
-    public class SkillResultEffect : PacketInfo
+    public class SkillResultEffect : ServerPacketInfo
     {
         public readonly ushort AbilityOrder;
         public readonly SunVector CurrentPosition;
@@ -74,7 +68,7 @@ namespace CherryDragon.Structures.ForPacket.Skill
         }
     }
 
-    public class SkillResultAbility : PacketInfo
+    public class SkillResultAbility : ServerPacketInfo
     {
         public ushort AbilityOrder;
         public ushort AbilityCode;

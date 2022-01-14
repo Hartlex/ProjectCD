@@ -337,6 +337,15 @@ namespace CDShared.ByteLevel
             _data = data;
         }
 
+        public void InsertSize()
+        {
+            var data = new byte[_data.Length + 2];
+            var size = _head;
+            Buffer.BlockCopy(_data,0,data,2,_data.Length);
+            Buffer.BlockCopy(BitConverter.GetBytes((ushort)size),0,data,0,2);
+            _head += 2;
+            _data = data;
+        }
         #endregion
 
         #region PublicMethods

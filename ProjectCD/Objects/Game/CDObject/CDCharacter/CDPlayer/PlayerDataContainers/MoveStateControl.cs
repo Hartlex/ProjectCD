@@ -93,5 +93,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
         {
             _currentSectorID = sectorID;
         }
+
+        public uint GetSectorID()
+        {
+            return _currentSectorID;
+        }
     }
 }

@@ -405,8 +405,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         #endregion
 
 
-
-
+        public uint GetSectorID()
+        {
+            return MoveStateControl.GetSectorID();
+        }
     }
 
 

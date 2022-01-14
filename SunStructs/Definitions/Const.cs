@@ -39,6 +39,8 @@ namespace SunStructs.Definitions
 
         public const int MAX_PACKET_DELAY_TIME = 500;
 
+        public const long BASE_EXPIRE_TIME_INFINITY = -1;
+
         //BitDefinitions
         public const byte CHAR_ACTION_CONDITION_NONE = 0;
         public const byte CHAR_ACTION_CONDITION_MOVING = 1;

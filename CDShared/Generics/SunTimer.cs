@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using CDShared.Logging;
 using static CDShared.Generics.SunCalc;
 
 namespace CDShared.Generics
@@ -13,56 +14,57 @@ namespace CDShared.Generics
         #region Properties
 
         private long _expireTime;
-        private long _baseInterval;
+        private int _baseInterval;
+        private int _bonusInterval;
         private bool _enabled;
-        private long _bonusInterval;
+
 
         #endregion
 
         #region Setter
-        public void SetTimer(long currentTime)
+        public void SetTimer(int currentTime)
         {
             _baseInterval = currentTime;
             _bonusInterval = 0;
             Reset();
         }
 
-        public void SetBonusInterval(long bonusInterval) { _bonusInterval = bonusInterval; }
+        public void SetBonusInterval(int bonusInterval) { _bonusInterval = bonusInterval; }
 
 
         #endregion
 
         #region Getter
-        public long GetBaseIntervalTime(){ return _baseInterval; }
-        public long GetBonusIntervalTime(){ return _bonusInterval; }
-        public long GetIntervalTime() { return Min(0,_baseInterval + _baseInterval); }
+        public int GetBaseIntervalTime(){ return _baseInterval; }
+        public int GetBonusIntervalTime(){ return _bonusInterval; }
+        public int GetIntervalTime() { return Min(0,_baseInterval + _bonusInterval); }
 
-        public float GetProgressRatio()
-        {
-            var processTicks = DateTime.Now.Ticks - (_expireTime - GetIntervalTime());
-            return Max(1.0f,(float)processTicks / GetIntervalTime());
-        }
+        //public float GetProgressRatio()
+        //{
+        //    var processTicks = DateTime.Now.Ticks - (_expireTime - GetIntervalTime());
+        //    return Max(1.0f,(float)processTicks / GetIntervalTime());
+        //}
 
         public long GetRemainingTime()
         {
             var ticks = DateTime.Now.Ticks;
-            if (_enabled && _expireTime > ticks) return _expireTime - ticks;
+            if (_enabled && _expireTime > ticks) return _expireTime-ticks;
             
             return 0;
         }
 
-        public long GetProcessTime()
-        {
-            var process = DateTime.Now.Ticks - (_expireTime - GetIntervalTime());
-            return process > 0 ? process : 0;
-        }
+        //public long GetProcessTime()
+        //{
+        //    var process = DateTime.Now.Ticks - (_expireTime - GetIntervalTime());
+        //    return process > 0 ? process : 0;
+        //}
         #endregion
 
         #region Methods
 
         public void Reset()
         {
-            _expireTime = DateTime.Now.Ticks + GetIntervalTime();
+            _expireTime = DateTime.Now.AddMilliseconds(GetIntervalTime()).Ticks;
             Enable();
         }
 
@@ -82,7 +84,7 @@ namespace CDShared.Generics
             if (!_enabled) return false;
             if (ticks < _expireTime) return false;
 
-            if (reset) { _expireTime = ticks + _baseInterval; }
+            if (reset) { _expireTime = DateTime.Now.Millisecond + _baseInterval; }
             return true;
         }
 
@@ -92,15 +94,18 @@ namespace CDShared.Generics
             if (!_enabled) return false;
             if (ticks < _expireTime) return false;
 
-            if (reset) { _expireTime = ticks + _baseInterval; }
+            if (reset)
+            {
+                _expireTime = DateTime.Now.AddMilliseconds(_baseInterval).Ticks;
+            }
             Disable();
             return true;
         }
 
-        public void InitCoolTime(long time)
-        {
-            _expireTime = time;
-        }
+        //public void InitCoolTime(long time)
+        //{
+        //    _expireTime = time;
+        //}
         #endregion
 
 

@@ -14,7 +14,8 @@ protOddNumber = 55479
 
 
 
-
+44
 90 heal? res>?
 140
 144 getting attacked?
+254 die

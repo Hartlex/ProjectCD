@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using CDShared.Logging;
 using ProjectCD.NetworkBase.Connections;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeChildren;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
@@ -20,7 +21,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         private readonly PlayerGeneral _general;
         private readonly PlayerPVPInfo _pvp;
         private readonly PlayerGuildInfo _guild;
-        private readonly PlayerStyleManager _styleManager;
         private readonly CharType _charType;
         private readonly User _user;
 
@@ -35,7 +35,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _general = new (ref reader);
             _pvp = new(ref reader);
             _guild = new(ref reader);
-            _styleManager = new(unchecked((ushort) reader.GetInt32(25)));
 
 
             PlayerAttributesInit(ref reader);
@@ -46,6 +45,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             SetNextExp();
 
             
+        }
+
+        public override bool Update(long currentTick)
+        {
+            if (_doingAction && _actionTimer.IsExpired())
+                SetActionDelay(0);
+            return base.Update(currentTick);
         }
 
         public void OnDisconnect(Connection connection)
@@ -69,10 +75,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         {
             return new FullCharInfoZone(new FullCharacterInfo(
                 _general.Experience,
-                _general.RemainSkillPoint,
-                _general.RemainStatPoint,
+                GetSkillPoints(),
+                GetStatPoints(),
                 GetMoney(),
-                _styleManager.GetSelectedStyleCode(),
+                (ushort) _skillManager.GetCurrentStyleCode(),
                 (ushort)GetMaxHP(),
                 (ushort)GetMaxHP(),
                 (ushort)GetMaxMP(),
@@ -125,9 +131,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 Level = GetLevel(),
                 Name = GetName(),
                 Position = GetPos(),
-                SelectedStyleCode = _styleManager.GetSelectedStyleCode(),
-                MoveSpeedRatio = 150,
-                AttackSpeedRatio = 150,
+                SelectedStyleCode = (ushort) _skillManager.GetCurrentStyleCode(),
+                MoveSpeedRatio = (ushort) GetMoveSpeedRatio(),
+                AttackSpeedRatio = (ushort) GetAttSpeedRatio(),
             };
             info.SetCharType(GetCharType());
             info.SetFace(_general.FaceCode);
@@ -141,10 +147,16 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             return _charType;
         }
 
-        public ushort GetLevel()
+        public override ushort GetLevel()
         {
             return _general.Level;
         }
+
+        public override ushort GetDisplayLevel()
+        {
+            return GetLevel();
+        }
+
         public void SendPacket(Packet packet)
         {
             _user.SendPacket(packet);
@@ -169,5 +181,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         public ulong GetAccumulatedExp(ushort level) { return ExpInfoDB.Instance.GetRequiredExp(level); }
 
         #endregion
+
+        public int GetCurrentStyleCode()
+        {
+            return _skillManager.GetCurrentStyleCode();
+        }
     }
 }

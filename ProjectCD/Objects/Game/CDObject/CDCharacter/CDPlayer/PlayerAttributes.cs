@@ -80,9 +80,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _attributes[ATTR_MAX_MP].Update();
             _attributes[ATTR_MAX_SD].Update();
 
-            SetHP(_attributes[ATTR_MAX_HP].GetValue32());
-            SetMP(_attributes[ATTR_MAX_MP].GetValue32());
-            SetSD(_attributes[ATTR_MAX_SD].GetValue32());
+            SetHP(_attributes[ATTR_MAX_HP].GetValue());
+            SetMP(_attributes[ATTR_MAX_MP].GetValue());
+            SetSD(_attributes[ATTR_MAX_SD].GetValue());
 
             _attributes.Update();
 
@@ -90,7 +90,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             {
                 SetMP(0);
 
-                SendPacket(new StatusRecoverMpBrd(new (GetKey(),GetMP())));
+                SendPacket(new StatusRecoverMpBrd(new (GetKey(),(uint) GetMP())));
             }
 
         }
@@ -103,12 +103,37 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         public ushort GetExpert1(){ return _attributes[ATTR_EXPERTY1].GetValue16(); }
         public ushort GetExpert2(){ return _attributes[ATTR_EXPERTY2].GetValue16(); }
 
-        public PlayerAttr GetAttributes()
+        public override int GetMPSpendIncValue()
+        {
+            return _attributes[ATTR_MP_SPEND_INCREASE].GetValue();
+        }
+
+        public override float GetMPSpendIncRatio()
+        {
+            return _attributes[ATTR_MP_SPEND_INCREASE].GetValue() / 100f;
+        }
+
+        public override int GetSkillRangeBonus()
+        {
+            return _attributes[ATTR_SKILL_ATTACK_RANGE].GetValue() / 10;
+        }
+
+        public override int GetSkillRangeBonusRatio()
+        {
+            return _attributes[ATTR_SKILL_ATTACK_RANGE].GetValue();
+        }
+
+        public override PlayerAttr GetAttributes()
         {
             return _attributes;
         }
 
-        public void UpdateCalcRecover(bool hpUpdated, bool mpUpdated, bool sdUpdated)
+        public override int GetPhysicalAvoidValue()
+        {
+            return GetLevel() / 5 + _attributes[ATTR_PHYSICAL_ATTACK_BLOCK_RATIO].GetValue();
+        }
+
+        public override void UpdateCalcRecover(bool hpUpdated, bool mpUpdated, bool sdUpdated)
         {
             var charType = GetCharType();
             var condition = StatusManager.GetCondition();
@@ -132,7 +157,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             if (sdUpdated)
             {
                 byte moveFlag = IsMoving() ? CHAR_ACTION_CONDITION_MOVING : CHAR_ACTION_CONDITION_NONE;
-                byte fightFlag = StatusManager.FindStatus(CharStateType.CHAR_STATE_FIGHTING,out var status) ? CHAR_ACTION_CONDITION_FIGHTING : CHAR_ACTION_CONDITION_NONE;
+                byte fightFlag = StatusManager.FindStatus(CharStateType.CHAR_STATE_FIGHTING) ? CHAR_ACTION_CONDITION_FIGHTING : CHAR_ACTION_CONDITION_NONE;
 
                 sdRecover = CalcSDRecover(charType, condition, (moveFlag | fightFlag), GetLevel());
             }

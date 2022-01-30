@@ -15,8 +15,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
         public readonly uint CharacterId;
         public ulong Experience;
         public ushort Level;
-        public uint RemainSkillPoint;
-        public uint RemainStatPoint;
 
 
         public PlayerGeneral(ref SqlDataReader reader)
@@ -24,8 +22,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
             CharSlot = reader.GetByte(2);
             ClassCode = reader.GetByte(3);
             CharacterId = unchecked((uint)reader.GetInt32(0));
-            RemainStatPoint = unchecked((uint)reader.GetInt32(23));
-            RemainSkillPoint = unchecked((uint)reader.GetInt32(24));
             Name = reader.GetString(4);
             Level = unchecked((ushort)reader.GetInt16(8));
             Experience = unchecked((ulong)reader.GetInt64(17));

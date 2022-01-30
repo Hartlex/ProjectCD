@@ -38,8 +38,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
             cmd.Parameters.Add("@Mp", SqlDbType.Real).Value = GetMP();
             cmd.Parameters.Add("@Money", SqlDbType.BigInt).Value = GetMoney();
-            cmd.Parameters.Add("@RemainStat", SqlDbType.Int).Value = _general.RemainStatPoint;
-            cmd.Parameters.Add("@RemainSkill", SqlDbType.Int).Value = _general.RemainSkillPoint;
+            cmd.Parameters.Add("@RemainStat", SqlDbType.Int).Value = GetStatPoints();
+            cmd.Parameters.Add("@RemainSkill", SqlDbType.Int).Value = GetSkillPoints();
             cmd.Parameters.Add("@PkState", SqlDbType.TinyInt).Value = 0;
             cmd.Parameters.Add("@CharState", SqlDbType.TinyInt).Value = 0;
             cmd.Parameters.Add("@StateTime", SqlDbType.TinyInt).Value = 0;
@@ -55,8 +55,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             cmd.Parameters.Add("@InventoryItem", SqlDbType.VarBinary).Value = _inventory.Serialize();
             cmd.Parameters.Add("@TmpInventoryItem", SqlDbType.VarBinary).Value = new byte[1];
             cmd.Parameters.Add("@EquipItem", SqlDbType.VarBinary).Value = _equipment.Serialize();
-            cmd.Parameters.Add("@Skill", SqlDbType.VarBinary).Value = new byte[1];
-            cmd.Parameters.Add("@QuickSkill", SqlDbType.VarBinary).Value = new byte[1];
+            cmd.Parameters.Add("@Skill", SqlDbType.VarBinary).Value = _skillContainer.Serialize();
+            cmd.Parameters.Add("@QuickSkill", SqlDbType.VarBinary).Value = _quickSlots.Serialize();
             cmd.Parameters.Add("@Style", SqlDbType.VarBinary).Value = new byte[1];
 
             cmd.Parameters.Add("@Quest", SqlDbType.VarBinary).Value = new byte[1];

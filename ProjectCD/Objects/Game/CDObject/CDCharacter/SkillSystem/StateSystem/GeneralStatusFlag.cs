@@ -65,7 +65,7 @@ public class GeneralStatusFlag
 
     public void RemoveFlag(uint flag)
     {
-        _flags ^= flag;
+        _flags &= ~flag;
     }
 
     #endregion
@@ -120,7 +120,7 @@ public class GeneralStatusFlag
     {
         if ((_flags & (uint) ENABLE_ONLY_SKILL_TARGET_ME) != 0)
         {
-            var targetType = info.Target;
+            var targetType = info.TargetType;
             return targetType is (byte)SKILL_TARGET_FRIEND 
                               or (byte)SKILL_TARGET_ME
                               or (byte)SKILL_TARGET_REACHABLE_FRIEND 
@@ -137,9 +137,9 @@ public class GeneralStatusFlag
     {
         if ((_flags & (uint) ENABLE_ONLY_SKILL_TARGET_ME) == 0) return true;
         var targetType = info.RangeType;
-        return targetType is (byte) SKILL_ABILITY_FRIEND
-                          or (byte) SKILL_ABILITY_MYAREA_FRIEND
-                          or (byte) SKILL_ABILITY_ME;
+        return targetType is SKILL_ABILITY_FRIEND
+                          or SKILL_ABILITY_MYAREA_FRIEND
+                          or SKILL_ABILITY_ME;
 
     }
 

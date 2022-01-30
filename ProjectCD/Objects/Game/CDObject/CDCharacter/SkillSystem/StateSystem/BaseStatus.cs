@@ -60,11 +60,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
         public int GetApplicationTime() { return _applicationTime; }
         public long GetExpireTime(){ return _expireTime; }
         public CharStateType GetStateType() { return _stateType; }
-        public Character? GetCharacter() { return _owner; }
+        public Character? GetOwner() { return _owner; }
         public virtual bool IsNotifyStatus(){ return false; }
         public virtual bool IsAbilityStatus(){ return false; }
         public virtual bool CanRemove(){ return true; }
-        
 
         #endregion
 
@@ -72,7 +71,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
         
         public void SetStateID(CharStateType stateType) { _stateType = stateType; }
         public void SetExpiredTime(long expireTime){ _expireTime = expireTime; }
-
         public virtual void SetRegenInfo(int regenHP = 0, int regenMP = 0) { }
 
         #endregion
@@ -104,7 +102,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
 #region Private
 
         private bool IsExecutionTime(long tick) { return tick >= _expireTime && IsPeriodicStatus(); }
-        private bool IsExpired(long tick) { return _expireTime != BASE_EXPIRE_TIME_INFINITY && _expireTime<=tick; }
+        public bool IsExpired(long tick) { return _expireTime != BASE_EXPIRE_TIME_INFINITY && _expireTime<=tick; }
 
 #endregion
     }

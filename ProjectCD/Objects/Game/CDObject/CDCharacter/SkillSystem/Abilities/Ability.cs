@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes;
 using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Skill.Server;
 using SunStructs.RuntimeDB;
@@ -20,23 +21,29 @@ using static SunStructs.Definitions.UserRelationType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
 {
-    internal class Ability
+    public class Ability
     {
         private ushort _skillCode;
         private byte _eventCode;
         private BaseAbilityInfo _baseInfo;
         private Character? _attacker;
-        private Skill _skill;
+        private SkillBase? _skill;
 
         #region Getters
 
         public ushort GetSkillCode(){ return _skillCode; }
         public BaseAbilityInfo GetBaseAbilityInfo(){ return _baseInfo; }
+
+        public BaseAbilityInfo MakeBaseInfoEditable()
+        {
+            _baseInfo = _baseInfo.EditableCopy();
+            return _baseInfo;
+        }
         public AbilityID GetAbilityID() { return _baseInfo.AbilityId; }
         public AttrType GetAttrType() { return _baseInfo.Attribute; }
         public CharStateType GetCharStateType() { return _baseInfo.CharStateType; }
         public byte GetIndex(){ return (byte) _baseInfo.Index; }
-        public Skill GetSkill(){ return _skill; }
+        public SkillBase? GetSkill(){ return _skill; }
         public byte GetEventCode() { return _eventCode; }
 
         public Character? GetAttacker()
@@ -50,12 +57,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
 
         #region Virtual
 
-        public virtual void Init(Skill skill, BaseAbilityInfo baseAbilityInfo)
+        public virtual void Init(SkillBase skill, BaseAbilityInfo baseAbilityInfo)
         {
             _skill = skill;
-            var owner = _skill.GetOwner();
+            var owner = _skill.Owner;
             var skillCode = _skill.GetSkillCode();
-            var skillInfo = _skill.GetSkillInfo();
+            var skillInfo = _skill.SkillInfo;
             var skillStatType = _skill.GetSkillStatType();
             InitDetailed(owner,skillCode,ref skillInfo,skillStatType,baseAbilityInfo);
         }
@@ -86,11 +93,17 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
 
             return true;
         }
+        public virtual bool ExecuteEffect(out SkillResultEffect? result) {
+        {
+            result = null;
+            return false;
+        }}
 
         public virtual bool IsValidState()
         {
             return GetCharStateType() != CHAR_STATE_INVALID;
         }
+        public virtual void SetBonusEffect(BonusAbilityEffect bonusAbilityEffect) { }
 
         public virtual bool CanExecute(Character attacker, Character target,uint mainTargetKey, SunVector mainTargetPos)
         {
@@ -140,7 +153,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
                     return false;
 
             var stateType = GetCharStateType();
-            var stateInfo = StateInfoDB.Instance.GetStateInfo((ushort) stateType);
+            StateInfoDB.Instance.TryGetStateInfo(stateType,out var stateInfo);
 
             var checkSuccess = false;
             if (stateInfo != null)
@@ -148,7 +161,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
                 if (stateInfo.RidingApply == 0)
                     if (isRidingOrSpreading)
                         return false;
-                if (stateInfo.Type is (byte) STATE_TYPE_ABNORMAL or (byte) STATE_TYPE_WEAKENING)
+                if (stateInfo.Type is STATE_TYPE_ABNORMAL or  STATE_TYPE_WEAKENING)
                 {
                     if (targetStatusManager.FindStatus(CHAR_STATE_PROTECTION) ||
                         targetStatusManager.FindStatus(CHAR_STATE_STAMP) ||
@@ -159,7 +172,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
 
                     checkSuccess = true;
                 }
-                else if (stateInfo.Type == (byte) STATE_TYPE_SPECIALITY)
+                else if (stateInfo.Type == STATE_TYPE_SPECIALITY)
                 {
                     if (targetStatusManager.FindStatus(CHAR_STATE_IMMUNITY_DAMAGE))
                     {
@@ -174,7 +187,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
 
             if (checkSuccess == false)
             {
-                    if (!GlobalRandom.IsSuccess(_baseInfo.SuccessRate / 10)) return false;
+                    if (!GlobalRandom.IsSuccess(_baseInfo.SuccessRate)) return false;
             }
 
             return CheckAbilityRange(attacker, target, mainTargetKey, (AbilityRangeType) _baseInfo.RangeType);
@@ -234,5 +247,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
             }
         }
         #endregion
+
+        public virtual AbilityType GetAbilityType()
+        {
+            return AbilityType.ABILITY_TYPE_ACTIVE;
+        }
     }
 }

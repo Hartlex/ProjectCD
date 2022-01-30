@@ -10,20 +10,17 @@ namespace ProjectCD.Servers.Game
 {
     internal class GameActions : Singleton<GameActions>
     {
-        private ConnectionActions _connectionActions = null!;
-        private CharInfoActions _charInfoActions = null!;
-        private SyncActions _syncActions = null!;
-        private ItemActions _itemActions = null!;
-        private ZoneActions _zoneActions = null!;
-        private BattleActions _battleActions = null!;
+
+
         public void Initialize()
         {
-            _connectionActions = new();
-            _charInfoActions = new();
-            _syncActions = new();
-            _itemActions = new();
-            _zoneActions = new();
-            _battleActions = new();
+            ConnectionActions.Initialize();
+            CharInfoActions.Initialize();
+            SyncActions.Initialize();
+            ItemActions.Initialize();
+            ZoneActions.Initialize();
+            BattleActions.Initialize();
+            SkillActions.Initialize();
         }
     }
 }

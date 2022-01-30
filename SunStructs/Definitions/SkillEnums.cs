@@ -6,6 +6,599 @@ using System.Threading.Tasks;
 
 namespace SunStructs.Definitions
 {
+    public enum SkillEnum
+    {
+        SKILL_INVALID = 0,
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // ¹ö¼­Ä¿ 
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Á÷¾÷ 1
+        SKILL_TAUNT = 51,
+        SKILL_STUN_KICK = 52,
+        SKILL_THORNS_SKIN = 53,
+        SKILL_SLASH = 54,
+        SKILL_GROUND_SHOCK = 55,
+        SKILL_DAMAGE_RECOVERY = 56,
+        SKILL_DOUBLE_SLASH = 57,
+        SKILL_WEAPON_BREAK = 58,
+        SKILL_SPECTUAL_GUARD = 59,
+        SKILL_REVENGE = 60,
+        SKILL_JUMPING_CRASH = 61,
+        SKILL_VITAL_AMPLYFY = 62,
+        SKILL_WILD_SPIRITS = 63,
+        SKILL_TACKLE = 66,
+        kSkillHardStance = 67, // ÇÏµå ½ºÅÄ½º (Áö¼Ó Ã¼·Â)
+        kSkillIronStance = 68, // ¾ÆÀÌ¾ð ½ºÅÄ½º (¼ø°£ Ã¼·Â)
+
+        // Á÷¾÷ 2
+        SKILL_BASH = 101,
+        kSkillSPRecovery = 102, // SP ¸®Ä¿¹ö¸®
+        SKILL_BERSERK_MODE = 103,
+        SKILL_MONSTER_TACKLE = 104,
+        SKILL_SPIN_RUSH = 105,
+        SKILL_SPIRIT_RECHARGE = 106,
+        SKILL_DEADLY_STRIKE = 107,
+        SKILL_SONIC_EXPLOSION = 108,
+        SKILL_SPINNING_BLOW = 109,
+        SKILL_SPINING_CRUSH = 110,
+        SKILL_UPPER_BLOW = 111,
+        SKILL_DOUBLE_ATTACK = 112,
+        SKILL_FURY_STRIKE = 113,
+        SKILL_WEAPON_THROWING = 114,
+        SKILL_BERSERKER_FORCE = 115,
+        SKILL_WARCRY = 116,
+        SKILL_SHOUT = 117,
+        SKILL_DASH = 118,
+        kSkillSPRecharge = 119, // SP ¸®Â÷Áö
+        kSkillBloodHaze = 120, // ºí·¯µå ÇìÀÌÁî (Áö¼Ó HP)
+        kSkillMotalBlood = 121, // ¸ðÅ» ºí·¯µå (¼ø°£ HP)
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // µå·¡°ï ³ªÀÌÆ®
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Á÷¾÷ 1
+        SKILL_TRIPLE_PIERCE = 251,
+        SKILL_SWORDDANCING = 252,
+        SKILL_SONICBLADE = 253,
+        SKILL_ILLUSION_DANCE = 254,
+        SKILL_MACHSLASH = 255,
+        SKILL_DIFFUSEBLOW = 256,
+        SKILL_VIPER_BLADE = 257,
+        SKILL_DEVINE_FORCE = 258,
+        SKILL_MARK_OF_CHANCE = 259,
+        SKILL_RAPID_ATTACK = 260,
+        SKILL_DEATH_DIVIDE = 261,
+        SKILL_SPIRITUAL_EYE = 262,
+        SKILL_ARCANE_BLADE = 263,
+        SKILL_SLAUGHTER = 264,
+        SKILL_BLADE_FURY = 265,
+        SKILL_CHARGE_ATTACK = 266,
+        SKILL_SPRIT_SLUG = 267,
+        kSkillCourageOfKnights = 268, // Ä¿¸®Áö ¿Àºê ³ªÀÌÃ÷ (Áö¼Ó ¹ÎÃ¸)
+        kSkillFeverOfKnights = 269, // ÇÇ¹ö ¿Àºê ³ªÀÌÃ÷ (¼ø°£ ¹ÎÃ¸)
+
+        // Á÷¾÷ 2
+        SKILL_ASSAULT = 301,
+        SKILL_STUNNINGBLOW = 302,
+        SKILL_FEAR = 303,
+        SKILL_MARK_OF_RECOVERY = 304,
+        SKILL_DRAGON_EYE = 305,
+        SKILL_DRAGON_ARM_TRANSFORM = 306,
+        SKILL_STORM_WAVE = 307,
+        SKILL_LIGHTING_LANCE = 308,
+        SKILL_DIVINE_AMBLEM = 309,
+        SKILL_ARMOR_BREAK = 310,
+        SKILL_DRAGON_CLER = 311,
+        SKILL_MARK_OF_SPIRIT_POWER = 312,
+        SKILL_EXPLOZEN_ATTACK = 313,
+        SKILL_EBON_BLADE = 314,
+        SKILL_FIST_OF_FIRE = 315,
+        SKILL_DRAGON_RAY = 321,
+        SKILL_DRAGON_GALE = 322,
+        SKILL_DRAGON_BEAD = 323,
+        kSkillDragonicForce = 324, // µå·¡°í´Ð Æ÷½º (Áö¼Ó °ø°Ý·Â)
+        kSkillDragonicBless = 325, // µå·¡°í´Ð ºí·¹½º (¼ø°£ °ø°Ý·Â)
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // ¹ßÅ°¸® 
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Á÷¾÷ 1
+        SKILL_FAST_SHOT = 451,
+        SKILL_SNIPING = 452,
+        SKILL_MOON_ASSAULT = 453,
+        SKILL_SHOCKWAVE = 454,
+        SKILL_FROZEN_ARROW = 455,
+        SKILL_DOUBLE_SPINKICK = 456,
+        SKILL_BLOOD_RAIN = 457,
+        SKILL_ETHER_BLASE = 458,
+        SKILL_DEFENCE_MOTION = 459,
+        //SKILL_AIR_BLOW                 = 460,
+        SKILL_AIRBLOW = 460,
+        SKILL_HEAVY_SHOT = 461,
+        SKILL_SPINING_WAVE = 462,
+        SKILL_PIERCEARROW = 463,
+        SKILL_OVER_LIMIT = 464,
+        SKILL_MANA_DRAIN = 467,
+        SKILL_WILD_SHOT = 468,
+        SKILL_CHASE_SHOT = 470,
+        kSkillIncreaseMind = 471, // ÀÎÅ©¸®½º ¸¶ÀÎµå (Áö¼Ó Áö·Â)
+        kSKillMindSpark = 472, // ¸¶ÀÎµå ½ºÆÄÅ© (¼ø°£ Áö·Â)
+
+        // Á÷¾÷ 2
+        SKILL_UNLIMIT_FORCE = 501,
+        SKILL_MARK_OF_FACTION = 502,
+        SKILL_MARK_OF_SYMPHONY = 503,
+        SKILL_SOUL_OF_LIFE = 504,
+        SKILL_PATIENCE = 505,
+        SKILL_SOUL_HEAL = 506,
+        SKILL_RESSURECTION = 507,
+        SKILL_WAR_BATTLER = 508,
+        SKILL_BATTLE_BARRIOR = 509,
+        //SKILL_BATTLER_HORN             = 510,
+        SKILL_BATTLERHONE = 510,
+        SKILL_DESTROYER = 511,
+        SKILL_FILL_OFF = 512,
+        SKILL_SACRIFICE = 513,
+        SKILL_MAGIC_WALKER = 514,
+        SKILL_MAGIC_WALKER_FIRE_ARROW = 515,
+        SKILL_MAGIC_WALKER_CURE = 516,
+        SKILL_DOUBLE_GORE = 517,
+        SKILL_DOUBLE_GORE_LIGHTING = 518,
+        SKILL_DOUBLE_GORE_DEXTERITY = 519,
+        SKILL_RANGE_HEAL = 520,
+        SKILL_SUMMON_MASTERY = 521,
+        SKILL_ADRENALINE = 522,
+        kSkillSummonicShield = 523, // ¼­¸Ó´Ð ½Çµå (Áö¼Ó ¹æ¾î·Â)
+        kSkillSummonicBarrier = 524, // ¼­¸Ó´Ð º£¸®¾î (¼ø°£ ¹æ¾î·Â)
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // ¿¤¸®¸àÅ»¸®½ºÆ® 
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // ÆÐ½Ãºê
+        SKILL_FIRE_MASTERY = 601,
+        SKILL_WATER_MASTERY = 602,
+        SKILL_WIND_MASTERY = 603,
+        SKILL_EARTH_MASTERY = 604,
+        SKILL_MANA_REGENERATION = 605,
+
+        // Á÷¾÷ 1
+        SKILL_FIRE_ARROW = 651,
+        SKILL_ICE_DAGGER = 652,
+        SKILL_HEALING_HAND = 653,
+        SKILL_TELEPORT = 654,
+        SKILL_MAGIC_SHIELD = 655,
+        SKILL_REVIVAL = 656,
+        SKILL_FROZON_SHIELD = 657,
+        SKILL_FIRE_BALL = 658,
+        SKILL_BLAZE_FORCE = 659,
+        SKILL_ICE_BLAST = 660,
+        SKILL_ICE_FORCE = 661,
+        SKILL_ICE_BOLT = 662,
+        SKILL_MANA_RECOVERY = 663,
+        SKILL_FIRE_SPEAR = 664,
+        SKILL_PRESSING_WALL = 665,
+        SKILL_FIRE_FILA = 666,
+        SKILL_REVERSE = 667,
+        SKILL_ESSENSE = 668,
+        SKILL_NATURAL_FORCE = 669,
+        kSkillEnchantPower = 670, // ÀÎÃ¦Æ® ÆÄ¿ö (Áö¼Ó Èû)
+        kSkillCatalystPower = 671, // Ä«Å»¸®½ºÆ® ÆÄ¿ö (¼ø°£ Èû)
+
+        // Á÷¾÷ 2
+        SKILL_WIND_BOLT = 701,
+        SKILL_ELECTRIC_FIELD = 702,
+        SKILL_POISON_THORN = 703,
+        SKILL_WIND_SHIELD = 704,
+        SKILL_NATURAL_ATTACK = 705,
+        SKILL_LIGHTING = 706,
+        SKILL_INCRESE_SPEED = 707,
+        SKILL_FOCUS = 708,
+        SKILL_LIGHTING_WAVE = 709,
+        SKILL_SONY_VINE = 710,
+        SKILL_MAGIC_FORCE = 711,
+        SKILL_POISON_RAIN = 712,
+        SKILL_ACCRUCY_SPIRIT = 713,
+        SKILL_MIGHTY_SPIRIT = 714,
+        SKILL_POWER_WAVE = 715,
+        SKILL_MIGHT_POWER = 716,
+        SKILL_STAR_FALL = 717,
+        SKILL_EARTHQUAKE = 718,
+        SKILL_BATTLE_HEAL = 719,
+        SKILL_HEAL_MAGIC_ARRAY = 720,
+        SKILL_GROUP_HEAL = 721,
+        SKILL_MANA_REACHARGE = 722,
+        SKILL_ICE_DAGGER2 = 723,
+        SKILL_TELEPORT2 = 724,
+        SKILL_SACRED_FIRE = 725,
+        SKILL_INQUIRY = 726,
+        SKILL_DEVISH_DANCE = 727,
+        SKILL_CIRCLE_SPRITS = 728,
+        SKILL_INABILITTY = 729,
+        SKILL_SAINT_AID = 730,
+        SKILL_PURGE = 731,
+        kSkillWhisperOfWind = 732, // À§½ºÆÛ ¿Àºê À©µå (Áö¼Ó ÀÌµ¿¼Óµµ)
+        kSkillWhisperOfSylph = 733, // À§½ºÆÛ ¿Àºê ½ÇÇÁ (¼ø°£ ÀÌµ¿¼Óµµ)
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // ¼¨µµ¿ì
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Á÷¾÷ 1
+        SKILL_PAIN = 800, // ÆäÀÎ (°íÅë)
+        SKILL_DARK_FIRE = 801,
+        SKILL_DARK_SPARK = 802,
+        SKILL_ARMOR_INCREASE = 803, // ¾Æ¸ÓÀÎÅ©¸®Áî (¹°¸®/¸¶¹ý ¹æ¾î·Â Áõ°¡, ¾ÏÈæÀúÇ×·Â »ó½Â)
+        SKILL_SOUL_CONTROL = 804, // ¼Ò¿ïÄÁÆ®·Ñ (¿µÈ¥Áö¹è)
+        SKILL_IMPRTENT = 805, // ÀÓÆ÷ÅÏÆ® (¹«·ÂÇÔÀÇ ÀúÁÖ)
+        SKILL_VITAL_SUCTION = 806, // ¹ÙÀÌÅ»¼®¼Ç (Á¤±âÈí¼ö)
+        SKILL_ENCHANT_POISON = 807, // ÀÎÃ¾Æ®Æ÷ÀÎÁð (µ¶À» ¹Ù¸¥ °Ë)
+        SKILL_HP_SUCTION = 808, // HP¼®¼Ç (HPÈí¼ö)
+        SKILL_MP_SUCTION = 809, // MP¼®¼Ç (MPÈí¼ö)		// ¹Ì»ç¿ë
+        SKILL_CURSE_INCREASE = 810, // Ä¿ÁîÀÎÅ©¸®Áî (ÀúÁÖ°­È­)
+        SKILL_DARK_PAIN = 811, // ´ÙÅ©ÆäÀÎ (¾ÏÈæÀÇ°íÅë)
+        SKILL_BUFF_CANCEL = 812, // ¹öÇÁÄµ½½ (°­È­¸¶¹ýÇØÁ¦)
+        SKILL_CONFUSE = 813, // ÄÁÇ»Áî (È¥¶õÀÇÀúÁÖ)
+        SKILL_DEMON = 814, // µ¥¸ó (¾Ç·É)
+        SKILL_DARK_FORCE = 815, // ´ÙÅ©Æ÷½º (¾îµÒÀÇÈû)
+        kSkillHelronsSoul = 816, // Çï·ÐÁî ¼Ò¿ï (Áö¼Ó Á¤½Å·Â)
+        kSkillDemonsSoul = 817, // µ¥¸óÁî ¼Ò¿ï (¼ø°£ Á¤½Å·Â)
+
+        // Á÷¾÷ 2
+        SKILL_WHIP_ATTACK = 850, // ÈÛ¾îÅÃ (ÈÄ·ÁÄ¡±â)
+        SKILL_POISON_DAGGER = 851, // Æ÷ÀÌÁð´ë°Å (µ¶ÀÌ¹¯Àº´ë°Å)
+        SKILL_DOUBLE_WIDTH = 852, // ´õºíÀ§µå (µÎ¹øÈ¾À¸·Îº£±â)
+        SKILL_DARK_STUN = 853, // ´ÙÅ©½ºÅÏ (ÃÖ¸é)
+        SKILL_HIDE = 854, // ÇÏÀÌµå (Àº½Å)
+        SKILL_DEATH_BLOW = 855, // ´Ù½ººí·Î¿ì (Ä¡¸íÅ¸)
+        SKILL_SHADOW_SPEAR = 856, // ¼¨µµ¿ì½ºÇÇ¾î (Âî¸£±â)
+        SKILL_CANCELLATION = 857, // Äµ½½·¹ÀÌ¼Ç (µð¹öÇÁÁ¦°Å)
+        SKILL_RUSH = 858, // ·¯½¬ (Àü·ÂÁúÁÖ)
+        SKILL_SUDDEN_STRIKE = 859, // ¼­µç½ºÆ®¶óÀÌÅ© (±â½À)
+        SKILL_DARK_DUST = 860, // ´ÙÅ©´õ½ºÆ® (¾ÏÈæÀÇ°¡·ç, ºí¶óÀÎµå)
+        SKILL_FAST_BLOW = 861, // ÆÐ½ºÆ®ºí·Î¿ì (¿Ã·ÁÄ¡±â)
+        SKILL_DOWN_SLASH = 862, // ´Ù¿î½½·¡½¬ (´Ù¿î°ø°ÝÇÔ)
+        SKILL_SOUL_SCREAM = 863, // ¼Ò¿ï½ºÅ©¸² (¿µÈ¥ÀÇÀý±Ô)
+        SKILL_WHIRLWIND_BLOW = 864, // ÈÙÀ©µåºí·Î¿ì
+        SKILL_DARK_SLASH = 865, // ¾îµÒÀÇ³­µµÁú
+        SKILL_DARK_BREAK = 866, // ´ÙÅ©ºê·ÀÅ© (ÀÚÆø)
+        kSkillDarkTrace = 867, // ´ÙÅ© Æ®·¹ÀÌ½º (Áö¼Ó °ø°Ý¼Óµµ)
+        kSkillDarkRage = 868, // ´ÙÅ© ·¹ÀÌÁî (¼ø°£ °ø°Ý¼Óµµ)
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // ¹Ì½ºÆ½
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        SKILL_MYSTIC_901 = 901,
+        SKILL_MYSTIC_902 = 902,
+        SKILL_MYSTIC_903 = 903,
+        SKILL_MYSTIC_904 = 904,
+        SKILL_MYSTIC_905 = 905,
+        SKILL_MYSTIC_906 = 906,
+        SKILL_MYSTIC_907 = 907,
+        SKILL_MYSTIC_908 = 908,
+        SKILL_MYSTIC_909 = 909,
+        SKILL_MYSTIC_910 = 910,
+        SKILL_MYSTIC_911 = 911,
+        SKILL_MYSTIC_912 = 912,
+        SKILL_MYSTIC_913 = 913,
+        SKILL_MYSTIC_914 = 914,
+        SKILL_MYSTIC_915 = 915,
+        SKILL_MYSTIC_916 = 916,
+        SKILL_MYSTIC_917 = 917,
+        SKILL_MYSTIC_918 = 918,
+
+        SKILL_MYSTIC_919 = 919,
+        SKILL_MYSTIC_920 = 920,
+        SKILL_MYSTIC_921 = 921,
+        SKILL_MYSTIC_922 = 922,
+        SKILL_MYSTIC_923 = 923,
+        SKILL_MYSTIC_924 = 924,
+        SKILL_MYSTIC_925 = 925,
+        SKILL_MYSTIC_926 = 926,
+        SKILL_MYSTIC_927 = 927,
+        SKILL_MYSTIC_928 = 928,
+        SKILL_MYSTIC_929 = 929,
+        SKILL_MYSTIC_930 = 930,
+        SKILL_MYSTIC_931 = 931,
+        SKILL_MYSTIC_932 = 932,
+        SKILL_MYSTIC_933 = 933,
+        SKILL_MYSTIC_934 = 934,
+        SKILL_MYSTIC_935 = 935,
+        SKILL_MYSTIC_936 = 936,
+
+        // ¿¬°èµÈ ½ºÅ³
+        SKILL_MYSTIC_DARKOFLIGHT_ZONE = 937,
+        SKILL_MYSTIC_GRAVITY_ZONE = 938,
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // Çï·ÎÀÌµå
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        SKILL_HELLROID_1000 = 1000,     // ºí·¡½ºÅÍÆÝÄ¡
+        SKILL_HELLROID_1001 = 1001,     // Å©·¡½¬¾Ï
+        SKILL_HELLROID_1002 = 1002,     // ¸®Æä¾î
+        SKILL_HELLROID_1003 = 1003,     // µå·ÓÅ±
+        SKILL_HELLROID_1004 = 1004,     // ½½·Î¿ì¿À¶ó
+        SKILL_HELLROID_1005 = 1005,     // µå¸±¾îÅÃ
+        SKILL_HELLROID_1006 = 1006,     // À§Å©³Ê½º¿À¶ó
+        SKILL_HELLROID_1007 = 1007,     // ½ºÇÉºí·Î¿ì
+        SKILL_HELLROID_1008 = 1008,     // ÇÃ¶óÀ×Â÷Â¡
+                                         //SKILL_HELLROID_1009            = 1009,     // ¹Ì»ç¿ë
+        SKILL_HELLROID_1010 = 1010,     // ÇÏÆ®ºê·¹ÀÌÅ©
+        SKILL_HELLROID_1011 = 1011,     // ¹Ì½ºÃ¦½º¿À¶ó
+        SKILL_HELLROID_1012 = 1012,     // Æ÷Áö¼ÇÃ¼ÀÎÁö
+        SKILL_HELLROID_1013 = 1013,     // µðÅ¬¶óÀÎ¿À¶ó
+        SKILL_HELLROID_1014 = 1014,     // ÀÎº£ÀÌ´õ¸ðµå
+        SKILL_HELLROID_1015 = 1015,     // Çï·ÎÀÌµå½ºÇÉ
+
+        SKILL_HELLROID_1016 = 1016,     // Çìµå¹þ
+        SKILL_HELLROID_1017 = 1017,     // ¿¡Å×¸£Â÷Â¡
+        SKILL_HELLROID_1018 = 1018,     // ·Î¿ìºí·Î¿ì
+        SKILL_HELLROID_1019 = 1019,     // ½ºÆ®·¹ÀÌÆ®ÆÝÄ¡
+        SKILL_HELLROID_1020 = 1020,     // ¸®Ä¿¹ö¸®¿À¶ó
+        SKILL_HELLROID_1021 = 1021,     // ¸®¹ÙÀÌºê
+        SKILL_HELLROID_1022 = 1022,     // ºÎ½ºÆ®¿À¶ó
+        SKILL_HELLROID_1023 = 1023,     // ºí·¡½ºÅÍºÕ
+        SKILL_HELLROID_1024 = 1024,     // ºí·¡½ºÅÍÆÄÀÌ¾î
+        SKILL_HELLROID_1025 = 1025,     // Çï·ÎÀÌµåºö
+        SKILL_HELLROID_1026 = 1026,     // ½½¶óÀÌµù¾îÅÃ
+        SKILL_HELLROID_1027 = 1027,     // ÀÌ±×³ë¾î¿À¶ó
+        SKILL_HELLROID_1028 = 1028,     // ¿¡Å×¸£º£¸®¾î
+        SKILL_HELLROID_1029 = 1029,     // ÄÁ¼¾Æ®·¹ÀÌ¼Ç¿À¶ó
+        SKILL_HELLROID_1030 = 1030,     // °¡µð¾ð½Çµå
+        SKILL_HELLROID_1031 = 1031,     // ºê·¹ÀÌÅ©¾î½º
+
+        // ¿¬°èµÈ ½ºÅ³
+        SKILL_HELLROID_AURA_1032 = 1032,
+        SKILL_HELLROID_AURA_1033 = 1033,
+        SKILL_HELLROID_AURA_1034 = 1034,
+        SKILL_HELLROID_AURA_1035 = 1035,
+        SKILL_HELLROID_AURA_1036 = 1036,
+        SKILL_HELLROID_AURA_1037 = 1037,
+        SKILL_HELLROID_AURA_1038 = 1038,
+        SKILL_HELLROID_AURA_1039 = 1039,
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // À§Ä¡ºí·¹ÀÌµå
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        SKILL_WITCHBLADE_1100 = 1100,      // È£¶óÀÌÁðÀè
+        SKILL_WITCHBLADE_1101 = 1101,      // ÅÍ´×Å±
+        SKILL_WITCHBLADE_1102 = 1102,      // ÇÇµå¿Â·¹ÀÌÁö
+        SKILL_WITCHBLADE_1103 = 1103,      // ½ºÇÉÅÏ¾²·¯½ºÆ®
+        SKILL_WITCHBLADE_1104 = 1104,      // Æ®À§½ºÆ®ÇÃ·¦Å±
+        SKILL_WITCHBLADE_1105 = 1105,      // ¹ÙÀÌ¿Ã·¿Å©·Î½º
+        SKILL_WITCHBLADE_1106 = 1106,      // ³×ÀÏ½ºÅ©·¡Ä¡
+        SKILL_WITCHBLADE_1107 = 1107,      // Æä¾î¸®ºí·¹½º
+        SKILL_WITCHBLADE_1108 = 1108,      // µ¥µåÆú
+        SKILL_WITCHBLADE_1109 = 1109,      // µå·¡°ï´í½º
+        SKILL_WITCHBLADE_1110 = 1110,      // ½ºÇÇ´×ÇÏÃ÷
+        SKILL_WITCHBLADE_1111 = 1111,      // ¹ÙÀÌ½º¼Òµå
+        SKILL_WITCHBLADE_1112 = 1112,      // ÀÌº£ÀÌµå
+        SKILL_WITCHBLADE_1113 = 1113,      // ´ÙÅ©Æú¸µ±×·¹ÀÌºê
+        SKILL_WITCHBLADE_1114 = 1114,      // Ç»¸®Æ÷¸ÞÀÌ¼Ç
+        SKILL_RISINGFORCE = 1115,      // ¶óÀÌÂ¡Æ÷½º
+        SKILL_WITCHBLADE_1116 = 1116,      // ¿£Á©ºí·¹½º
+
+        SKILL_WITCHBLADE_1117 = 1117,      // ¼­¸Õ_½ºÄÃÁ¦ÀÌÅ©
+        SKILL_WITCHBLADE_1118 = 1118,      // Å©·Î½ºÄÞºñ³×ÀÌ¼Ç
+        SKILL_WITCHBLADE_1119 = 1119,      // ´ÙÀÌºêÇïÆÎ
+        SKILL_WITCHBLADE_1120 = 1120,      // ºí·¹¾îÆÎ
+        SKILL_WITCHBLADE_1121 = 1121,      // ¹ìÆÄÀÌ¾î¸¯ÅÍÄ¡
+        SKILL_WITCHBLADE_1122 = 1122,      // ¼­¸Ó³ÊÁî¸®Ä¿¹ö¸®
+        SKILL_WITCHBLADE_1123 = 1123,      // ºí·¹ÀÌµåÄ¿Æ°
+        SKILL_WITCHBLADE_1124 = 1124,      // ¼­¸Õ_Æ¼Å¸´Ï¾Æ
+        SKILL_WITCHBLADE_1125 = 1125,      // ÇÁ·Î½ºÆ®ºí·¹½º
+        SKILL_WITCHBLADE_1126 = 1126,      // ¸àµù¸àÅ»
+        SKILL_WITCHBLADE_1127 = 1127,      // ¼­¸Õ_º¥½¬
+        SKILL_WITCHBLADE_1128 = 1128,      // ÇÁ·ÎÁðÀ©µå
+        SKILL_WITCHBLADE_1129 = 1129,      // µð¹ÙÀÎ¾î¼³Æ®
+        SKILL_WITCHBLADE_1130 = 1130,      // ¼­¸Õ_¾¾¿¤¸®½º
+        SKILL_WITCHBLADE_1131 = 1131,      // ¸àµù¸¶ÀÎµå
+        SKILL_WITCHBLADE_1132 = 1132,      // ¸¶±×³×Æ½±×¶óÇÇÅä
+        SKILL_WITCHBLADE_1133 = 1133,      // ·çÆ°Æ÷ÀÎÆ®
+
+        // ÆÐ½Ãºê
+        SKILL_DAGGER_MASTERY = 900,
+        SKILL_WHIP_SWORD_MASTERY = 901,
+        SKILL_SHADOW_FORCE = 902,
+        SKILL_CURSE_TRAINING = 903,
+        SKILL_DARK_TRAINING = 904,
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // ÇÃ·¹ÀÌ¾î ½ºÅ³ ³¡
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        SKILL_CREATE_CRYSTAL_WARP = 1400,
+        SKILL_DESTROY_CRYSTAL_WARP = 1401,
+
+        // ¸ó½ºÅÍ
+        SKILL_BEAST_MASTER_DEADLY_STRIKE = 1500,
+        SKILL_BEAST_MASTER_NAKED_BUD = 1501,
+        SKILL_BEAST_MASTER_DIRTY_SIDE = 1502,
+        SKILL_BEAST_MASTER_SOUL_OF_BEAST = 1503,
+        SKILL_BEAST_MASTER_BLIND_TIME = 1504,
+        SKILL_BEAST_MASTER_SPIRITS_TOUCH = 1505,
+        SKILL_BEAST_MASTER_SUMMON_VAIN = 1506,
+        SKILL_BEAST_MASTER_REGEN_ENERMY = 1507,
+        SKILL_DRAGON_ZOMBIE_UPPER_BLOW = 1508,
+        SKILL_DRAGON_ZOMBIE_StUNNING_BLOW = 1509,
+        SKILL_DRAGON_ZOMBIE_HOUL = 1510,
+        SKILL_DRAGON_ZOMBIE_RECOVERY_HOUL = 1511,
+        SKILL_DRAGON_ZOMBIE_SOUL_OF_DRAGON = 1512,
+        SKILL_DRAGON_ZOMBIE_MOON_ASSERT = 1513,
+        SKILL_GATESENTRY_CHIEF_GROUND_SHOCK = 1514,
+        SKILL_GATESENTRY_CHIEF_TOTUR_SHOCK = 1515,
+        SKILL_GATESENTRY_REGEN_ENERMY = 1516,
+        SKILL_RESTRICTED_DRAGON_SONIC_EXPLORZEN = 1517,
+        SKILL_RESTRICTED_DRAGON_SPINNING_BLOW = 1518,
+        SKILL_RESTRICTED_DRAGON_REVERSE_SOLDIER = 1519,
+        SKILL_EVIL_SORCERER_FIRE_BALL = 1520,
+        SKILL_EVIL_SORCERER_PRESSING_WALL = 1521,
+        SKILL_EVIL_SORCERER_ANIMATE_DEAD = 1522,
+        SKILL_EVIL_SORCERER_SPIRIT_TOUCH = 1523,
+        SKILL_REDAMOR_WARRIOR_SONIC_BLADE = 1524,
+        SKILL_REDAMOR_WARRIOR_SPIN_CRUSH = 1525,
+        SKILL_REDAMOR_WARRIOR_TOURNADO_AIDS = 1526,
+        SKILL_REDAMOR_WARRIOR_REGEN_ENERMY = 1527,
+        SKILL_DARK_F_INFANTRY_BASH = 1528,
+        SKILL_DARK_F_OFFENSE_UP = 1529,
+        SKILL_DARK_F_REVERSE_SOLDIER = 1530,
+        SKILL_HEAVY_HUNTER_SNIPING = 1531,
+        SKILL_HEAVY_NOIZE_SHOT = 1532,
+        SKILL_HEAVY_WHISTLE_SHOT = 1533,
+        SKILL_BEAST_KNIGHT_DEATH_DIVIDE = 1534,
+        SKILL_BEAST_KNIGHT_CURSE_ENERMY = 1535,
+        SKILL_BEAST_KNIGHT_SELF_HEAL = 1536,
+        SKILL_GHOUL_STUNNING_BLOW = 1537,
+        SKILL_GHOUL_GHOUL_DANCE = 1538,
+        SKILL_GHOUL_ANIMATE_DEAD = 1539,
+        SKILL_SKULL_INFANTRY_ASSERT = 1540,
+        SKILL_SKULL_INFANTRY_CUTTER = 1541,
+        SKILL_SKULL_INFANTRY_SUMMON_SOLDIER = 1542,
+        SKILL_SNOW_DRAGON_ZOMBIE_UPPER_BLOW = 1543,
+        SKILL_SNOW_DRAGON_ZOMBIE_STOP_ORDER = 1544,
+        SKILL_SNOW_DRAGON_ZOMBIE_REVERSE_SOLDIER = 1545,
+        SKILL_VOLCANO_BEAST_UPPER_BLOW = 1546,
+        SKILL_VOLCANO_BEAST_STOP_ORDER = 1547,
+        SKILL_VOLCANO_BEAST_SPIRIT_TOUCH = 1548,
+        SKILL_BEAST_GUARD_BASH = 1549,
+        SKILL_BEAST_GUARD_SLEEP_DANCE = 1550,
+        SKILL_BEAST_GUARD_SELF_HEAL = 1551,
+        SKILL_GATESENTRY_INFANTRY_GROUND_SHOCK = 1552,
+        SKILL_GATESENTRY_INFANTRY_ARMMOR_DOWN = 1553,
+        SKILL_GATESENTRY_INFANTRY_SUMMON_SOLDIER = 1554,
+        SKILL_DARK_F_PATROL_WEAPON_BREAK = 1555,
+        SKILL_DARK_F_PATROL_TWIN_STRECH = 1556,
+        SKILL_DARK_F_PATROL_SELF_HEAL = 1557,
+        SKILL_LAVA_DRAGON_SONIC_EXPLOZEN = 1558,
+        SKILL_LAVA_DRAGON_SPINNING_BLOW = 1559,
+        SKILL_LAVA_DRAGON_SUMMON_SOLDIER = 1560,
+        SKILL_SLAVE_ARCHER_HEAVY_SHOT = 1561,
+        SKILL_SLAVE_ARCHER_SOLOW_SHOT = 1562,
+        SKILL_SLAVE_ARCHER_RECOVERY_SHOT = 1563,
+        SKILL_ROAM_PRISONER_STURNING_BLOW = 1564,
+        SKILL_ROAM_PRISONER_CHARGE_BLOW = 1565,
+        SKILL_ROAM_PRISONER_SPIRITS_TOUCH = 1566,
+        SKILL_DARK_KNIGHT_DARK_SHOCK = 1567,
+        SKILL_DARK_KNIGHT_DARK_SWORD = 1568,
+        SKILL_DARK_KNIGHT_Regen_ENERMY = 1569,
+        SKILL_DARK_KNIGHT_SPRIRITS_TOUCH = 1570,
+        SKILL_DARK_F_MAGICIAN_LIGHTNING = 1571,
+        SKILL_DARK_F_MAGICIAN_SHADOW_ROOTS = 1572,
+        SKILL_DARK_F_MAGICIAN_SUMMON_SOLIDER = 1573,
+        SKILL_FIRE_DESTROYER_DOUBLE_HEAD = 1574,
+        SKILL_FIRE_DESTROYER_FLAME_BREATH = 1575,
+        SKILL_FIRE_DESTROYER_SELF_HEAL = 1576,
+        SKILL_FIRE_DESTROYER_SUMMON_VEIN = 1577,
+        SKILL_BEAST_KEEPER_DRAGON_HOUL = 1578,
+        SKILL_BEAST_KEEPER_NAKED_BID = 1579,
+        SKILL_BEAST_KEEPER_SUMMON_VEIN = 1580,
+        SKILL_BEAST_KEEPER_SPIRITS_TOUCH = 1581,
+        SKILL_CERBERUS_CUTTER = 1582,
+        SKILL_CERBERUS_NOISE_HOUL = 1583,
+        SKILL_CERBERUS_SUMMON_VEIN = 1584,
+        SKILL_CERBERUS_REGEN_ENERMY = 1585,
+        SKILL_DARKNESS_SORCERESS_DARK_FORCE = 1586,
+        SKILL_DARKNESS_SORCERESS_CURSE_HEALTH = 1587,
+        SKILL_DARKNESS_SORCERESS_SUMMON_SOLIDER = 1588,
+        SKILL_DARKNESS_OBSERVER_HEABY_BLOW = 1589,
+        SKILL_DARKNESS_OBSERVER_WHEEL_ATTACK = 1590,
+        SKILL_DARKNESS_OBSERVER_REVERSE_SOLIDER = 1591,
+        SKILL_DARKNESS_OBSERVER_SPRITS_TOUCH = 1592,
+        SKILL_SNOWFIELD_DOOR_KEEPER_ROCK_AWAY = 1593,
+        SKILL_SNOWFIELD_DOOR_KEEPER_HEAVY_BLOW = 1594,
+        SKILL_SNOWFIELD_DOOR_KEEPER_SUMMMON_SOLIDER = 1595,
+        SKILL_WHITE_MAGICIAN_ICE_BALL = 1596,
+        SKILL_WHITE_MAGICIAN_ICE_FORM = 1597,
+        SKILL_WHITE_MAGICIAN_RERVERSE_SOLIDER = 1598,
+        SKILL_ICE_CASTLE_KEEPER_TACKLE = 1599,
+        SKILL_ICE_CASTLE_KEEPER_ICE_THORNS = 1600,
+        SKILL_ICE_CASTLE_KEEPER_SELF_HEAL = 1601,
+        SKILL_CURSED_PRIEST_LIGHTING = 1602,
+        SKILL_CURSED_PRIEST_ICE_SPRAY = 1603,
+        SKILL_CURSED_PRIEST_SELF_HEAL = 1604,
+        SKILL_CURSED_PRIEST_SPIRITS_TOUCH = 1605,
+        SKILL_MASTER_OF_CASTLE_ICE_MISSILE = 1606,
+        SKILL_MASTER_OF_CASTLE_ICE_CAGE = 1607,
+        SKILL_MASTER_OF_CASTLE_BLIZZARD = 1608,
+        SKILL_MASTER_OF_CASTLE_SUMMON_VEIN = 1609,
+        SKILL_MASTER_OF_CASTLE_REGEN_ENERMY = 1610,
+        SKILL_MASTER_OF_CASTLE_SPIRITS_TOUCH = 1611,
+        SKILL_FIRE_CERBERUS_FIRE_BREATH = 1612,
+        SKILL_FIRE_CERBERUS_GRATE_HOUL = 1613,
+        SKILL_FIRE_CERBERUS_SUMMON_SOLDIER = 1614,
+        //SKILL_EVIL_SORCERER_ANIMATE_DEAD           = 1615,
+        //SKILL_FIRE_DRAKE_FIRE_BREATH               = 1616,
+        //SKILL_FIRE_DRAKE_SUMMON_SOLDIER            = 1617,
+        SKILL_FLAME_BEAST_BLOODY_BITE = 1618,
+        SKILL_FLAME_BEAST_TACKLE = 1619,
+        SKILL_FIRE_DRAKE_SLOWER_WING = 1620,
+        SKILL_FIRE_DRAKE_FIRE_BREATH = 1621,
+        SKILL_FLAME_SHAMAN_FIRE_ENERGY = 1622,
+        SKILL_FLAME_SHAMAN_FIRE_WALL = 1623,
+        SKILL_FLAME_WARRIOR_AXE_FLAME = 1624,
+        SKILL_FLAME_WARRIOR_KNOCK_OUT = 1625,
+        SKILL_FLAME_RULER_EXPLORZEN_KNOCKLE = 1626,
+        SKILL_FLAME_RULER_FIRE_WALL = 1627,
+        SKILL_FLAME_RULER_GIGANTIC_BOMBER = 1628,
+
+        SKILL_CURSED_PRIEST_ICE_STORM = 1639,
+
+        SKILL_MASTER_OF_CASTLE_FROST_RING = 1670,
+        SKILL_BEAST_MASTER_FIRE_OF_DARKNESS = 1719,
+        SKILL_FLAME_RULER_METEO_SHOWER = 1722,
+        SKILL_MASTER_OF_CASTLE_BLIZZARD2 = 1737,
+
+        // 07.3¿ù 15ÀÏ ¾ÆÀÌ¿ÃÆ® ¸ð½ºÅÍ ½ºÅ³Ãß°¡1 - º¸È¯
+        SKILL_FELLEN_WARRIOR_DASH_ATTACK = 1784,
+        SKILL_FELLEN_WARRIOR_XDANCE = 1785,
+        eSkILL_CURSED_ARCHER_POISON_ARROW = 1787,
+
+        // 07.4¿ù 5ÀÏ ¾ÆÀÌ¿ÃÆ® ¸ó½ºÅÍ ½ºÅ³ Ãß°¡2 - º¸È¯
+        SKILL_CURSED_SOCERER_VAMPIRIC_KISS = 1790,
+        SKILL_DARK_SWORDMAN_TRIPLE_ATTACK = 1791,
+        SKILL_DARK_SWORDMAN_DEADLY_SMITE = 1792,
+        SKILL_DARK_WARRIOR_BEAT = 1793,
+        SKILL_DARK_WARRIOR_FATAL_BLOW = 1794,
+        SKILL_ARCHBISHOP_OF_DARKNESS_FRUSTRATION_ZONE = 1795,
+        SKILL_ARCHBISHOP_OF_DARKNESS_LACK = 1796,
+        SKILL_ARCHBISHOP_OF_DARKNESS_DOOM = 1797,
+        SKILL_ARCHBISHOP_OF_DARKNESS_SPRIT_TOUCH = 1798,
+        SKILL_ARCHBISHOP_OF_DARKNESS_SUMMON_ALLY = 1799,
+        SKILL_ARCHBISHOP_OF_DARKNESS_SHIELD_OF_KARMA = 1800,
+
+        // 07.4¿ù 30ÀÏ ¼Ó¹ÚÀÇ±â»ç, ±¾ÁÖ¸®ÇÐ»ìÀÚ ½ºÅ³ Ãß°¡
+        SKILL_KNIGHT_OF_SLAVERY_BINDING = 1803,
+
+        //07.6¿ù 20ÀÏ °Å´ëÇÑ ±î¸¶±Í,¹ö·ÁÁøÀÚ ½ºÅ³ Ãß°¡
+        SKILL_GIIANTIC_CROW_SCRATCH = 1833,
+        SKILL_GIANNTIC_CROW_DIVE = 1834,
+        SKILL_DUMPED_MAN_BLIDING = 1835,
+        SKILL_DUMPED_MAN_DREIN_RANGER = 1836,
+
+        SKILL_KNIGHT_OF_HUNGRY_SLAYER_THUNDER_CLAP = 1904,
+        SKILL_BINDED_ARCHER_STUN_SHOT = 1905,
+
+        //¸Ê»ç¹° ¿ÀºêÁ§Æ® 
+        SKILL_MAP_MONSTER_1 = 3000,
+        SKILL_MAP_MONSTER_2 = 3001,
+        SKILL_MAP_MONSTER_3 = 3002,
+        SKILL_MAP_MONSTER_4 = 3003,
+
+        SKILL_ITEM_MINE = 5004,
+    };
     public enum SkillType
     {
         SKILL_TYPE_PASSIVE = 1,
@@ -26,6 +619,16 @@ namespace SunStructs.Definitions
         SKILL_FACTOR_EFFECT,            // ÀÌÆåÆ®°¡ »ç¿ëÇÏ´Â ½ºÅ³(½ºÅ³ÄðÅ¸ÀÓ ¾øÀ½)
     };
 
+    public enum SkillUserType
+    {
+        SKILL_USER_PLAYER = 0,
+        SKILL_USER_MONSTER,
+        SKILL_USER_NPC,
+        SKILL_USER_SUMMONED,
+        SKILL_USER_FOLLOWER,
+        SKILL_USER_ACTION,
+        SKILL_USER_EMOTICON
+    };
     // °ø°ÝÆÐÅ¶ÇÊµå¿­°Å : 4ºñÆ®
     public enum AttackPropensity
     {
@@ -519,7 +1122,7 @@ namespace SunStructs.Definitions
         CHAR_STATE_CURSE_INCREASE = 308,       // ÀúÁÖ°­È­(Ä¿½ºÀÎÅ©¸®Áî)
                                                 //_NA001385_20090924_DOMINATION_ETC
         CHAR_STATE_STAMP = 309,        // °¢ÀÎ »óÅÂ(ÀÌ»ó»óÅÂ¿¡ °É¸®Áö ¾ÊÀ½)
-        kCharStateIncreseHeal = 310, // Ä¡À¯·® Áõ°¡ »óÅÂ
+        kCharStateIncreaseHeal = 310, // Ä¡À¯·® Áõ°¡ »óÅÂ
         kCharStateActiveComboSkill = 311, // ¿¬°è ½ºÅ³ È°¼ºÈ­
         kCharStateIncreseSkillDamage = 312, // ½ºÅ³ µ¥¹ÌÁö Áõ°¡ »óÅÂ
                                             // _NA_005026_20120527_CHAOS_ZONE_BATTLE_GROUND
@@ -1010,5 +1613,52 @@ namespace SunStructs.Definitions
         STATE_TYPE_WEAKENING = 2,      // »óÅÂ¾àÈ­
         STATE_TYPE_STRENGTHENING = 3,      // »óÅÂ°­È­
         STATE_TYPE_SPECIALITY = 4,     // Æ¯¼ö
+    };
+    public enum SkillAreaType
+    {
+        SRF_FOWARD_ONE = 1,
+        SRF_FOWARD_120,
+        SRF_FOWARD_160,
+        SRF_FOWARD_360,
+        SRF_PIERCE,
+        SRF_AREA_POSITION,      // Å¸°ÙÀÌ ¾øÀÌ ÁÂÇ¥¸¸ ÀÖ´Â ½ºÅ³ÀÌ´Ù.
+        SRF_MAX
+    };
+    public enum AttackResist
+    {
+        ATTACK_RESIST_NOMAL = 0,
+        ATTACK_RESIST_SKILL,
+        ATTACK_RESIST_ALL,
+        //_NA_008486_20150914_TOTAL_BALANCE
+        ATTACK_RESIST_SKILL_DOT_DAMAGE,    //DoTµ¥¹ÌÁö ½ºÅ³ (Áö¼Ó ÇÇÇØ»óÅÂ)
+        ATTACK_RESIST_MAX,
+    };
+    public enum SDApply
+    {
+        SD_APPLY_NOT = 0,
+        SD_APPLY_DO,
+        SD_APPLY_MAX,
+        SD_APPLY_EMPTY,
+    };
+    public enum IncreaseHealAbilityType
+    {
+        SKILL = 1, // ½ºÅ³ »ç¿ë½Ã¿¡¸¸ Áõ°¡
+        ITEM = 2, // ¾ÆÀÌÅÛ »ç¿ë½Ã¿¡¸¸ Áõ°¡
+        SKILL_AND_ITEM = 3 // ½ºÅ³°ú ¾ÆÀÌÅÛ µÑ´Ù »ç¿ë½Ã Áõ°¡
+    }
+    public enum RecoverType
+    {
+        RECOVER_TYPE_NORMAL = 0,
+        RECOVER_TYPE_AUTO_HP = 1,          //ÀÚµ¿À¸·Î HPÈ¸º¹
+        RECOVER_TYPE_AUTO_MP = 2,          //ÀÚµ¿À¸·Î MPÈ¸º¹
+        RECOVER_TYPE_AUTO_HPMP = 3,            //ÀÚµ¿À¸·Î HP ¹× MPÈ¸º¹
+        RECOVER_TYPE_IGNORE_RESERVE_HP = 4,        //HPÀû¸³ ¹«½ÃÇÏ°í HPÈ¸º¹
+    };
+    public enum FieldeffectType
+    {
+        EFFECT_TYPE_PERIODIC_DAMAGE = 0,
+        EFFECT_TYPE_BOMB = 1,
+        EFFECT_TYPE_SELF_DESTRUCTION = 2,   //__NA00XXXX_080922_TASK_SSQ_NPC_SELF_DESTRUCTION__
+        EFFECT_TYPE_PERIODIC_SKILL = 3,
     };
 }

@@ -343,4 +343,84 @@ namespace SunStructs.Definitions
 		RC_ITEM_PROCESS_PENDING,                        // ¼­¹ö°£ ¿¬µ¿ µîÀÇ ÀÌÀ¯·Î °á°ú¸¦ Áï½Ã ÆÇÁ¤ÇÒ ¼ö ¾ø¾î Ã³¸® º¸·ù
 		RC_ITEM_UPPERBOUND                              // ¾ÆÀÌÅÛ °á°ú ÄÚµå »óÇÑ°ª
 	}; // eITEM_RESULT
+	public enum BattleResult
+	{
+		RC_BATTLE_SUCCESS,
+
+		RC_BATTLE_PLAYER_NOTEXIST_TO_FIELD,                 //< ÇÃ·¹ÀÌ¾î°¡ ÇÊµå¿¡ Á¸ÀçÇÏÁö ¾Ê´Â´Ù.
+		RC_BATTLE_INVALID_MAINTARGET,                       //< ¸ÞÀÎÅ¸°ÙÀ» Ã£À» ¼ö ¾ø´Ù.
+		RC_BATTLE_PLAYER_STATE_WHERE_CANNOT_ATTACK_ENEMY,   //< °ø°ÝÀÚ°¡ ÀûÀ» °ø°ÝÇÒ ¼ö ¾ø´Â »óÅÂÀÌ´Ù.
+		RC_BATTLE_VKR_RELOAD_COUNT_LACK,                    //< ¹ßÅ°¸® ÀåÀü°³¼ö ºÎÁ· 
+		RC_BATTLE_TRAGET_STATE_WHERE_CANNOT_ATTACKED,       //< Å¸°ÙÀÌ °ø°Ý¹ÞÀ» ¼ö ¾ø´Â »óÅÂÀÌ´Ù.
+		RC_BATTLE_OUT_OF_RANGE,                             //< ¸ÞÀÎÅ¸°ÙÀÌ °ø°Ý»ç°Å¸®¿¡¼­ ¹þ¾î³²
+		RC_BATTLE_INVLIDPOS,                                //< Àß¸øµÈ À§Ä¡Á¤º¸°¡ ¿Ô½À´Ï´Ù.
+		RC_BATTLE_THRUST_DIST_OVER,                         //< Å¬¶ó¿¡¼­ º¸³»´Â ¹Ð¸®´Â °Å¸®°¡ ³Ê¹« ±æ´Ù.(ÇØÅ· °¡´É¼º)
+		RC_BATTLE_ALREADY_DOING_ACTION,                     //< ÀÌ¹Ì °ø°ÝÁßÀÎ »óÅÂÀÌ´Ù.
+		RC_BATTLE_BASEINFO_NOTEXIST,                        //< BaseStyleInfo°¡ ¾ø´Ù.
+		RC_BATTLE_STYLECODE_WHERE_DONOT_SELECT,             //< ¼±ÅÃÇÏÁö ¾ÊÀº ½ºÅ¸ÀÏÄÚµå
+		RC_BATTLE_CHAR_CLASS_LIMIT,                         //< Å¬·¡½º Á¦ÇÑ(±× ½ºÅ¸ÀÏÀ» »ç¿ëÇÒ ¼ö ¾ø´Â Ä³¸¯ÅÍ Å¸ÀÔÀÌ´Ù)
+		RC_BATTLE_WEAPON_LIMIT,                             //< ¹«±â Á¦ÇÑ
+		RC_BATTLE_FIELD_IS_NULL,
+		RC_BATTLE_ATTACKER_LEVEL_IS_LOW,                    //< °ø°ÝÀÚ ·¹º§ÀÌ ³·¾Æ¼­ PK¸¦ ÇÒ ¼ö ¾ø´Ù.
+		RC_BATTLE_TARGET_LEVEL_IS_LOW,                      //< Å¸°Ù ·¹º§ÀÌ ³·¾Æ¼­ PK¸¦ ´çÇÒ ¼ö ¾ø´Ù.
+		RC_BATTLE_ISNOT_PK_ZONE,                            //< PK°¡ °¡´ÉÇÑ Áö¿ªÀÌ ¾Æ´Ï´Ù.
+		RC_BATTLE_ISNOT_PK_SERVER,                          //< PK°¡ °¡´ÉÇÑ ¼­¹ö°¡ ¾Æ´Ï´Ù.
+		RC_BATTLE_SERVER_STATE_IMPOSSIBLE_PK,               //< PK°¡ ºÒ°¡´ÉÇÑ ¼­¹ö»óÅÂÀÌ´Ù.
+		RC_BATTLE_PK_IMPOSSIBLE_TARGET_TYPE,                //< PK°¡ ºÒ°¡´ÉÇÑ Å¸°ÙÅ¸ÀÔÀÌ´Ù.
+		RC_BATTLE_ALLIENCE_GUILD_CHARACTER,                 //< µ¿¸Í ±æµå Ä³¸¯ÅÍÀÌ¹Ç·Î PK ºÒ°¡´É
+
+		RC_BATTLE_ISNOT_TROUBLED_PART,                      //< Å¸ÀÏÀÌ ºÐÀï Áö¿ªÀÌ ¾Æ´Ï´Ù
+		RC_BATTLE_PLAYER_TILE_INVLIDPOS,                    //< ´ë»óÀÇ Å¸ÀÏÀÌ Á¸ÀçÇÏÁö ¾Ê´Â´Ù.
+		RC_BATTLE_FAILED,                                   //< ±âÅ¸¿øÀÎÀÇ ½ÇÆÐ
+		RC_BATTLE_SAME_GUILD_CHARACTER,                     //< °°Àº ±æµå¿øÀÌ´Ù.
+		RC_BATTLE_SAME_PARTY_CHARACTER,                     //< °°Àº ÆÄÆ¼¿øÀÌ´Ù.
+
+		//__NA_000921_20080227_TROUBLED_PARTS               //< Å¬¶óÀÌ¾ðÆ® »ç¿ë ¾ÈÇÒ½Ã »èÁ¦µÉ µ¥ÀÌÅÍ
+		RC_BATTLE_ISNOT_CHAO_PART,                          //< Ä«¿À °¡´ÉÇÑ Áö¿ªÀÌ ¾Æ´Ï´Ù.	//»ç¿ë¹«
+		RC_BATTLE_ISNOT_TROUBLED_ZONE,                      //< ºÐÀï °¡´ÉÇÑ Áö¿ªÀÌ ¾Æ´Ï´Ù.	//»ç¿ë¹«
+		RC_BATTLE_IMPOSSIBLE_PACKET_DATA,                   //< ÆÐÅ¶ µ¥ÀÌÅÍ°¡ Çü½Ä¿¡ ¸ÂÁö ¾Ê´Â´Ù. //»ç¿ë¹«
+	};
+    public enum SkillResult
+    {
+        RC_SKILL_SUCCESS,
+        RC_SKILL_FAILED,                            //< ±âÅ¸¿øÀÎÀÇ ½ÇÆÐ
+
+        RC_SKILL_BASEINFO_NOTEXIST,                 //< BaseSkillInfo°¡ ¾ø´Ù.
+
+        RC_SKILL_STATE_WHERE_CANNOT_ATTACK_ENEMY,   //< ÀûÀ» °ø°ÝÇÒ ¼ö ¾ø´Â »óÅÂÀÌ´Ù.
+        RC_SKILL_COOLTIME_ERROR,                    //< ¾ÆÁ÷ ÄðÅ¸ÀÓÀÌ ³¡³ªÁö ¾Ê¾Ò´Ù.
+        RC_SKILL_HPMP_RUN_SHORT,                    //< HP, MP ºÎÁ·
+        RC_SKILL_CHAR_CLASS_LIMIT,                  //< Å¬·¡½º Á¦ÇÑ(±× ½ºÅ³À» »ç¿ëÇÒ ¼ö ¾ø´Â Ä³¸¯ÅÍ Å¸ÀÔÀÌ´Ù)
+        RC_SKILL_WEAPON_LIMIT,                      //< ¹«±â Á¦ÇÑ
+        RC_SKILL_SEALING_STATE,                     //< ºÀÀÎ »óÅÂ°¡ °É·ÁÀÖ´Ù.
+        RC_SKILL_OUT_OF_RANGE,                      //< ½ºÅ³ »ç°Å¸®¿¡¼­ ¹þ¾î³­´Ù.
+
+        RC_SKILL_REQUIRE_LEVEL_LIMIT,               //< ¿ä±¸·¹º§ Á¦ÇÑ
+        RC_SKILL_REQUIRE_SKILLSTAT_LIMIT,           //< ¿ä±¸¼÷·Ãµµ Á¦ÇÑ
+        RC_SKILL_DOES_NOT_HAVE,                     //< ½ºÅ³À» °¡Áö°í ÀÖÁö ¾Ê´Ù.
+        RC_SKILL_REMAIN_SKILLPOINT_LACK,            //< ³²Àº ½ºÅ³Æ÷ÀÎÆ®°¡ ½ºÅ³·¹º§À» ¿Ã¸®±â¿¡´Â ºÎÁ·ÇÏ´Ù.
+        RC_SKILL_MAX_LEVEL_LIMIT,                   //< ÀÌ¹Ì ¸¸·¾ÀÌ¶ó¼­ ´õÀÌ»ó ½ºÅ³Æ÷ÀÎÆ®¸¦ ¿Ã¸± ¼ö ¾ø´Ù.
+        RC_SKILL_ALREADY_EXIST_SKILL,               //< ÀÌ¹Ì Á¸ÀçÇÏ´Â ½ºÅ³ÀÌ´Ù.
+
+        RC_SKILL_INVALID_STATE,                     //< ÇÃ·¹ÀÌ¾îÀÇ »óÅÂ°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.
+        RC_SKILL_NOTEXIST,                          //< ½ºÅ³ÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.
+        RC_SKILL_INVLIDPOS,                         //< Àß¸øµÈ À§Ä¡Á¤º¸°¡ ¿Ô½À´Ï´Ù.
+
+        RC_SKILL_FIGHTING_ENERGY_FULL,              //< Åõ±â°³¼ö°¡ ÃÖ´ëÄ¡¹Ç·Î ´õÀÌ»ó ¿Ã¸± ¼ö ¾ø´Ù.
+
+        RC_SKILL_POSITION_INVALID,                  //< ÁÂÇ¥°¡ À¯È¿ÇÏÁö ¾Ê´Ù.
+
+        RC_SKILL_SUMMONED_NOTEXIST,                 //< ¼ÒÈ¯Ã¼°¡ Á¸ÀçÇÏÁö ¾Ê´Â´Ù.
+        RC_SKILL_TARGET_NOTEXIST,                   //< Å¸°ÙÀÌ Á¸ÀçÇÏÁö ¾Ê´Â´Ù.
+    };
+    public enum ConditionResult
+    {
+        RC_CONDITION_SUCCESS,
+        RC_CONDITION_ALREADY_SAME_CONDITION,                //< ÀÌ¹Ì °°Àº »óÅÂÀÌ´Ù.
+        RC_CONDITION_INVALID_CONDITION,                     //< Á¸ÀçÇÏÁö ¾Ê´Â »óÅÂÀÌ´Ù.
+        RC_CONDITION_DOING_ACTION,                          //< ´Ù¸¥ µ¿ÀÛÀ» ÁøÇàÁßÀÌ´Ù.
+        RC_CONDITION_DRAGON_TRANSFORMATION_LIMIT,           //< µå·¡°ï º¯½Å »óÅÂ¿¡¼­´Â »óÅÂÀüÈ¯ ºÒ°¡
+        RC_CONDITION_FAILED,
+    };
+
 }

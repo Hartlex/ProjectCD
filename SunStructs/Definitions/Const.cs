@@ -8,6 +8,8 @@ namespace SunStructs.Definitions
 {
     public static class Const
     {
+        public const int SERVER_UPDATE_TIME=50; //ms
+
         public const int INFO_MAX_LENGTH = 64;
         public const int IP_MAX_LENGTH = 32;
         public const int ID_MAX_LENGTH = 24;
@@ -62,9 +64,28 @@ namespace SunStructs.Definitions
         public const ushort PTA_JUMP_CONTROL_A = 0x0800;
         public const ushort PTA_JUMP_CONTROL_B = 0x1000;
 
+
         #endregion
 
+        public const int MAX_TARGET_COUNT = 32;
+        public const int MAX_EFFECT_COUNT = 5;
+        public const int MAX_EFFECT_COUNT_INTERNAL = 10;
+        public const int SKILL_ATTRIBUTION_INVISIBLE = 1;
+        public const int SKILL_ATTRIBUTION_TARGETSTOP = 2;
+        public const int SKILL_ATTRIBUTION_TARGETFLYING = 4;
 
+        public const int SKILL_EFFECT_KNOCKBACK = 0x01;
+        public const int SKILL_EFFECT_KNOCKDOWN = 0x02;
+        public const int SKILL_EFFECT_PIERCE = 0x04;
+        public const int SKILL_EFFECT_STUN = 0x08;
+        public const int SKILL_EFFECT_CRITICAL = 0x10;
+        public const int SKILL_EFFECT_DOUBLEDAMAGE = 0x20;
+        public const int SKILL_EFFECT_ETHERDEVICE_METAL = 0x40;
+        public const int SKILL_EFFECT_ETHERDEVICE_ETHER = 0x80;
 
+        public const int STATE_BATTLE_TIME = 5000;
+        public const int SKILLCODE_NORMAL_ATTACK = 65500;
+        public const int PLAYER_FIGHTING_TIME = 5000;
+        public const int NPC_FIGHTING_TIME = 5000;
     }
 }

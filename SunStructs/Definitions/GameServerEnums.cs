@@ -559,7 +559,16 @@ namespace SunStructs.Definitions
 
         ARMOR_TYPE_MAX
     };
+    public enum MeleeType
+    {
+        MELEE_TYPE_NOT = 0,    // Å¸ÀÔ¾øÀ½(°ø°Ý¾øÀ½)
+        MELEE_TYPE_SLASH = 1,  // º£±â
+        MELEE_TYPE_PIERCE,             // Âî¸£±â
+        MELEE_TYPE_HIT,                // Å¸°Ý
+        MELEE_TYPE_MAGIC,              // ¸¶¹ý(¿Àºê, ÁöÆÎÀÌ)
 
+        MELEE_TYPE_MAX
+    };
     public enum ObjectState
     {
         OBJECT_STATE_IDLE = 0,

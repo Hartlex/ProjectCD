@@ -33,7 +33,7 @@ namespace ProjectCD.GlobalManagers.DB
             QuestInfoDB.Instance.Init(dataFolderPath);
             RewardInfoDB.Instance.Init(dataFolderPath);
             //DropRatioInfoDB.Instance.Init(dataFolderPath);
-            //AiParameterDb.Instance.Init(dataFolderPath);
+            AiParameterDb.Instance.Init(dataFolderPath);
             //MissionInfoDB.Instance.Init(dataFolderPath);
             SetInfoDB.Instance.Init(dataFolderPath);
             Logger.Instance.LogLine(LogType.SYSTEM_MESSAGE);

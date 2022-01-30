@@ -33,5 +33,14 @@ namespace ProjectCD.Objects.Game.World
                 return null;
             }
         }
+
+        public void Update(long tick)
+        {
+            foreach (var activeField in _activeFields)
+            {
+                activeField.Value.Update(tick);
+            }
+
+        }
     }
 }

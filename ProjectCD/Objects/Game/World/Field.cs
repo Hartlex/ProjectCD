@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +11,7 @@ using CDShared.ByteLevel;
 using CDShared.Logging;
 using ProjectCD.GlobalManagers;
 using ProjectCD.Objects.Game.CDObject;
+using ProjectCD.Objects.Game.CDObject.CDCharacter;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.MOB;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
@@ -17,9 +20,11 @@ using ProjectCD.Servers.Game;
 using SunStructs.Definitions;
 using SunStructs.PacketInfos;
 using SunStructs.PacketInfos.Game.Item.Server;
+using SunStructs.PacketInfos.Game.Map.Server;
 using SunStructs.PacketInfos.Game.Sync.Server;
 using SunStructs.PacketInfos.Game.Sync.Server.WarPacket;
 using SunStructs.Packets;
+using SunStructs.Packets.GameServerPackets.Map;
 using SunStructs.Packets.GameServerPackets.Sync;
 using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General;
@@ -27,6 +32,7 @@ using SunStructs.ServerInfos.General.Object.Character.NPC;
 using SunStructs.ServerInfos.General.World;
 using static SunStructs.Definitions.Const;
 using static SunStructs.Definitions.ItemResult;
+using Timer = System.Timers.Timer;
 
 namespace ProjectCD.Objects.Game.World
 {
@@ -37,6 +43,7 @@ namespace ProjectCD.Objects.Game.World
         private readonly Dictionary<uint, Player> _activePlayers;
         private readonly Dictionary<uint, ObjectBase> _activeObjects;
         private readonly WarPacketScheduler _warPacketScheduler;
+     
 
         public Field(BaseFieldInfo baseFieldInfo, GameServer server)
         {
@@ -45,19 +52,23 @@ namespace ProjectCD.Objects.Game.World
             _activePlayers = new(MAX_PLAYERS_ON_MAP);
             _activeObjects = new(MAX_OBJECTS_ON_MAP);
             _warPacketScheduler = new (this);
+
         }
 
         public virtual bool EnterField(ObjectBase obj, SunVector pos, ushort angle = 0)
         {
             var pSuccess = true;
-            if (obj is Player player)
+            if (obj.GetObjectType() == ObjectType.PLAYER_OBJECT)
             {
+                var player = (Player) obj;
                 pSuccess = _activePlayers.TryAdd(player.GetKey(), player);
 #if DEBUG
                 Logger.Instance.Log($"Player[{player.GetKey()}] joined Field[{_baseFieldInfo.MapCode}]");
 #endif
                 SendPlayerAllInfos(player);
-            } 
+
+            }
+
             var oSuccess = _activeObjects.TryAdd(obj.GetKey(), obj) && pSuccess;
 
             obj.OnEnterField(this,pos);
@@ -65,9 +76,11 @@ namespace ProjectCD.Objects.Game.World
         }
         public virtual bool LeaveField(ObjectBase obj)
         {
-            if (obj is Player player)
+            if (obj.GetObjectType() == ObjectType.PLAYER_OBJECT)
             {
+                var player = (Player)obj;
                 _activePlayers.Remove(player.GetKey());
+
 #if DEBUG
                 Logger.Instance.Log($"Player[{player.GetKey()}] left Field[{_baseFieldInfo.MapCode}]");
                 Logger.Instance.Log($"{_activePlayers.Count} Players left on Field[{_baseFieldInfo.MapCode}]");
@@ -217,6 +230,60 @@ namespace ProjectCD.Objects.Game.World
         {
             return _baseFieldInfo.MapCode.ToString();
 
+        }
+
+        public Character? FindCharacter(uint key)
+        {
+            return _activeObjects.TryGetValue(key, out var value) ? (Character) value : default;
+        }
+
+        public Character[] FindTargets(SkillTargetType targetType, SkillAreaType attackRangeForm, Character owner, SunVector mainTargetPosition, int skillRange, int maxTargets, uint exceptTargetKey=0)
+        {
+            if (attackRangeForm == SkillAreaType.SRF_FOWARD_ONE) return Array.Empty<Character>();
+
+            var result = new Character[MAX_TARGET_COUNT];
+            int i = 0;
+            foreach (var activeObject in _activeObjects.Values)
+            {
+                if(!activeObject.IsObjectType(ObjectType.CHARACTER_OBJECT)) continue;
+                if(SunVector.GetDistance(activeObject.GetPos(),mainTargetPosition)>skillRange) continue;
+
+                //switch (targetType)
+                //{
+                //    //TODO friend check etc
+                //}
+                if(activeObject.GetKey() == exceptTargetKey) continue;
+
+                result[i] = (Character) activeObject;
+                i++;
+
+                if(i== maxTargets) break;
+            }
+
+            return result;
+        }
+
+        public void Update(long tick)
+        {
+            lock (_activeObjects)
+            {
+                foreach (var activeObject in _activeObjects)
+                {
+                    activeObject.Value.Update(tick);
+                }
+            }
+
+        }
+
+        public bool TeleportObject(Character target, ref SunVector destPos)
+        {
+            var info = new ObjectTeleportInfo(true, target.GetKey(), destPos);
+
+            var packet = new ObjectTeleportCMD(info);
+
+            SendToAll(packet);
+
+            return true;
         }
     }
 

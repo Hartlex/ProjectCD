@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SunStructs.PacketInfos;
 using SunStructs.PacketInfos.Game.Connection.Server;
 using SunStructs.PacketInfos.Game.Object.Character.Player;
+using SunStructs.PacketInfos.Game.Skill.Server;
 
 namespace SunStructs.Packets.GameServerPackets.CharInfo
 {
@@ -50,7 +51,7 @@ namespace SunStructs.Packets.GameServerPackets.CharInfo
     }
     public class PlayerSkillInfoCmd : CharInfoPacket
     {
-        public PlayerSkillInfoCmd(TestPacketInfo bytes) : base(159, bytes) { }
+        public PlayerSkillInfoCmd(FullSkillInfo info) : base(159, info) { }
     }
 
     public class PlayerQuickInfoCmd : CharInfoPacket

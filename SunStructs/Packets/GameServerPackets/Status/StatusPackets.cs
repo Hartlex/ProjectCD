@@ -13,7 +13,8 @@ namespace SunStructs.Packets.GameServerPackets.Status
     {
         ATTR_CHANGE_BRD = 157,
         CHANGE_HP = 16,
-        CHANGE_MP = 50
+        CHANGE_MP = 50,
+        CHANGE_CONDITION_BRD = 63
     }
     public class StatusPacket : Packet
     {
@@ -33,5 +34,9 @@ namespace SunStructs.Packets.GameServerPackets.Status
     public class StatusRecoverMpBrd : StatusPacket
     {
         public StatusRecoverMpBrd(ChangeMPInfo info) : base(CHANGE_MP, info) { }
+    }
+    public class ChangConditionBRD : StatusPacket
+    {
+        public ChangConditionBRD(ChangeConditionInfo info) : base(CHANGE_CONDITION_BRD, info) { }
     }
 }

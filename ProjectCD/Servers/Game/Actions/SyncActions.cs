@@ -19,10 +19,10 @@ using static SunStructs.Packets.GameServerPackets.Sync.SyncProtocol;
 
 namespace ProjectCD.Servers.Game.Actions
 {
-    internal class SyncActions
+    internal static class SyncActions
     {
-        private int _count;
-        public SyncActions()
+        private static int _count;
+        public static void Initialize()
         {
             RegisterSyncAction(ASK_ENTER_FIELD, AskEnterField);
             RegisterSyncAction(ON_KEYBOARD_MOVE, OnKeyboardMove);
@@ -35,13 +35,13 @@ namespace ProjectCD.Servers.Game.Actions
             Logger.Instance.LogOnLine($"[GAME][SYNC] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
-        private void RegisterSyncAction(SyncProtocol subType, Action<ByteBuffer, Connection> action)
+        private static void RegisterSyncAction(SyncProtocol subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.SYNC,(byte) subType, action);
             _count++;
         }
 
-        private void AskEnterField(ByteBuffer buffer, Connection connection)
+        private static void AskEnterField(ByteBuffer buffer, Connection connection)
         {
             var checksum = buffer.ReadBlock(16);
             var player = connection.User.Player;
@@ -57,46 +57,46 @@ namespace ProjectCD.Servers.Game.Actions
             connection.Send(guildPacket, enterPacket);
         }
 
-        private void OnKeyboardMove(ByteBuffer buffer, Connection connection)
+        private static void OnKeyboardMove(ByteBuffer buffer, Connection connection)
         {
             var info = new KeyBoardMoveInfo(ref buffer);
             connection.User.Player.OnKeyboardMove(info);
             
         }
 
-        private void OnJump(ByteBuffer buffer, Connection connection)
+        private static void OnJump(ByteBuffer buffer, Connection connection)
         {
             var info = new JumpInfo(ref buffer);
             connection.User.Player.OnJump(info);
 
         }
 
-        private void OnMouseMove(ByteBuffer buffer, Connection connection)
+        private static void OnMouseMove(ByteBuffer buffer, Connection connection)
         {
             var info = new MouseMoveInfo(ref buffer);
             connection.User.Player.OnMouseMove(info);
 
         }
 
-        private void OnJumpEnd(ByteBuffer buffer, Connection connection)
+        private static void OnJumpEnd(ByteBuffer buffer, Connection connection)
         {
             var info = new AfterJumpInfo(ref buffer);
             connection.User.Player.OnAfterJump(info);
         }
 
-        private void OnMoveStop(ByteBuffer buffer, Connection connection)
+        private static void OnMoveStop(ByteBuffer buffer, Connection connection)
         {
             var info = new MoveStopInfo(ref buffer);
             connection.User.Player.OnMoveStop(info);
         }
 
-        private void OnTargetMove(ByteBuffer buffer, Connection connection)
+        private static void OnTargetMove(ByteBuffer buffer, Connection connection)
         {
             var info = new TargetMoveInfo(ref buffer);
             connection.User.Player.OnTargetMove(info);
         }
 
-        private void Test(Connection connection)
+        private static void Test(Connection connection)
         {
             var pos = connection.User.Player.GetPos();
             var b = new List<byte>();

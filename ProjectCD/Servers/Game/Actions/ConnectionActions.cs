@@ -25,10 +25,10 @@ using SunStructs.ServerInfos.General.Object.Character.Player;
 
 namespace ProjectCD.Servers.Game.Actions
 {
-    internal class ConnectionActions
+    internal static class ConnectionActions
     {
-        private int _count;
-        public ConnectionActions()
+        private static int _count;
+        public static void Initialize()
         {
             RegisterConnectionAction(118,OnAskEnterCharSelect);
             RegisterConnectionAction(31, OnAskEnterGame);
@@ -36,14 +36,14 @@ namespace ProjectCD.Servers.Game.Actions
             Logger.Instance.LogOnLine($"[GAME][CONNECTION] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
-        private void RegisterConnectionAction(byte subType, Action<ByteBuffer, Connection> action)
+        private static void RegisterConnectionAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.CONNECTION, subType, action);
             _count++;
         }
 
 
-        private void OnAskEnterCharSelect(ByteBuffer buffer, Connection connection)
+        private static void OnAskEnterCharSelect(ByteBuffer buffer, Connection connection)
         {
             var info = new AskEnterCharSelectInfo(ref buffer);
             if (ServerManager.Instance.TryEnterGameServer(info, connection, out var user,out var worldServer))
@@ -69,7 +69,7 @@ namespace ProjectCD.Servers.Game.Actions
             }
         }
 
-        private void OnAskEnterGame(ByteBuffer buffer, Connection connection)
+        private static void OnAskEnterGame(ByteBuffer buffer, Connection connection)
         {
             var info = new AskEnterGameInfo(ref buffer);
 
@@ -81,7 +81,7 @@ namespace ProjectCD.Servers.Game.Actions
             var fullInfo = player.GetFullCharInfoZone();
             var charPacket = new FullCharInfoCmd(fullInfo);
 
-            var skillPacket = new PlayerSkillInfoCmd(new TestPacketInfo(new byte[] { 0 }));
+            var skillPacket = new PlayerSkillInfoCmd(new(player.GetFullSkillInfo()));
             var quickPacket = new PlayerQuickInfoCmd(new TestPacketInfo(new byte[] { 0 }));
             var stylePacket = new PlayerStyleInfoCmd(new TestPacketInfo(new byte[] { 0 }));
             var statePacket = new PlayerStateInfoCmd(new TestPacketInfo(new byte[] { 0 }));
@@ -94,7 +94,7 @@ namespace ProjectCD.Servers.Game.Actions
 
         }
 
-        private void OnHeartbeat(ByteBuffer buffer, Connection connection)
+        private static void OnHeartbeat(ByteBuffer buffer, Connection connection)
         {
 
         }

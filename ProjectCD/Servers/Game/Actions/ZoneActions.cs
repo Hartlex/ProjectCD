@@ -17,10 +17,10 @@ using SunStructs.ServerInfos.General;
 
 namespace ProjectCD.Servers.Game.Actions
 {
-    internal class ZoneActions
+    internal static class ZoneActions
     {
-        private int _count;
-        public ZoneActions()
+        private static int _count;
+        public static void Initialize()
         {
             RegisterZoneAction(204, AskUserPortal);
 
@@ -28,13 +28,13 @@ namespace ProjectCD.Servers.Game.Actions
             Logger.Instance.LogOnLine($"[GAME][ZONE] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
-        private void RegisterZoneAction(byte subType, Action<ByteBuffer, Connection> action)
+        private static void RegisterZoneAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.ZONE, subType, action);
             _count++;
         }
 
-        private void AskUserPortal(ByteBuffer buffer, Connection connection)
+        private static void AskUserPortal(ByteBuffer buffer, Connection connection)
         {
             var info = new AskZoneMoveInfo(ref buffer);
             SunVector newPos =null;

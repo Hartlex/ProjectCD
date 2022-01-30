@@ -21,10 +21,10 @@ using SunStructs.RuntimeDB.Parsers;
 
 namespace ProjectCD.Servers.Game.Actions
 {
-    internal class ItemActions
+    internal static class ItemActions
     {
-        private int _count;
-        public ItemActions()
+        private static int _count;
+        public static void Initialize()
         {
             RegisterItemAction(211,OnAskMoveItem);
             RegisterItemAction(190,OnAskBindItem);
@@ -44,13 +44,13 @@ namespace ProjectCD.Servers.Game.Actions
             Logger.Instance.LogOnLine($"[GAME][ITEM] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
-        private void RegisterItemAction(byte subType, Action<ByteBuffer, Connection> action)
+        private static void RegisterItemAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.ITEM, subType, action);
             _count++;
         }
 
-        private void OnAskBuyItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskBuyItem(ByteBuffer buffer, Connection connection)
         {
             var info = new AskBuyItemInfo(ref buffer);
             if (connection.User.Player.TryBuyItem(info, out var ackInfo))
@@ -60,7 +60,7 @@ namespace ProjectCD.Servers.Game.Actions
             }
         }
 
-        private void OnAskMoveItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskMoveItem(ByteBuffer buffer, Connection connection)
         {
             ItemMoveInfo itemMoveInfo = new(ref buffer);
             var user = connection.User;
@@ -71,7 +71,7 @@ namespace ProjectCD.Servers.Game.Actions
             }
         }
 
-        private void OnAskBindItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskBindItem(ByteBuffer buffer, Connection connection)
         {
             var pos = buffer.ReadByte();
             var player = connection.User.Player;
@@ -89,7 +89,7 @@ namespace ProjectCD.Servers.Game.Actions
             connection.Send(outPacket);
         }
 
-        private void OnAskBindSkillToQuick(ByteBuffer buffer, Connection connection)
+        private static void OnAskBindSkillToQuick(ByteBuffer buffer, Connection connection)
         {
             var info = new BindSkillToQuickInfo(ref buffer);
             connection.User.Player.GetQuickSlotContainer().SetSkillRef(info.QuickPos, info.SkillCode);
@@ -97,7 +97,7 @@ namespace ProjectCD.Servers.Game.Actions
             connection.Send(outPacket);
         }
 
-        private void OnAskBindItemToQuick(ByteBuffer buffer, Connection connection)
+        private static void OnAskBindItemToQuick(ByteBuffer buffer, Connection connection)
         {
             var info = new BindItemToQuickInfo(ref buffer);
             var itemId = connection.User.Player.GetInventory().GetItem(info.InvPos)!.GetItemId();
@@ -105,21 +105,21 @@ namespace ProjectCD.Servers.Game.Actions
             var outPacket = new AckItemToQuick(info);
             connection.Send(outPacket);
         }
-        private void OnAskUnbindQuick(ByteBuffer buffer, Connection connection)
+        private static void OnAskUnbindQuick(ByteBuffer buffer, Connection connection)
         {
             var info = new UnbindQuickInfo(ref buffer);
             connection.User.Player.GetQuickSlotContainer().ClearSlot(info.Pos);
             var outPacket = new AckUnbindQuick(info);
             connection.Send(outPacket);
         }
-        private void OnAskMoveQuick(ByteBuffer buffer, Connection connection)
+        private static void OnAskMoveQuick(ByteBuffer buffer, Connection connection)
         {
             var info = new MoveQuickInfo(ref buffer);
             connection.User.Player.GetQuickSlotContainer().MoveSlot(info.Pos1, info.Pos2);
             var outPacket = new AckMoveQuick(info);
             connection.Send(outPacket);
         }
-        private void OnAskSellItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskSellItem(ByteBuffer buffer, Connection connection)
         {
             var info = new AskSellItemInfo(ref buffer);
             var result = connection.User.Player.TrySellItem(info, out var ackInfo);
@@ -134,7 +134,7 @@ namespace ProjectCD.Servers.Game.Actions
 
             }
         }
-        private void OnAskDeleteItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskDeleteItem(ByteBuffer buffer, Connection connection)
         {
             var info = new AskDeleteItemInfo(ref buffer);
 
@@ -155,7 +155,7 @@ namespace ProjectCD.Servers.Game.Actions
 
         }
 
-        private void OnAskDropItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskDropItem(ByteBuffer buffer, Connection connection)
         {
             var player = connection.User.Player;
             var info = new DropItemInfo(ref buffer);
@@ -169,7 +169,7 @@ namespace ProjectCD.Servers.Game.Actions
             }
         }
 
-        private void OnAskPickupItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskPickupItem(ByteBuffer buffer, Connection connection)
         {
             var info = new AskPickupItemInfo(ref buffer);
             var player = connection.User.Player;
@@ -196,7 +196,7 @@ namespace ProjectCD.Servers.Game.Actions
 
         }
 
-        private void OnAskDivideItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskDivideItem(ByteBuffer buffer, Connection connection)
         {
             var info = new AskDivideInfo(ref buffer);
 
@@ -215,7 +215,7 @@ namespace ProjectCD.Servers.Game.Actions
             }
         }
 
-        private void OnAskMergeItem(ByteBuffer buffer, Connection connection)
+        private static void OnAskMergeItem(ByteBuffer buffer, Connection connection)
         {
             var info = new MergeItemInfo(ref buffer);
 
@@ -246,7 +246,7 @@ namespace ProjectCD.Servers.Game.Actions
             }
         }
 
-        private void OnAskPickupMoney(ByteBuffer buffer, Connection connection)
+        private static void OnAskPickupMoney(ByteBuffer buffer, Connection connection)
         {
             var info = new AskPickupMoneyInfo(ref buffer);
             var player = connection.User.Player;

@@ -18,10 +18,10 @@ using SunStructs.ServerInfos.General.Object.Character.Player;
 
 namespace ProjectCD.Servers.Game.Actions
 {
-    internal class CharInfoActions
+    internal static class CharInfoActions
     {
-        private int _count;
-        public CharInfoActions()
+        private static int _count;
+        public static void Initialize()
         {
             RegisterCharInfoAction(81, OnAskDuplicateName);
             RegisterCharInfoAction(111, OnAskCreateCharacter);
@@ -29,12 +29,12 @@ namespace ProjectCD.Servers.Game.Actions
             Logger.Instance.LogOnLine($"[GAME][CHAR_INFO] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
-        private void RegisterCharInfoAction(byte subType, Action<ByteBuffer, Connection> action)
+        private static void RegisterCharInfoAction(byte subType, Action<ByteBuffer, Connection> action)
         {
             GamePacketParser.Instance.RegisterAction((byte)GamePacketType.CHAR_INFO, subType, action);
             _count++;
         }
-        private void OnAskDuplicateName(ByteBuffer buffer, Connection connection)
+        private static void OnAskDuplicateName(ByteBuffer buffer, Connection connection)
         {
             var charName = Encoding.ASCII.GetString(ByteUtils.CutTail(buffer.ReadBlock(16)));
             if (Database.Instance.IsCharNameFree(charName))
@@ -47,7 +47,7 @@ namespace ProjectCD.Servers.Game.Actions
             var nakPacket = new NakDuplicateName(new(CharIdCheckResult.RC_CHAR_IDCHECK_FAILED));
             connection.Send(nakPacket);
         }
-        private void OnAskCreateCharacter(ByteBuffer buffer, Connection connection)
+        private static void OnAskCreateCharacter(ByteBuffer buffer, Connection connection)
         {
             var info = new AskCreateCharInfo(ref buffer);
             var user = connection.User;
@@ -63,7 +63,7 @@ namespace ProjectCD.Servers.Game.Actions
             var nakPacket = new NakCreateCharacter(new(resultCode));
             connection.Send(nakPacket);
         }
-        private void OnAskDeleteCharacter(ByteBuffer buffer, Connection connection)
+        private static void OnAskDeleteCharacter(ByteBuffer buffer, Connection connection)
         {
             var info = new AskDeleteCharInfo(ref buffer);
             CharDestroyResult resultCode = CharDestroyResult.RC_CHAR_DESTROY_FAILED;

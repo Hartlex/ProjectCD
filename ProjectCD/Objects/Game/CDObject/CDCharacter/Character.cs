@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.Generics;
+using CDShared.Logging;
+using ProjectCD.Formulas;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
@@ -11,9 +13,13 @@ using ProjectCD.Objects.Game.CDObject.CDCharacter.PartySystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem;
 using SunStructs.Definitions;
+using SunStructs.Formulas.Char;
 using SunStructs.PacketInfos.Game.Status.Server;
 using SunStructs.Packets;
 using SunStructs.Packets.GameServerPackets.Status;
+using SunStructs.RuntimeDB;
+using SunStructs.ServerInfos.General;
+using SunStructs.ServerInfos.General.Object.AI;
 using static CDShared.Generics.SunCalc;
 using static SunStructs.Definitions.AttrType;
 
@@ -36,7 +42,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         protected CooldownTable CooldownTable;
         protected MoveStateControl MoveStateControl;
         protected StatusManager StatusManager;
-        protected SkillManager SkillManager;
+        protected ActiveSkillManager ActiveSkillManager;
 
         protected PartyState PartyState; //TODO move to Player?
         #endregion
@@ -45,9 +51,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         
 
-        private uint _hp;
-        private uint _mp;
-        private uint _sd;
+        private int _hp;
+        private int _mp;
+        private int _sd;
 
         private uint _reserveHP;
         private uint _deadReserveHP;
@@ -90,14 +96,14 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             _deadReserveHP = 0;
             
             StatusManager = new(this);
-            SkillManager = new(this);
+            ActiveSkillManager = new(this);
             MoveStateControl = new(this, CharMoveState.CMS_RUN);
         }
 
         public override bool Update(long currentTick)
         {
             StatusManager.Update(currentTick);
-            SkillManager.Update();     
+            ActiveSkillManager.Update();     
             return true;
         }
 
@@ -107,31 +113,31 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         #region HP MP SD
 
-        public uint GetHP() { return _hp; }
-        public uint GetMP() { return _mp; }
-        public uint GetSD() { return _sd; }
+        public int GetHP() { return _hp; }
+        public int GetMP() { return _mp; }
+        public int GetSD() { return _sd; }
 
-        public uint GetMaxHP() { return _attr[ATTR_MAX_HP].GetValue32(); }
-        public uint GetMaxMP() { return _attr[ATTR_MAX_MP].GetValue32(); }
-        public uint GetMaxSD() { return _attr[ATTR_MAX_SD].GetValue32(); }
-
-        public void SetHP(uint value)
+        public int GetMaxHP() { return _attr[ATTR_MAX_HP].GetValue(); }
+        public int GetMaxMP() { return _attr[ATTR_MAX_MP].GetValue(); }
+        public int GetMaxSD() { return _attr[ATTR_MAX_SD].GetValue(); }
+        
+        public void SetHP(int value)
         {
             var maxHP = GetMaxHP();
             _hp = Min(0, Max(maxHP, value));
         }
-        public void SetMP(uint value)
+        public void SetMP(int value)
         {
             var maxMP = GetMaxMP();
             _mp = Min(0, Max(maxMP, value));
         }
-        public void SetSD(uint value)
+        public void SetSD(int value)
         {
             var maxSD = GetMaxSD();
             _sd = Min(0, Max(maxSD, value));
         }
 
-        public virtual uint IncreaseHP(uint value)
+        public virtual int IncreaseHP(int value)
         {
             var curHP = GetHP();
             var calcHP = curHP +value;
@@ -147,7 +153,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
             return value;
         }
-        public virtual uint DecreaseHP(int value, int limitHP)
+        public virtual int DecreaseHP(int value, int limitHP=0)
         {
             var curHp = (int)GetHP();
             bool IsDead = false;
@@ -172,7 +178,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             }
             else
             {
-                uint hp = (uint) (curHp - value);
+                var hp =  (curHp - value);
                 SetHP(hp);
             }
 
@@ -185,10 +191,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
                 }
             }
 
-            return (uint) value;
+            return value;
         }
 
-        public virtual uint IncreaseMP(uint value)
+        public virtual int IncreaseMP(int value)
         {
             var curMP = GetMP();
             var calcMP = curMP + value;
@@ -201,7 +207,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
             return value;
         }
-        public virtual uint DecreaseMp(uint value)
+        public virtual int DecreaseMP(int value)
         {
             var curMP = GetMP();
             if (curMP <= value)
@@ -218,7 +224,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             return value;
         }
 
-        public virtual uint IncreaseSD(uint value)
+        public virtual int IncreaseSD(int value)
         {
             var curSD = GetSD();
             var maxSD = GetMaxSD();
@@ -239,7 +245,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
             return realIncrement;
         }
-        public virtual uint DecreaseSD(uint value)
+        public virtual int DecreaseSD(int value)
         {
             var curSD = GetSD();
             if (curSD <= value)
@@ -255,6 +261,20 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             }
 
             return value;
+        }
+
+        public virtual int GetRegenHP()
+        {
+            return _attr[ATTR_RECOVERY_HP].GetValue();
+        }
+        public virtual int GetRegenMP()
+        {
+            return _attr[ATTR_RECOVERY_MP].GetValue();
+        }
+
+        public virtual int GetRegenSD()
+        {
+            return _attr[ATTR_RECOVERY_SD].GetValue();
         }
 
         #region Shield
@@ -279,7 +299,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
             _shieldHP -= absorbDamage;
 
-            SetMP((uint) (GetMP()-decreaseMP));
+            SetMP((GetMP()-decreaseMP));
 
             if (_shieldHP <= 0)
             {
@@ -302,11 +322,25 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         #endregion
 
-
         public virtual float GetPhysicalAttackSpeed(){ return _attr[ATTR_ATTACK_SPEED].GetValue() / 100f; }
         public virtual int GetAttSpeedRatio(){ return _attr[ATTR_ATTACK_SPEED].GetValue(); }
         public virtual int GetMoveSpeedRatio() { return _attr[ATTR_MOVE_SPEED].GetValue(); }
+        public virtual int GetSightRange(){ return _attr[ATTR_SIGHT_RANGE].GetValue()/10; }
+        public virtual float GetMPSpendIncRatio() { return 0;}
+        public virtual int GetMPSpendIncValue() { return 0;}
+        public virtual int GetSkillRangeBonus() { return 0;}
+        public virtual int GetSkillRangeBonusRatio() { return 0;}
 
+        public void SetAttr(AttrType type, AttrValueType kind, int value)
+        {
+            if (type is <= ATTR_TYPE_INVALID or >= ATTR_MAX)
+            {
+                Logger.Instance.Log($"Attribute[{type}] invalid!");
+                return;
+            }
+            _attr[type].SetValue(value,kind);
+            _attr.UpdateEx();
+        }
         #endregion
 
         public void SendPacketAround(Packet packet)
@@ -348,8 +382,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             ulong recoverExp = (ulong) (_deadExp * recoverExpRatio);
             AddExp(recoverExp, 0, 0, false);
 
-            var newHP = (uint) (GetMaxHP() * recoverHPRatio);
-            var newMP = (uint) (GetMaxMP() * recoverMPRatio);
+            int newHP = (int) (GetMaxHP() * recoverHPRatio);
+            int newMP = (int) (GetMaxMP() * recoverMPRatio);
             var newSD = GetMaxSD();
 
             SetHP(newHP);
@@ -364,7 +398,58 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         public StatusManager GetStatusManager() { return StatusManager; }
 
 
+        #region Abstract SC Character
+
+        public abstract Attributes GetAttributes();
+        public abstract AttackType GetWeaponBaseAttackType();
+        public abstract AttackType GetWeaponMagicAttackType();
+        public abstract int GetPhysicalAvoidValue();
+        public abstract ushort GetLevel();
+        public abstract ushort GetDisplayLevel();
+        public abstract ArmorType GetArmorType();
+        public abstract MeleeType GetMeleeType();
+        
+
+        #endregion
+
         #region Virtual Battle Methods
+
+        public virtual void UpdateCalcRecover(bool hp, bool mp, bool sd)
+        {
+
+        }
+        public virtual void OnRecover(int recoverHP, int recoverMP, int recoverSD, RecoverType recoverType=0, Character? attacker=null)
+        {
+            if (recoverHP > 0)
+                IncreaseHP(recoverHP);
+            if (recoverHP < 0)
+                DecreaseHP(-recoverHP);
+
+            if (recoverMP > 0)
+                IncreaseMP(recoverMP);
+            if (recoverMP < 0)
+                DecreaseMP(-recoverMP);
+
+            if (recoverSD > 0)
+                IncreaseSD(recoverSD);
+            if (recoverSD < 0)
+                DecreaseSD(-recoverSD);
+        }
+        public virtual bool ExecuteThrust(bool forced, SunVector destPos, ref SunVector posAfterThrust,
+            float moveDistance, bool downAfterThrust)
+        {
+            return true;
+        }
+
+        public virtual void OnAttack(Character target, ushort skillCode, int damage)
+        {
+            StatusManager.Attack(damage);
+        }
+
+        public void ForcedAttack(Character mainTarget)
+        {
+            
+        }
         public virtual void SetTargetChar(Character attacker)
         {
 
@@ -376,7 +461,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         public virtual UserRelationType IsFriend(Character target)
         {
-            return UserRelationType.USER_RELATION_NEUTRALIST;
+            return UserRelationType.USER_RELATION_ENEMY;
         }
 
         public virtual int GetResistBadStatusRatio(ushort stateID)
@@ -388,6 +473,22 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         {
             return true;
         }
+        public bool CheckSkillRange(Character mainTarget, SunVector position, float range=0)
+        {
+            var aiInfo = AiParameterDb.Instance.GetAiParamInfo();
+            range += aiInfo.RangeTolerance;
+
+            if (range >= 4)
+            {
+                var bonus = range * GetSkillRangeBonusRatio() / 100;
+                range += GetSkillRangeBonus() + bonus;
+            }
+            //no height check
+
+            return SunVector.GetDistance(GetPos(),position) < range;
+        }
+
+        public virtual bool IsTotemSKillAreaType(){ return true; }
 
         #endregion
 
@@ -397,17 +498,111 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         {
         }
 
-        public virtual void ChangeState(AIStateID stateIDTrack)
+        public virtual void ChangeState(AIStateID stateID,int param1=0,int param2=0,int param3=0)
         {
 
         }
-
+        public virtual void SendAiMessageAroundExceptMe(AIMsg msg){}
+        public virtual void OnAiMessage(AIMsg msg){}
         #endregion
 
-
+        public void SetMoveState(CharMoveState state)
+        {
+            MoveStateControl.SetMoveState(state);
+        }
         public uint GetSectorID()
         {
             return MoveStateControl.GetSectorID();
+        }
+
+
+        public virtual void Attacked()
+        {
+            StatusManager.Attacked();
+        }
+
+
+        public void Damaged(DamageArgs damageArgs)
+        {
+            var attacker = damageArgs.attacker;
+
+            if (ReferenceEquals(this, attacker) || damageArgs.IsMirror)
+            {
+                int curHP = (int) GetHP();
+                if (curHP <= damageArgs.Damage)
+                    damageArgs.Damage = (ushort) (curHP - (curHP * 0.01f));
+
+            }
+
+            if (attacker != null)
+            {
+                KillerObjectType = attacker.GetObjectType();
+                KillerObjectKey = attacker.GetKey();
+            }
+            else
+            {
+                KillerObjectType = ObjectType.MAX_OBJECT;
+                KillerObjectKey = 0;
+            }
+
+            if (damageArgs.IsMirror == false)
+            {
+                var dmg = damageArgs.Damage;
+                GetStatusManager().Damaged(attacker, damageArgs.attackType, ref dmg);
+                damageArgs.Damage = dmg;
+            }
+
+            damageArgs.Damage = ApplyOptionDecDamage(attacker, damageArgs.Damage, damageArgs.AttackResistKind);
+
+            damageArgs.Damage = (int) DecreaseHP(damageArgs.Damage, damageArgs.LimitHP);
+
+            if (damageArgs.IsMirror == false)
+            {
+                StatusManager.DamagedAbsorb(damageArgs.Damage);
+            }
+
+            Attacked();
+            StatusManager.UpdateExpireTime(CharStateType.CHAR_STATE_BATTLE, Const.STATE_BATTLE_TIME);
+
+            //TODO BATTLERECORDRESULT
+        }
+
+        private int ApplyOptionDecDamage(Character? attacker, int damage, AttackResist attackResistKind)
+        {
+            var attr = GetAttributes();
+            int resistValue = attr[ATTR_DECREASE_DAMAGE].GetValue();
+            int resistRatio = attr[ATTR_DECREASE_DAMAGE].GetValue(AttrValueType.CALC_RATIO);
+
+            damage = CalcDecreaseDamage(damage, resistValue, resistRatio);
+
+            if (attacker == null || !attacker.IsObjectType(ObjectType.PLAYER_OBJECT)) return damage;
+
+            if (!IsObjectType(ObjectType.PLAYER_OBJECT)) return damage;
+            //PVP
+            resistValue = attr[ATTR_DECREASE_PVPDAMAGE].GetValue();
+            resistRatio = attr[ATTR_DECREASE_PVPDAMAGE].GetValue(AttrValueType.CALC_RATIO);
+
+            damage = CalcDecreaseDamage(damage, resistValue, resistRatio);
+
+            return damage;
+        }
+
+        private int CalcDecreaseDamage(int damage, int resistValue, int resistRatio)
+        {
+            if (damage == 0) return 0;
+
+            damage -= resistValue;
+            if (resistRatio != 0)
+            {
+                damage = damage * (1 - resistRatio / 100);
+            }
+
+            return damage < 0 ?  0 :  damage;
+        }
+
+        public void CancelAllSkill()
+        {
+            ActiveSkillManager.CancelAllSkill();
         }
     }
 

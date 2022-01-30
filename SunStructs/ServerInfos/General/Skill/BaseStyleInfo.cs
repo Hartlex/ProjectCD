@@ -40,7 +40,7 @@ namespace SunStructs.ServerInfos.General.Skill
         public readonly float PierceRate;
         public readonly float PierceRange;
         public readonly float StunRate;
-        public readonly ushort StunTime;
+        public readonly int StunTime;
         public readonly float KnockBackRate;
         public readonly float KnockBackRange;
         public readonly float DownRate;
@@ -106,7 +106,7 @@ namespace SunStructs.ServerInfos.General.Skill
             PierceRate = sb.ReadFloat();
             PierceRange = sb.ReadFloat();
             StunRate = sb.ReadFloat();
-            StunTime = sb.ReadUshort();
+            StunTime = sb.ReadInt();
             KnockBackRate = sb.ReadFloat();
             KnockBackRange = sb.ReadFloat();
             DownRate = sb.ReadFloat();

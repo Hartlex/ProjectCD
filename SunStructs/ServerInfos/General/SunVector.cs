@@ -24,6 +24,9 @@ namespace SunStructs.ServerInfos.General
         public float GetX(){return _vector.X;}
         public float GetY(){return _vector.Y;}
         public float GetZ(){return _vector.Z;}
+        public void SetX(float value) { _vector.X = value;}
+        public void SetY(float value) { _vector.Y = value;}
+        public void SetZ(float value) { _vector.Z = value;}
         public byte[] GetBytes()
         {
             ByteBuffer buffer = new ByteBuffer(4);
@@ -154,5 +157,6 @@ namespace SunStructs.ServerInfos.General
         {
             return Vector3.Distance(v1._vector, v2._vector);
         }
+
     }
 }

@@ -1,13 +1,14 @@
 ﻿using CDShared.Logging;
+using SunStructs.Definitions;
 using SunStructs.ServerInfos.General.Skill;
 
 namespace SunStructs.RuntimeDB.Parsers
 {
     public class StateInfoParser
     {
-        private readonly Dictionary<ushort, BaseStateInfo> _infos = new();
+        private readonly Dictionary<CharStateType, BaseStateInfo> _infos = new();
 
-        public Dictionary<ushort, BaseStateInfo> ParseInfos(string dataFolderPath)
+        public Dictionary<CharStateType, BaseStateInfo> ParseInfos(string dataFolderPath)
         {
             var lines = ReadAllLines(dataFolderPath+"\\StateInfo.txt");
             foreach (var line in lines)

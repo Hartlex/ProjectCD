@@ -1,5 +1,6 @@
 ﻿using CDShared.Generics;
 using CDShared.Logging;
+using SunStructs.Definitions;
 using SunStructs.RuntimeDB.Parsers;
 using SunStructs.ServerInfos.General.Skill;
 
@@ -7,7 +8,7 @@ namespace SunStructs.RuntimeDB
 {
     public class StateInfoDB : Singleton<StateInfoDB>
     {
-        private Dictionary<ushort, BaseStateInfo> _stateInfos;
+        private Dictionary<CharStateType, BaseStateInfo> _stateInfos;
         public void Init(string dataFolderPath)
         {
 
@@ -16,17 +17,10 @@ namespace SunStructs.RuntimeDB
             Logger.Instance.LogOnLine($"{_stateInfos.Count} StateInfos loaded!\n", LogType.SUCCESS);
         }
 
-        public BaseStateInfo GetStateInfo(ushort id)
+        public bool TryGetStateInfo(CharStateType type, out BaseStateInfo? info)
         {
-            try
-            {
-                return _stateInfos[id];
-            }
-            catch (KeyNotFoundException e)
-            {
-                return null;
-            }
-
+            return _stateInfos.TryGetValue(type, out info);
         }
+
     }
 }

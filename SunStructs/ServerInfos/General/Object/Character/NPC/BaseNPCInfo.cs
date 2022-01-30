@@ -10,12 +10,12 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
         public readonly ushort Level;
         public readonly ushort DisplayLevel;
         public readonly byte ChangeTargetRatio;
-        public readonly uint MaxHP;
-        public readonly uint MaxMP;
-        public readonly uint MaxSD;
-        public readonly uint HP;
-        public readonly uint MP;
-        public readonly uint SD;
+        public readonly int MaxHP;
+        public readonly int MaxMP;
+        public readonly int MaxSD;
+        public readonly int HP;
+        public readonly int MP;
+        public readonly int SD;
         public readonly uint NameCode;
         public readonly uint ICode;
         public readonly NPCGrade Grade;
@@ -30,7 +30,7 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
         public readonly uint PhysicalDef;
         public readonly uint MagicalDef;
         public readonly ushort Attitude;
-        public readonly ushort MoveAttitude;
+        public readonly NPCMoveAttitude MoveAttitude;
         public readonly string MoveAreaID;
         public readonly ushort Class;
 
@@ -40,9 +40,9 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
         public readonly ushort EarthResist;
         public readonly ushort PhysicalAttRate;
         public readonly float PhysicalAvoidRate;
-        public readonly ushort AttType;
-        public readonly ushort MeleeType;
-        public readonly ushort ArmorType;
+        public readonly AttackType AttType;
+        public readonly MeleeType MeleeType;
+        public readonly ArmorType ArmorType;
         public readonly float AttRange;
         public readonly float ViewRange;
         public readonly float MoveRange;
@@ -111,9 +111,9 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
             Name = sb.ReadString();
             Level = sb.ReadUshort();
             DisplayLevel = sb.ReadUshort();
-            MaxHP = sb.ReadUint();
-            MaxMP= sb.ReadUint();
-            MaxSD= sb.ReadUint();
+            MaxHP = sb.ReadInt();
+            MaxMP= sb.ReadInt();
+            MaxSD= sb.ReadInt();
             NameCode = sb.ReadUint();
             ICode = sb.ReadUint();
             sb.Skip();
@@ -122,7 +122,7 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
             Size = sb.ReadUshort();
             AIType = sb.ReadByte();
             FindNPC = sb.ReadByte();
-            AttType = sb.ReadUshort();;
+            AttType = (AttackType) sb.ReadInt();;
             CriticalRatio = sb.ReadByte();
             MinAttackPower= sb.ReadUint();
             MaxAttackPower= sb.ReadUint();
@@ -135,8 +135,8 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
             EarthResist = sb.ReadUshort();
             PhysicalAttRate= sb.ReadUshort();
             PhysicalAvoidRate= sb.ReadFloat();
-            MeleeType= sb.ReadUshort();
-            ArmorType= sb.ReadUshort();
+            MeleeType= (MeleeType)sb.ReadInt();
+            ArmorType= (ArmorType)sb.ReadInt();
             sb.Skip();
             AttRange = sb.ReadFloat();
             ViewRange = sb.ReadFloat();
@@ -153,7 +153,7 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
             SpawnAniTime = sb.ReadUint();
             DeadWaitingTime = sb.ReadUlong();
             Attitude= sb.ReadUshort();
-            MoveAttitude= sb.ReadUshort();
+            MoveAttitude= (NPCMoveAttitude)sb.ReadInt();
             MoveAreaID = sb.ReadString();
             SpecialConditions = new[]
             {

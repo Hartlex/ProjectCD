@@ -1,17 +1,19 @@
 ﻿using CDShared.Parsing;
+using SunStructs.Definitions;
 
 namespace SunStructs.ServerInfos.General.Skill
 {
     public class BaseStateInfo
     {
-        public ushort StateID;							
+        public CharStateType StateID;							
         public string StateName;
         public uint NameCode;				
         public uint DescCode;			
         public uint	IconCode;
+        public int GKind;
         public byte DelType;
-        public byte Type;
-        public byte SDApply;
+        public StateType Type;
+        public SDApply SDApply;
         public byte RidingApply;
         public string EffectID;                
         public byte EffectPos;
@@ -20,16 +22,17 @@ namespace SunStructs.ServerInfos.General.Skill
         {
             var sb = new StringBuffer(info);
             sb.Skip();
-            StateID = sb.ReadUshort();
+            StateID = (CharStateType)sb.ReadInt();
             sb.Skip();
             StateName = sb.ReadString();
             NameCode = sb.ReadUint();
             DescCode = sb.ReadUint();
             IconCode = sb.ReadUint();
-            sb.Skip(3);
+            sb.Skip(2);
+            GKind = sb.ReadInt();
             DelType = sb.ReadByte();
-            Type = sb.ReadByte();
-            SDApply = sb.ReadByte();
+            Type = (StateType) sb.ReadInt();
+            SDApply = (SDApply)sb.ReadInt();
             RidingApply = sb.ReadByte();
             EffectID = sb.ReadString();
             EffectPos = sb.ReadByte();

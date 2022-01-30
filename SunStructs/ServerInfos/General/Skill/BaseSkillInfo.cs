@@ -1,8 +1,11 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.Net.Sockets;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using CDShared.Logging;
 using SunStructs.Definitions;
 using SunStructs.ServerInfos.General.Object.Items;
 using static SunStructs.Definitions.AbilityID;
+using static SunStructs.Definitions.AbilityRangeType;
 using static SunStructs.Definitions.ArmorType;
 using static SunStructs.Definitions.AttackType;
 using static SunStructs.Definitions.AttrType;
@@ -20,6 +23,7 @@ namespace SunStructs.ServerInfos.General.Skill
         public readonly int[] WeaponDefine;
         public readonly string WZAnimCode;
         public readonly uint CastAnimCode;
+        public readonly int CSSyncDelay;
         public readonly ushort FlyingObjCode;
         public readonly ushort FlyingLifeTime;
         public readonly uint FieldEffectCode;
@@ -35,10 +39,10 @@ namespace SunStructs.ServerInfos.General.Skill
         public readonly byte SkillStatType;
         public readonly ushort[] RequireSkillStat;
         public readonly byte RequireSkillPoint;
-        public readonly byte Target;
+        public readonly byte TargetType;
         public readonly byte ForbiddenTarget;
-        public readonly ushort HPCost;
-        public readonly ushort MPCost;
+        public readonly float HPCost;
+        public readonly float MPCost;
         public readonly ushort SkillCasting;
         public readonly uint Cooldown;
         public readonly ushort SkillRange;
@@ -63,6 +67,7 @@ namespace SunStructs.ServerInfos.General.Skill
             WeaponDefine[1] = int.Parse(info[10]);
             WeaponDefine[2] = int.Parse(info[12]);
             WeaponDefine[3] = int.Parse(info[14]);
+            CSSyncDelay = int.Parse(info[16]);
             WZAnimCode = info[9];
             FlyingObjCode = ushort.Parse(info[18]);
             FlyingLifeTime= ushort.Parse(info[19]);
@@ -83,10 +88,10 @@ namespace SunStructs.ServerInfos.General.Skill
             SkillStatType = byte.Parse(info[35]);
             RequireSkillStat = new[] {ushort.Parse(info[36]), ushort.Parse(info[37])};
             RequireSkillPoint = byte.Parse(info[38]);
-            Target = byte.Parse(info[39]);
+            TargetType = byte.Parse(info[39]);
             ForbiddenTarget = byte.Parse(info[40]);
-            HPCost = ushort.Parse(info[41]);
-            MPCost = ushort.Parse(info[42]);
+            HPCost = float.Parse(info[41]);
+            MPCost = float.Parse(info[42]);
             SkillCasting = ushort.Parse(info[43]);
             Cooldown = uint.Parse(info[44]);
             SkillRange= ushort.Parse(info[45]);
@@ -112,15 +117,30 @@ namespace SunStructs.ServerInfos.General.Skill
 
 
 
-        public BaseAbilityInfo GetAbilityInfo(byte index)
+        public bool TryGetAbilityInfo(AbilityID id,out BaseAbilityInfo? info)
+        {
+            info = null;
+            foreach (var baseAbilityInfo in BaseAbilityInfos)
+            {
+                if (baseAbilityInfo.AbilityId == id)
+                {
+                    info = baseAbilityInfo;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public BaseAbilityInfo? GetAbilityInfoByIndex(int index)
         {
             try
             {
                 return BaseAbilityInfos[index];
             }
-            catch (KeyNotFoundException e)
+            catch (IndexOutOfRangeException e)
             {
-                Logger.Instance.Log("Ability not found",LogType.ERROR);
+                Logger.Instance.Log(e);
                 return null;
             }
         }
@@ -146,27 +166,140 @@ namespace SunStructs.ServerInfos.General.Skill
             Stat = stat;
         }
     }
+    public class IffFilter
+    {
+        internal enum IffCheck
+        {
+            IFF_NONE = 0,
+            //
+            IFF_CHECK_SKIP = 1 << 0,
+            //
+            IFF_ONE = 1 << 3,
+            IFF_PLAYER = 1 << 4,
 
+            IFF_CORPSE = 1 << 7,
+            IFF_RESURRECTION = 1 << 8,
+            //
+            IFF_ENEMY = 1 << 11,
+            IFF_FRIEND = 1 << 12,
+            //
+            IFF_ATTACKER_ONLY = 1 << 18,
+            IFF_MAIN_TARGET_ONLY = 1 << 19,
+            //
+        }
+        internal enum IffAbilityCondition
+        {
+            IFF_ABILITY_CONDITION_ACTOR_ONLY
+                = (1 << SKILL_ABILITY_ME),
+
+            IFF_ABILITY_CONDITION_MAIN_TARGET_ONLY
+                = (1 << SKILL_ABILITY_FRIEND)
+                  | (1 << SKILL_ABILITY_ENEMY),
+
+            IFF_ABILITY_CONDITION_CORPSE_ABILITIES
+                = (1 << SKILL_ABILITY_CORPSE_RESURRECTION)
+                  | (1 << SKILL_ABILITY_CORPSE_FRIEND)
+                  | (1 << SKILL_ABILITY_MYAREA_CORPSE_ENEMY)
+                  | (1 << SKILL_ABILITY_CORPSE_ENEMY),
+
+            IFF_ABILITY_CONDITION_ENABLED_RESURRECTION
+                = (1 << SKILL_ABILITY_CORPSE_RESURRECTION),
+
+            IFF_ABILITY_CONDITION_PLAYER
+                = (1 << SKILL_ABILITY_PLAYER_ENEMY),
+
+            IFF_ABILITY_CONDITION_SKIP_ABILITIES
+                = (1 << SKILL_ABILITY_FIELD)
+                  | (1 << SKILL_ABILITY_SUMMON)
+                  | (1 << SKILL_ABILITY_SUMMONED_MONSTER),
+
+            IFF_ABILITY_CONDITION_FRIEND_ABILITIES
+                = (1 << SKILL_ABILITY_FRIEND)
+                  | (1 << SKILL_ABILITY_TARGETAREA_FRIEND)
+                  | (1 << SKILL_ABILITY_MYAREA_FRIEND)
+                  | (1 << SKILL_ABILITY_CORPSE_FRIEND),
+
+            IFF_ABILITY_CONDITION_ENEMY_ABILITIES
+                = (1 << SKILL_ABILITY_ENEMY)
+                  | (1 << SKILL_ABILITY_TARGETAREA_ENEMY)
+                  | (1 << SKILL_ABILITY_MYAREA_ENEMY)
+                  | (1 << SKILL_ABILITY_MYAREA_CORPSE_ENEMY)
+                  | (1 << SKILL_ABILITY_CORPSE_ENEMY),
+        };
+
+        public ulong ValueType;
+        public bool IsValidated;
+
+        public IffFilter(BaseAbilityInfo info)
+        {
+            var rangeType = (AbilityRangeType) info.RangeType;
+            if (info.AbilityId != 0 &&
+                rangeType != SKILL_ABILITY_NONE &&
+                rangeType < SKILL_ABILITY_MAX)
+            {
+                IsValidated = false;
+            }
+
+            ulong rangeTypeBit = (ulong) (1 << (int) rangeType);
+            ulong selectFilter = 0;
+            if((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_ACTOR_ONLY) != 0) selectFilter |= (ulong)IffCheck.IFF_ATTACKER_ONLY;
+            if((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_MAIN_TARGET_ONLY) != 0) selectFilter |= (ulong)IffCheck.IFF_ATTACKER_ONLY | (ulong)IffCheck.IFF_MAIN_TARGET_ONLY;
+            if ((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_CORPSE_ABILITIES) != 0) selectFilter |= (ulong)IffCheck.IFF_CORPSE;
+            if ((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_ENABLED_RESURRECTION) != 0) selectFilter |= (ulong)IffCheck.IFF_RESURRECTION;
+            if ((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_PLAYER) != 0) selectFilter |= (ulong)IffCheck.IFF_PLAYER;
+            if ((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_SKIP_ABILITIES) != 0) selectFilter |= (ulong)IffCheck.IFF_CHECK_SKIP;
+            if ((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_FRIEND_ABILITIES) != 0) selectFilter |= (ulong)IffCheck.IFF_FRIEND;
+            if ((rangeTypeBit & (int)IffAbilityCondition.IFF_ABILITY_CONDITION_ENEMY_ABILITIES) != 0) selectFilter |= (ulong)IffCheck.IFF_ENEMY;
+
+            ValueType = selectFilter;
+            IsValidated = true;
+        }
+    }
     public class BaseAbilityInfo
     {
-        public readonly int Index;
-        public readonly AbilityID AbilityId;
-        public readonly byte RangeType;
-        public readonly ushort SuccessRate;
-        public readonly uint option1;
-        public readonly uint option2;
-        public readonly int[] Params;
-        public readonly CharStateType CharStateType;
-        public readonly AttrType Attribute;
+        public int Index;
+        public AbilityID AbilityId;
+        public IffFilter Filter;
+        public AbilityRangeType RangeType;
+        public int SuccessRate;
+        public int option1;
+        public int option2;
+        public int[] Params;
+        public CharStateType CharStateType;
+        public AttrType Attribute;
+        public BaseAbilityInfo(){}
+        public BaseAbilityInfo EditableCopy()
+        {
+            var result = new BaseAbilityInfo()
+            {
+                Index = this.Index,
+                AbilityId = this.AbilityId,
+                RangeType = RangeType,
+                SuccessRate = SuccessRate,
+                option1 = option1,
+                option2 = option2,
+                Params = new int[]
+                {
+                    Params[0],
+                    Params[1],
+                    Params[2],
+                    Params[3]
+                },
+                CharStateType = CharStateType,
+                Attribute = Attribute
+            };
+            result.Filter = new IffFilter(result);
 
+            return result;
+        }
         public BaseAbilityInfo(int index, string[] info, int startIndex)
         {
             Index = index;
             AbilityId = (AbilityID)ushort.Parse(info[startIndex]);
-            RangeType = byte.Parse(info[startIndex + 1]);
-            SuccessRate = ushort.Parse(info[startIndex + 2]);
-            option1 = uint.Parse(info[startIndex + 3]);
-            option2 = uint.Parse(info[startIndex + 4]);
+            RangeType = (AbilityRangeType) int.Parse(info[startIndex + 1]);
+            SuccessRate = int.Parse(info[startIndex + 2]) * 10;
+            option1 = int.Parse(info[startIndex + 3]);
+            option2 = int.Parse(info[startIndex + 4]);
 
             Params = new[]
             {
@@ -178,6 +311,7 @@ namespace SunStructs.ServerInfos.General.Skill
             };
             CharStateType = (CharStateType) int.Parse(info[startIndex + 9]);
             Attribute = GetAttrType();
+            Filter = new IffFilter(this);
         }
 
         private AttrType GetAttrType()

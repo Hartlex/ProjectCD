@@ -54,9 +54,9 @@ namespace SunStructs.ServerInfos.General.Object.Items
         public ushort PhysicalAttackRate;
         public ushort PhysicalAttackSpeed;
         public ushort PhysicalAvoid;
-        public ushort BaseAttackType;
-        public ushort MagicAttackType;
-        public ushort MeleeType;
+        public AttackType BaseAttackType;
+        public AttackType MagicAttackType;
+        public MeleeType MeleeType;
         public float AttackRange;
         public ArmorType ArmorType;
 
@@ -164,9 +164,9 @@ namespace SunStructs.ServerInfos.General.Object.Items
             PhysicalAttackRate = ushort.Parse(info[47]);
             PhysicalAttackSpeed = ushort.Parse(info[48]);
             PhysicalAvoid = ushort.Parse(info[50]);
-            BaseAttackType = ushort.Parse(info[51]);
-            MagicAttackType = ushort.Parse(info[52]);
-            MeleeType = ushort.Parse(info[53]);
+            BaseAttackType = (AttackType) int.Parse(info[51]);
+            MagicAttackType = (AttackType) int.Parse(info[52]);
+            MeleeType = (MeleeType)int.Parse(info[53]);
             AttackRange = float.Parse(info[54]);
             ArmorType =(ArmorType) ushort.Parse(info[55]);
             MagicAttackSpeed = ushort.Parse(info[58]);

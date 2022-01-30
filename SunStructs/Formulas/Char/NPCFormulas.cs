@@ -8,17 +8,17 @@ namespace SunStructs.Formulas.Char
 {
     public static class NPCFormulas
     {
-        public static int CalcNpcHPRecovery(uint MaxHP, uint recoveryRatio = 1)
+        public static int CalcNpcHPRecovery(int maxHP, uint recoveryRatio = 1)
         {
-            return (int) (MaxHP * 0.005f * recoveryRatio);
+            return (int) (maxHP * 0.005f * recoveryRatio);
         }
-        public static int CalcNpcMPRecovery(uint MaxMP, uint recoveryRatio = 1)
+        public static int CalcNpcMPRecovery(int maxMP, uint recoveryRatio = 1)
         {
-            return (int)(MaxMP * 0.01f * recoveryRatio);
+            return (int)(maxMP * 0.01f * recoveryRatio);
         }
-        public static int CalcNpcSDRecovery(uint MaxSD)
+        public static int CalcNpcSDRecovery(int maxSD)
         {
-            return (int)(MaxSD * 0.15f);
+            return (int)(maxSD * 0.15f);
         }
     }
 }

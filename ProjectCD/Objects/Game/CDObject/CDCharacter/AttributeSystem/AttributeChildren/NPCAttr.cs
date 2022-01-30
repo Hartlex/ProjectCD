@@ -196,10 +196,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
 
         public override void UpdateEx()
         {
-            int attackSpeedRatio = _owner.GetAttSpeedRatio();
-            int moveSpeedRatio = _owner.GetMoveSpeedRatio();
-            uint maxHP = _owner.GetMaxHP();
-            uint maxMP = _owner.GetMaxMP();
+            var attackSpeedRatio = _owner.GetAttSpeedRatio();
+            var moveSpeedRatio = _owner.GetMoveSpeedRatio();
+            var maxHP = _owner.GetMaxHP();
+            var maxMP = _owner.GetMaxMP();
 
             Update();
 

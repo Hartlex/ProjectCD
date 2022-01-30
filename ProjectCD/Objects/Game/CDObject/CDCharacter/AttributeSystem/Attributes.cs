@@ -65,24 +65,40 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             BonusDefense[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = Attrs[(int)ATTR_ADD_PHYSICAL_DEFENSE_POWER];
             BonusDefense[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = Attrs[(int)ATTR_ADD_MAGICAL_DEFENSE_POWER];
             BonusDefense[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = Attrs[(int)ATTR_ADD_ALL_DEFENSE_POWER];
+            BonusDefense[(int)AttackType.ATTACK_TYPE_MAGIC] = new ();
         }
         private void RegisterMagicAttackPower()
         {
+            MagicalAttPower[(int) AttackType.ATTACK_TYPE_ALL_OPTION] = new ();
+            MagicalAttPower[(int) AttackType.ATTACK_TYPE_MELEE] = new ();
+            MagicalAttPower[(int) AttackType.ATTACK_TYPE_RANGE] = new();
             MagicalAttPower[(int)AttackType.ATTACK_TYPE_WATER] = Attrs[(int)ATTR_MAGICAL_WATER_ATTACK_POWER];
             MagicalAttPower[(int)AttackType.ATTACK_TYPE_FIRE] = Attrs[(int)ATTR_MAGICAL_FIRE_ATTACK_POWER];
             MagicalAttPower[(int)AttackType.ATTACK_TYPE_WIND] = Attrs[(int)ATTR_MAGICAL_WIND_ATTACK_POWER];
             MagicalAttPower[(int)AttackType.ATTACK_TYPE_EARTH] = Attrs[(int)ATTR_MAGICAL_EARTH_ATTACK_POWER];
             MagicalAttPower[(int)AttackType.ATTACK_TYPE_DARKNESS] = Attrs[(int)ATTR_MAGICAL_DARKNESS_ATTACK_POWER];
             MagicalAttPower[(int)AttackType.ATTACK_TYPE_DIVINE] = Attrs[(int)ATTR_MAGICAL_DIVINE_ATTACK_POWER];
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = new();
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = new();
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = new();
+            MagicalAttPower[(int)AttackType.ATTACK_TYPE_MAGIC] = new();
+
         }
         private void RegisterMagicalDefPower()
         {
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_ALL_OPTION] = new();
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_MELEE] = new();
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_RANGE] = new();
             MagicalDefPower[(int)AttackType.ATTACK_TYPE_WATER] = Attrs[(int)ATTR_MAGICAL_WATER_DEFENSE_POWER];
             MagicalDefPower[(int)AttackType.ATTACK_TYPE_FIRE] = Attrs[(int)ATTR_MAGICAL_FIRE_DEFENSE_POWER];
             MagicalDefPower[(int)AttackType.ATTACK_TYPE_WIND] = Attrs[(int)ATTR_MAGICAL_WIND_DEFENSE_POWER];
             MagicalDefPower[(int)AttackType.ATTACK_TYPE_EARTH] = Attrs[(int)ATTR_MAGICAL_EARTH_DEFENSE_POWER];
             MagicalDefPower[(int)AttackType.ATTACK_TYPE_DARKNESS] = Attrs[(int)ATTR_MAGICAL_DARKNESS_DEFENSE_POWER];
             MagicalDefPower[(int)AttackType.ATTACK_TYPE_DIVINE] = Attrs[(int)ATTR_MAGICAL_DIVINE_DEFENSE_POWER];
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = new();
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = new();
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = new();
+            MagicalDefPower[(int)AttackType.ATTACK_TYPE_MAGIC] = new();
         }
         private void RegisterBonusDefenseRatio()
         {
@@ -98,6 +114,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = Attrs[(int)ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
             ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = Attrs[(int)ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
             ReduceDefenseRate[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = Attrs[(int)ATTR_DEL_ALL_TARGET_DEFENSE_RATIO];
+            ReduceDefenseRate[(int) AttackType.ATTACK_TYPE_MAGIC] = new();
         }
         private void RegisterReduceDamage()
         {
@@ -113,6 +130,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             ReduceDamage[(int)AttackType.ATTACK_TYPE_PHYSICAL_OPTION] = Attrs[(int)ATTR_DEL_PHYSICAL_DAMAGE];
             ReduceDamage[(int)AttackType.ATTACK_TYPE_MAGIC_OPTION] = Attrs[(int)ATTR_DEL_MAGICAL_DAMAGE];
             ReduceDamage[(int)AttackType.ATTACK_TYPE_ALL_MAGIC] = Attrs[(int)ATTR_DEL_MAGICAL_ALL_DAMAGE];
+            ReduceDamage[(int) AttackType.ATTACK_TYPE_MAGIC] = new();
         }
         public Attribute this[AttrType key] => Attrs[(int)key];
 
@@ -188,6 +206,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             return BonusDamagePercent[(int)type].GetValue();
         }
 
+        public int GetReduceDefenseRate(AttackType type)
+        {
+            return ReduceDefenseRate[(int) type].GetValue();
+        }
+
         public void UpdateHPRecovery(int hpValue)
         {
             SetBaseAndUpdate(ATTR_RECOVERY_HP, hpValue);
@@ -219,6 +242,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             }
 
         }
+
+
 
     }
 }

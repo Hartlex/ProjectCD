@@ -29,6 +29,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             return _values[(int)CALC];
         }
 
+        public int GetRatio()
+        {
+            return _values[(int) CALC_RATIO];
+        }
+
         public void AddValue(int value, AttrValueType type = BASE)
         {
             _values[(int) type] += value;
@@ -56,13 +61,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         }
         private void UpdateRatValues()
         {
-            _values[(int) CALC_RATIO] = _values[(int) ITEM_RATIO] + _values[(int) SKILL_RATIO];
+            _values[(int) CALC_RATIO] =  _values[(int) ITEM_RATIO] + _values[(int) SKILL_RATIO];
         }
         private void UpdateAll()
         {
             UpdateAbsValues();
             UpdateRatValues();
-            _values[(int) CALC] += _values[(int) CALC_RATIO] * _values[(int) CALC]+100 / 100; //100 = 10%
+            //_values[(int) CALC] += _values[(int) CALC_RATIO] * _values[(int) CALC]+100 / 100; //100 = 10%
         }
 
         public void Clear()

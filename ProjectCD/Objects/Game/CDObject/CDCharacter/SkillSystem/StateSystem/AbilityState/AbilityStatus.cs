@@ -20,7 +20,7 @@ using static SunStructs.Definitions.CharStateType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class AbilityStatus : BaseStatus
+    internal class AbilityStatus : BaseStatus
     {
         #region Const
 
@@ -46,7 +46,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.Ab
         public float TotemRadius { get; private set; }
         public byte AbilityEventCode { get; set; }
 
-        public SkillExtraOption SkillOption { get; }
+        public SkillExtraOption SkillOption { get; private set; }
         protected Character? Attacker { get; private set; }
         public BaseAbilityInfo BaseAbilityInfo { get; private set; }
 
@@ -64,7 +64,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.Ab
 
             var skill = ability.GetSkill();
 
-            RegisterSkillOption(skill != null ? skill.SkillInfo.SkillExtraOption : new());
+            var skillOption = skill.SkillInfo.SkillExtraOption;
+            if (skillOption == null)
+                skillOption = new();
+            SkillOption = new();
+            RegisterSkillOption(skillOption);
 
             var baseInfo = ability.GetBaseAbilityInfo();
 

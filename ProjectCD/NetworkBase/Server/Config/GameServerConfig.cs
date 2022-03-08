@@ -4,7 +4,7 @@ using ProjectCD.NetworkBase.Connections;
 
 namespace CD.Network.Server.Config
 {
-    public class GameServerConfig : ServerConfig
+    internal class GameServerConfig : ServerConfig
     {
         private readonly byte _groupID;
         private readonly string _name;

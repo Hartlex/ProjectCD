@@ -9,7 +9,7 @@ using SunStructs.Formulas.Char;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers
 {
-    public class MoveStateControl
+    internal class MoveStateControl
     {
         private Character _owner;
         private CharMoveState _moveState;

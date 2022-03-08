@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.EtcState
 {
-    public class EtcStatus : BaseStatus
+    internal class EtcStatus : BaseStatus
     {
         public virtual void SetDownTime(int downTime){}
-    }
-
-    public class BattleStatus : EtcStatus
-    {
-
     }
 }

@@ -58,7 +58,7 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
         public readonly SpecialCondition[] SpecialConditions;
         public readonly ResistanceCondition[] ResistanceConditions;
 
-        public readonly ushort SkillUpdateTime;
+        public readonly int SkillUpdateTime;
 
         public readonly byte ReviveCondition;
         public readonly ushort ReviveConditionParam;
@@ -166,7 +166,7 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
                 new ResistanceCondition(ref sb)
             };
             ChangeTargetRatio = sb.ReadByte();
-            SkillUpdateTime = sb.ReadUshort();
+            SkillUpdateTime = sb.ReadInt();
             ReviveCondition = sb.ReadByte();
             ReviveConditionParam = sb.ReadUshort();
             ReviveRate = sb.ReadByte();
@@ -249,19 +249,19 @@ namespace SunStructs.ServerInfos.General.Object.Character.NPC
 
     public class SpecialCondition
     {
-        public byte Condition;
-        public ushort ConditionParam;
-        public string ActionType;
-        public ushort ActionParam;
-        public byte ActionRate;
+        public int Condition;
+        public int ConditionParam;
+        public NPCSpecialActionType ActionType;
+        public int ActionParam;
+        public int ActionRate;
 
         public SpecialCondition(ref StringBuffer sb)
         {
-            Condition = sb.ReadByte();
-            ConditionParam = sb.ReadUshort();
-            ActionType = sb.ReadString();
-            ActionParam = sb.ReadUshort();
-            ActionRate = sb.ReadByte();
+            Condition = sb.ReadInt();
+            ConditionParam = sb.ReadInt();
+            ActionType = (NPCSpecialActionType) sb.ReadInt();
+            ActionParam = sb.ReadInt();
+            ActionRate = sb.ReadInt();
 
         }
     }

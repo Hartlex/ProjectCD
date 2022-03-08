@@ -1,4 +1,5 @@
-﻿using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC;
+﻿using CDShared.Logging;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState;
@@ -16,7 +17,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
         public bool RequestRemove;
         public BaseStatus Status;
     }
-    public class StatusManager
+    internal class StatusManager
     {
         private readonly Character _owner;
         private Dictionary<CharStateType, StatusNode> _statusMap;
@@ -57,20 +58,21 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
                 Release();
                 return;
             }
+            //Logger.Instance.Log($"StatusCount[{_statusMap.Values.Count}]");
 
-            lock (_statusMap)
+            foreach (var node in _statusMap.ToList())
             {
-                foreach (var node in _statusMap)
+                //Logger.Instance.Log($"Status[{node.Value.Status.GetStateType()}] Time[{(node.Value.Status.GetExpireTime() - DateTime.Now.Ticks)/10000}]");
+                if (node.Value.RequestRemove) continue;
+                if (!node.Value.Status.Update(currentTick))
                 {
-                    if (node.Value.RequestRemove) continue;
-                    if (!node.Value.Status.Update(currentTick))
-                    {
-                        node.Value.RequestRemove = true;
-                        node.Value.Status.End();
-                        _deleteMap.Add(node.Key);
-                    }
+                    //Logger.Instance.Log($"Removing Status [{node.Value.Status.GetStateType()}][{node.Value.Status.GetExpireTime()}][{DateTime.Now.Ticks}]");
+                    node.Value.RequestRemove = true;
+                    node.Value.Status.End();
+                    _deleteMap.Add(node.Key);
                 }
             }
+            
             DeleteRemoved();
         }
 
@@ -80,7 +82,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             {
                 foreach (var charStateType in _deleteMap)
                 {
-                    _statusMap.Remove(charStateType);
+                    _REMOVESTATUS(charStateType);
+
                 }
                 _deleteMap.Clear();
             }
@@ -265,25 +268,24 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
                 if(existingNode!.RequestRemove == false)
                     existingNode.Status.End();
 
-                _statusMap.Remove(existingNode.Status.GetStateType());
+                //_statusMap.Remove(existingNode.Status.GetStateType());
                 existingNode.RequestRemove = false;
-
+                existingNode.Status = newStatus;
             }
             else
             {
-                _statusMap.Add(type,new StatusNode()
-                {
-                    RequestRemove = false, 
-                    Status = newStatus
-                });
-
-                _bits.AddRestrictStatus(type);
+                _ADDSTATUS(newStatus);
             }
         } 
 
         public bool CanBeAttacked()
         {
             return true;
+        }
+
+        public bool CanAttack()
+        {
+            return _bits.CanAttack();
         }
 
         public bool IsImmunityDamageState()
@@ -460,6 +462,53 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             DeleteRemoved();
 
             return number;
+        }
+
+        public BaseStatus? FindAuroraStatus()
+        {
+            foreach (var node in _statusMap.Values.ToList())
+            {
+                if(node.RequestRemove) continue;
+                if (node.Status.IsAbilityStatus())
+                {
+                    if (IsAuroraStatus(node.Status.GetStateType()))
+                        return node.Status;
+                }
+            }
+
+            return null;
+        }
+
+        private bool IsAuroraStatus(CharStateType type)
+        {
+            switch (type)
+            {
+                case CHAR_STATE_SLOW_AURORA:
+                case CHAR_STATE_WEAKNESS_AURORA:
+                case CHAR_STATE_MISCHANCE_AURORA:
+                case CHAR_STATE_DECLINE_AURORA:
+                case CHAR_STATE_RECOVERY_AURORA:
+                case CHAR_STATE_BOOST_AURORA:
+                case CHAR_STATE_IGNORE_AURORA:
+                case CHAR_STATE_CONCENTRATION_AURORA:
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void _ADDSTATUS(BaseStatus status)
+        {
+            _statusMap.Add(status.GetStateType(),new StatusNode(){RequestRemove = false, Status = status});
+            _bits.AddRestrictStatus(status.GetStateType());
+        }
+
+        private void _REMOVESTATUS(CharStateType type)
+        {
+            if (_statusMap.Remove(type))
+            {
+                _bits.RemoveRestrictStatus(type);
+            }
         }
     }
 }

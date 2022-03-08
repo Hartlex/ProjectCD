@@ -1538,7 +1538,7 @@ namespace SunStructs.Definitions
         ATTACK_SEQUENCE_MAX
 
     };
-    public enum Style
+    public enum StyleEnum
     {
 
         STYLE_BERSERKER_PUNCH = 60000, // ¸Ç¼Õ°ø°Ý ½ºÅ¸ÀÏ 
@@ -1661,4 +1661,14 @@ namespace SunStructs.Definitions
         EFFECT_TYPE_SELF_DESTRUCTION = 2,   //__NA00XXXX_080922_TASK_SSQ_NPC_SELF_DESTRUCTION__
         EFFECT_TYPE_PERIODIC_SKILL = 3,
     };
+
+    [Flags]
+    public enum PlayerStatEvent
+    {
+        NONE=0,
+        CHANGED_HP = 1<<0,
+        CHANGED_MP = 1<<1,
+        CHANGED_POS = 1<<2,
+        CHANGED_SD = 1<<3
+    }
 }

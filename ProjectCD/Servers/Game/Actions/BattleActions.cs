@@ -50,7 +50,8 @@ namespace ProjectCD.Servers.Game.Actions
                 MainTargetPosition = info.DestinationPos,
                 MainTargetKey = info.TargetKey
             };
-
+            //Logger.Instance.Log($"Current Pos= {info.CurrentPos}");
+            //Logger.Instance.Log($"Target Pos= {info.DestinationPos}");
             var player = connection.User.Player;
             player.SetPos(info.CurrentPos);
             skillInfo.Owner = player;

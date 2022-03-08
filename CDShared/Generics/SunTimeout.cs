@@ -15,7 +15,12 @@ namespace CDShared.Generics
             ExpireTick = expireTick;
         }
 
+        public SunTimeout(int delay)
+        {
+            ExpireTick = DateTime.Now.AddMilliseconds(delay).Ticks;
+        }
         public bool IsExpired(){ return DateTime.Now.Ticks > ExpireTick; }
+        
 
     }
 }

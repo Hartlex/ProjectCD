@@ -12,6 +12,7 @@ using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers;
 using ProjectCD.Objects.Game.World;
 using SunStructs.Definitions;
 using SunStructs.PacketInfos;
+using SunStructs.PacketInfos.Game.Status.Server;
 using SunStructs.PacketInfos.Game.Sync.Client;
 using SunStructs.PacketInfos.Game.Sync.Server;
 using SunStructs.PacketInfos.Game.Sync.Server.WarPacket;
@@ -22,7 +23,7 @@ using SunStructs.ServerInfos.General;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
-    public partial class Player
+    internal partial class Player
     {
         public void PlayerMovementInit(ref SqlDataReader reader)
         {
@@ -76,14 +77,46 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             SetPos(info.LandPosition);
             GetCurrentField()?.QueueWarPacketInfo(new PlayerJumpBrd(GetKey(), info));
 
-            GetCurrentField()?.SpawnMonsterEx(2,info.LandPosition);
+            //var stateInfo = new TotalStateInfo();
+            //stateInfo.EtcStateCount = 1;
+            //stateInfo.EtcStates = new[] { new EtcStateInfo((ushort)CharStateType.CHAR_STATE_STUN, 5000) };
+            //stateInfo.StateCount = 1;
+            //stateInfo.States = new[] { new StateInfo(10301, 0, 0, 10000) };
 
-            var b = new ByteBuffer();
-            b.WriteUInt32(GetKey());
-            b.WriteUInt16((ushort)Style.STYLE_DRAGON_PUNCH);
-            b.WriteUInt16((ushort)Style.STYLE_ONEHANDSWORD_NORMAL);
-            var testPacket = new TestPacket((byte)GamePacketType.STYLE, 95, new TestPacketInfo(b.GetData()));
-            GetCurrentField()?.SendToAll(testPacket);
+            //var statePacket = new PlayerStateInfoCmd(new TestPacketInfo(new byte[]
+            //{
+            //    1,
+            //    6,0,
+            //    1,1,1,1
+
+            //}));
+            //68 ETC Packets
+
+            //var b = new ByteBuffer();
+            //b.WriteByte(1);
+            //b.WriteUInt16(10301);
+            //b.WriteByte(0);
+            //b.WriteByte(0);
+            //b.WriteUInt32(10000);
+            //for (byte i = 0; i < 255; i++)
+            //{
+            //    var testPacket = new TestPacket((byte)GamePacketType.STATUS, i,
+            //        new TestPacketInfo(b.GetData()));
+
+            //    SendPacket(testPacket);
+            //    Thread.Sleep(2000);
+            //    Logger.Instance.Log(i);
+            //}
+
+
+            //GetCurrentField()?.SpawnMonsterEx(637,info.LandPosition);
+
+            //var b = new ByteBuffer();
+            //b.WriteUInt32(GetKey());
+            //b.WriteUInt16((ushort)StyleEnum.STYLE_DRAGON_PUNCH);
+            //b.WriteUInt16((ushort)StyleEnum.STYLE_ONEHANDSWORD_NORMAL);
+            //var testPacket = new TestPacket((byte)GamePacketType.STYLE, 95, new TestPacketInfo(b.GetData()));
+            //GetCurrentField()?.SendToAll(testPacket);
 
             //GetCurrentField()?.QueueWarPacketInfo(new StatusAddBrd(GetKey(),CharStateType.CHAR_STATE_STUN));
             //var addBuffer = new ByteBuffer();
@@ -152,7 +185,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
         public void OnTargetMove(TargetMoveInfo info)
         {
-            SetPos(info.CurrentPosition);
+            SetPos(info.DestinationPosition);
 
             GetCurrentField()?.QueueWarPacketInfo(new TargetMoveBrd((ushort)GetKey(),info));
         }

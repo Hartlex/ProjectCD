@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.Generics;
@@ -25,7 +26,7 @@ using static SunStructs.Definitions.AttrType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 {
-    public abstract class Character : ObjectBase
+    internal abstract class Character : ObjectBase
     {
         #region Properties
 
@@ -40,7 +41,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         protected CharDeadType DeadType;
 
         protected CooldownTable CooldownTable;
-        protected MoveStateControl MoveStateControl;
+        public MoveStateControl MoveStateControl;
         protected StatusManager StatusManager;
         protected ActiveSkillManager ActiveSkillManager;
 
@@ -414,6 +415,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         #region Virtual Battle Methods
 
+        public virtual void SetActionDelay(int delay)
+        {
+
+        }
+
         public virtual void UpdateCalcRecover(bool hp, bool mp, bool sd)
         {
 
@@ -421,12 +427,21 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         public virtual void OnRecover(int recoverHP, int recoverMP, int recoverSD, RecoverType recoverType=0, Character? attacker=null)
         {
             if (recoverHP > 0)
+            {
                 IncreaseHP(recoverHP);
+                var packet = new StatusRecoverHpBrd(new(GetKey(), (uint) GetHP(), _reserveHP));
+                SendPacketAround(packet);
+            }
             if (recoverHP < 0)
                 DecreaseHP(-recoverHP);
 
             if (recoverMP > 0)
+            {
                 IncreaseMP(recoverMP);
+                var packet = new StatusRecoverMpBrd(new(GetKey(), (uint)GetMP()));
+                SendPacketAround(packet);
+            }
+                
             if (recoverMP < 0)
                 DecreaseMP(-recoverMP);
 
@@ -461,6 +476,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
 
         public virtual UserRelationType IsFriend(Character target)
         {
+            if (ReferenceEquals(target, this)) return UserRelationType.USER_RELATION_FRIEND;
             return UserRelationType.USER_RELATION_ENEMY;
         }
 
@@ -484,8 +500,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
                 range += GetSkillRangeBonus() + bonus;
             }
             //no height check
-
-            return SunVector.GetDistance(GetPos(),position) < range;
+            //Logger.Instance.Log($"Player pos[{GetPos()}] TargetPos[{position}] Distance[{SunVector.GetDistance(GetPos(), position)}]");
+            return SunVector.Get2DDistance(GetPos(),position) < range;
         }
 
         public virtual bool IsTotemSKillAreaType(){ return true; }
@@ -504,6 +520,50 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         }
         public virtual void SendAiMessageAroundExceptMe(AIMsg msg){}
         public virtual void OnAiMessage(AIMsg msg){}
+
+        protected bool CheckCondition(int condition, int param)
+        {
+            switch (condition)
+            {
+                case 1:
+                    return CheckConditionUnderHP(param);
+                case 2:
+                    return CheckConditionUnderMP(param);
+                case 3:
+                    return CheckConditionSameHP(param);
+                case 4:
+                    return CheckConditionSameMP(param);
+                case 5:
+                    return IsDead();
+                default:
+                    return false;
+
+            }
+        }
+
+        private bool CheckConditionUnderHP(int percent)
+        {
+            if (GetMaxHP() == 0) return false;
+            if (IsDead()) return false;
+            return GetHP() * 100 / GetMaxHP() <= percent;
+        }
+        private bool CheckConditionUnderMP(int percent)
+        {
+            if (GetMaxMP() == 0) return false;
+            if (IsDead()) return false;
+            return GetMP() * 100 / GetMaxMP() <= percent;
+        }
+        private bool CheckConditionSameHP(int percent)
+        {
+            if (GetMaxHP() == 0) return false;
+            return GetHP() * 100 / GetMaxHP() == percent;
+        }
+        private bool CheckConditionSameMP(int percent)
+        {
+            if (GetMaxMP() == 0) return false;
+            return GetMP() * 100 / GetMaxMP() == percent;
+        }
+
         #endregion
 
         public void SetMoveState(CharMoveState state)
@@ -521,6 +581,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             StatusManager.Attacked();
         }
 
+        public bool CanAttack()
+        {
+            if (IsDead()) return false;
+            return StatusManager.CanAttack();
+        }
 
         public void Damaged(DamageArgs damageArgs)
         {
@@ -560,7 +625,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
             {
                 StatusManager.DamagedAbsorb(damageArgs.Damage);
             }
-
+            //Logger.Instance.Log($"[{GetKey()}] damaged for {damageArgs.Damage} new Health: {GetHP()}");
             Attacked();
             StatusManager.UpdateExpireTime(CharStateType.CHAR_STATE_BATTLE, Const.STATE_BATTLE_TIME);
 
@@ -603,6 +668,23 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         public void CancelAllSkill()
         {
             ActiveSkillManager.CancelAllSkill();
+        }
+
+        public void StopMoving()
+        {
+            
+        }
+
+        public bool HasEnoughMP(int value)
+        {
+            int spent = (int) (value * (1 + GetMPSpendIncRatio()) + GetMPSpendIncValue());
+            spent = Min(0, spent);
+            return GetMP() > spent;
+        }
+
+        public ActiveSkillManager GetActiveSkillManager()
+        {
+            return ActiveSkillManager;
         }
     }
 

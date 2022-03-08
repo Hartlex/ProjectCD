@@ -22,7 +22,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             Attrs = new Attribute[(int) ATTR_MAX];
             foreach (var attribute in profile.GetAttrTypes())
             {
-                Attrs[(int) attribute] = new ();
+                Attrs[(int) attribute] = new (attribute);
             }
             RegisterBonusDefenseRatio();
             RegisterBonusDefense();

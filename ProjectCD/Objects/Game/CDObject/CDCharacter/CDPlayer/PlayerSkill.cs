@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CDShared.Generics;
+﻿using CDShared.Generics;
 using CDShared.Logging;
-using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Skill;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem;
 using ProjectCD.Objects.Game.Slots.Skill;
 using SunStructs.Definitions;
@@ -16,11 +8,16 @@ using SunStructs.PacketInfos.Game.Skill.Server;
 using SunStructs.Packets.GameServerPackets.Sync;
 using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General.Skill;
+using System.Data.SqlClient;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.SkillMan;
+using SunStructs.PacketInfos.Game.Status.Client;
+using SunStructs.PacketInfos.Game.Style.Server;
 using static SunStructs.Definitions.SkillResult;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
-    public partial class Player
+    internal partial class Player
     {
         private bool _doingAction;
         private SunTimer _actionTimer;
@@ -42,6 +39,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _skillManager = new(this, _skillContainer, _quickSlots,selectedStyle);
         }
 
+        
+
         #endregion
 
 
@@ -49,7 +48,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         {
             return _skillContainer.Serialize();
         }
-        public void SetActionDelay(int delay)
+        public override void SetActionDelay(int delay)
         {
             _actionTimer.SetTimer(delay);
             if (delay > 0)
@@ -118,10 +117,19 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 ActiveSkillManager.RegisterSkill(baseSkillInfo.SkillType, ref info);
                 return true;
             }
-            else if (baseInfo.IsStyle())
+            if (baseInfo.IsStyle())
             {
-                //attackSequence
-                ActiveSkillManager.RegisterSkill(SkillType.SKILL_TYPE_NORMAL, ref info);
+                if (info.AttackSequence < (int) AttackSequence.ATTACK_SEQUENCE_THIRD
+                    || baseInfo.SkillClassCode is 
+                        (ushort) StyleEnum.STYLE_TWOHANDAXE_NORMAL or 
+                        (ushort) StyleEnum.STYLE_SPEAR_NORMAL or 
+                        (ushort) StyleEnum.STYLE_SHADOW_WHIP_NORMAL or 
+                        (ushort) StyleEnum.STYLE_ETHER_NORMAL)
+                {
+                    ActiveSkillManager.RegisterSkill(SkillType.SKILL_TYPE_NORMAL, ref info);
+                }
+                else 
+                    ActiveSkillManager.RegisterSkill(SkillType.SKILL_TYPE_STYLE, ref info);
                 return true;
             }
 
@@ -133,6 +141,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             return true;
         }
 
+        public void SetSelectedStyle(StyleEnum style)
+        {
+            _skillManager.SelectStyle(style);
+        }
         #region PacketActions
 
         public SkillResult TryLevelUpSkill(AskIncreaseSkillInfo info, out AckIncreaseSkillInfo? resultInfo)
@@ -194,5 +206,52 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         }
 
         #endregion
+
+        public void SelectBaseStyle()
+        {
+            _skillManager.SelectBaseStyle();
+        }
+
+        public bool CanApplyPassiveSkill(BaseSkillInfo skillInfo)
+        {
+
+            if (!CheckClassDefine(skillInfo, false)) return false;
+
+            if (skillInfo.WeaponDefine[0] != -1)
+            {
+                var weaponType = GetWeaponWeaponType();
+                if (weaponType == WeaponType.WEAPONTYPE_INVALID) return false;
+
+                var success = false;
+                for (int i = 0; i < 4; i++)
+                {
+                    if (skillInfo.WeaponDefine[i] == (int) weaponType)
+                    {
+                        success = true;
+                        break;
+                    }
+                }
+                if(!success) return false;
+            }
+
+            if (skillInfo.RequireLevel > GetLevel()) return false;
+            if (skillInfo.RequireSkillStat[0] != 0 && skillInfo.RequireSkillStat[0] > GetExpert1()) return false;
+            if (skillInfo.RequireSkillStat[1] != 0 && skillInfo.RequireSkillStat[1] > GetExpert1()) return false;
+
+            return true;
+        }
+
+        public bool TryIncreaseBaseAttribute(AskIncreaseAttribute info,out int newValue)
+        {
+            newValue = 0;
+            if (_statPoints < 1) return false;
+
+            _attributes[info.AttrType].AddValue(1);
+            _attributes.UpdateEx();
+            newValue = _attributes[info.AttrType].GetValue();
+            return true;
+
+        }
+
     }
 }

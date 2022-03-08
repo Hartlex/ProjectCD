@@ -13,10 +13,17 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
         protected NPC Owner;
         private long _prevTick;
         private AIStateID _stateId;
+        protected AiTypeInfo AiTypeInfo;
 
         public void SetStateId(AIStateID stateID) { _stateId = stateID; }
         public AIStateID GetStateID(){return _stateId;}
-        public virtual void SetNpc (NPC npc){Owner = npc;}
+
+
+        public virtual void SetNpc(NPC npc)
+        {
+            Owner = npc;
+            AiTypeInfo = AiParameterDb.Instance.GetAiTypeInfo(npc.GetBaseInfo().AIType);
+        }
 
         public virtual void OnEnter(int param1 = 0, int param2 = 0, int param3 = 0)
         {
@@ -128,78 +135,92 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
 
         protected virtual void OnMsgAttacked(AIMsg msg)
         {
-            //if (!(msg is AIMsgAttacked attackedMsg)) return;
-            //if (Owner.IsMemberOfGroup())
-            //{
-            //    AI_MSG_EnemyFound aiMsg = new AI_MSG_EnemyFound(DateTime.Now.Ticks, attackedMsg.AttackerKey);
-            //    Owner.SendAiMessageToGroupExceptMe(aiMsg);
+            if (!(msg is AIMsgAttacked attackedMsg)) return;
+            if (Owner.IsGroupMember())
+            {
+                AIMsgEnemyFound aiMsg = new (attackedMsg.AttackerKey);
+                Owner.SendAiMsgToGroupExceptMe(aiMsg);
 
-            //}
+            }
 
-            //if (Owner.GetBaseInfo().SpecialConditions[0].ActionType == "1")
-            //{
-            //    var aiParam = AiParameterDb.Instance.GetAiTypeInfo(Owner.GetBaseInfo().AIType);
-            //    if (Owner.GetHP() <= Owner.GetMaxHP() * aiParam.HelpRequestHPPercent)
-            //    {
-            //        AIMsgHelpRequest aiHelpMsg = new (DateTime.Now.Ticks, attackedMsg.AttackerKey,
-            //            Owner.GetKey());
-            //        Owner.SendAiMessageAroundExceptMe(aiHelpMsg);
-            //    }
-            //}
-            //var attacker = Owner.GetCurrentField()?.FindCharacter(attackedMsg.AttackerKey);
-            //if (attacker == null) return;
+            if (Owner.GetBaseInfo().SpecialConditions[0].ActionType == NPCSpecialActionType.NPC_SPECIAL_ACTION_HELPREQUEST)
+            {
+                var aiParam = AiParameterDb.Instance.GetAiTypeInfo(Owner.GetBaseInfo().AIType);
+                if (Owner.GetHP() <= Owner.GetMaxHP() * aiParam.HelpRequestHPPercent)
+                {
+                    AIMsgHelpRequest aiHelpMsg = new(attackedMsg.AttackerKey,Owner.GetKey());
+                    Owner.SendAiMessageAroundExceptMe(aiHelpMsg);
+                }
+            }
+            var attacker = Owner.GetCurrentField()?.FindCharacter(attackedMsg.AttackerKey);
+            if (attacker == null) return;
 
             //Owner.AddBattlePoint(attacker, 0);
         }
 
         protected virtual void OnMsgHelpRequest(AIMsg msg)
         {
-            //if (!(msg is AIMsgHelpRequest helpMsg)) return;
-            //var attacker = Owner.GetCurrentField()?.FindCharacter(helpMsg.AttackerKey);
-            //if (attacker == null) return;
-            
-            //var aiParam = AiParameterDb.Instance.GetAiTypeInfo(Owner.GetBaseInfo().AIType);
-            //if (Owner.GetDistToNewTarget(attacker) <= Owner.GetSightRange())
-            //{
-            //    Owner.SetTargetChar(attacker);
-            //    Owner.ChangeState(STATE_ID_HELP);
-            //}
+            if (!(msg is AIMsgHelpRequest helpMsg)) return;
+
+            if (Owner.GetBaseInfo().Grade is NPCGrade.NPC_BOSS or NPCGrade.NPC_LUCKY_MONSTER)
+                return;
+
+            var attacker = Owner.GetCurrentField()?.FindCharacter(helpMsg.AttackerKey);
+            if (attacker == null) 
+                return;
+
+            if (Owner.IsFriend(attacker) != UserRelationType.USER_RELATION_ENEMY) 
+                return;
+
+            var distance = Owner.GetDistToNewTarget(attacker);
+            var sightRange = Owner.GetSightRange();
+
+            if(distance>= sightRange * AiParameterDb.Instance.GetAiParamInfo().HelpSightrangeRatio)
+            {
+                Owner.SetTargetChar(attacker);
+                Owner.ChangeState(STATE_ID_HELP);
+            }
         }
 
         protected virtual void OnMsgLeaveField(AIMsg msg)
         {
-            //if (!(msg is AIMsgLeaveField leaveFieldMsg)) return;
+            if (msg is not AIMsgLeaveField leaveFieldMsg) return;
 
-            //Owner.RemoveEnemy(leaveFieldMsg.ObjectKey);
-            //Owner.ChangeState(STATE_ID_IDLE);
+            var target = Owner.GetCurrentTarget();
+            if (target != null && target.GetKey() == leaveFieldMsg.ObjectKey)
+            {
+                Owner.ChangeState(STATE_ID_IDLE,0,0,(int) msg.MsgId);
+            }
+
+            Owner.RemoveTarget(leaveFieldMsg.ObjectKey);
 
         }
 
         protected virtual void OnMsgThrust(AIMsg msg)
         {
-            //if (!(msg is AIMsgThrust thrustMsg)) return;
-            //if(thrustMsg.DownAfterThrust)
-            //    Owner.ChangeState(STATE_ID_THRUST,STATE_ID_KNOCKDOWN);
-            //else
-            //    Owner.ChangeState(STATE_ID_THRUST);
+            if (!(msg is AIMsgThrust thrustMsg)) return;
+            if (thrustMsg.DownAfterThrust)
+                Owner.ChangeState(STATE_ID_THRUST, (int) STATE_ID_KNOCKDOWN,0,(int) msg.MsgId);
+            else
+                Owner.ChangeState(STATE_ID_THRUST);
         }
 
         protected virtual void OnMsgFlying(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_Flying flyMsg)) return;
-            //Owner.ChangeState((uint) STATE_ID_FLYING,flyMsg.FlyingTick);
+            if (!(msg is AIMsgFlying flyMsg)) return;
+            Owner.ChangeState(STATE_ID_FLYING, flyMsg.FlyingTime);
         }
 
         protected virtual void OnMsgKnockDown(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_KnockDown knockDownMsg)) return;
-            //Owner.ChangeState((uint) STATE_ID_KNOCKDOWN,knockDownMsg.KnockDownTick);
+            if (!(msg is AIMsgKnockDown knockDownMsg)) return;
+            Owner.ChangeState(STATE_ID_KNOCKDOWN, knockDownMsg.KnockDownTime);
         }
 
         protected virtual void OnMsgStun(AIMsg msg)
-        {            
-            //if (!(msg is AI_MSG_Stun stunMsg)) return;
-            //Owner.ChangeState((uint) STATE_ID_KNOCKDOWN,stunMsg.StunTick);
+        {
+            if (!(msg is AIMsgStun stunMsg)) return;
+            Owner.ChangeState(STATE_ID_KNOCKDOWN, stunMsg.StunTick);
         }
 
         protected virtual void OnMsgGroupAttacked(AIMsg msg)
@@ -228,28 +249,28 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
 
         protected virtual void OnMsgEnemyFound(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_EnemyFound enemyFoundMsg)) return;
-            //var target = Owner.CurrentMap?.FindCharacter(enemyFoundMsg.TargetObjectKey);
-            //if (target == null) return;
+            if (!(msg is AIMsgEnemyFound enemyFoundMsg)) return;
+            var target = Owner.GetCurrentField()?.FindCharacter(enemyFoundMsg.TargetObjectKey);
+            if (target == null) return;
 
-            //if (!Owner.IsFriend(target))
-            //{
-            //    Owner.SetMainTarget(target);
-            //    Owner.ChangeState((uint) STATE_ID_TRACK);
-            //}
-            
+            if (Owner.IsFriend(target)==UserRelationType.USER_RELATION_ENEMY)
+            {
+                Owner.SetTargetChar(target);
+                Owner.ChangeState(STATE_ID_TRACK,0,0,(int) msg.MsgId);
+            }
+
         }
 
         protected virtual void OnMsgRunAway(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_RunAway runAwayMsg)) return;
-            //Owner.ChangeState((uint) STATE_ID_RUNAWAY,runAwayMsg.TargetKey,runAwayMsg.RunAwayTime);
+            if (!(msg is AIMsgRunAway runAwayMsg)) return;
+            Owner.ChangeState(STATE_ID_RUNAWAY, (int) runAwayMsg.TargetKey, runAwayMsg.RunAwayTime,runAwayMsg.StateID);
         }
 
         protected virtual void OnMsgChaos(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_Chaos chaosMsg)) return;
-            //Owner.ChangeState((uint) STATE_ID_CHAOS,chaosMsg.ChaosTime);
+            if (!(msg is AIMsgChaos chaosMsg)) return;
+            Owner.ChangeState(STATE_ID_CHAOS, chaosMsg.ChaosTime,0,(int) msg.MsgId);
         }
 
         protected virtual void OnMsgChangeState(AIMsg msg)

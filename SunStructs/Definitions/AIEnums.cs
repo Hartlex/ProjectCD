@@ -121,4 +121,12 @@ namespace SunStructs.Definitions
         GROUP_CMD_TYPE_ATTACK,
         GROUP_CMD_TYPE_STOP_ATTACK,
     };
+    public enum NPCSpecialActionType
+    {
+        NPC_SPECIAL_ACTION_HELPREQUEST = 1,    // Áö¿ø¿äÃ»
+        NPC_SPECIAL_ACTION_TRANSFORMATION = 2, // º¯½Å
+        NPC_SPECIAL_ACTION_SKILL = 3,  // Æ¯¼ö½ºÅ³ »ç¿ë
+        NPC_SPECIAL_ACTION_SELP_DESTRUCTION = 4,   // ÀÚÆø	(__NA00XXXX_080922_TASK_SSQ_NPC_SELF_DESTRUCTION__)
+        NPC_SPECIAL_ACTION_MAX
+    };
 }

@@ -21,7 +21,7 @@ using static SunStructs.Definitions.UserRelationType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
 {
-    public class Ability
+    internal class Ability
     {
         private ushort _skillCode;
         private byte _eventCode;
@@ -34,6 +34,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities
         public ushort GetSkillCode(){ return _skillCode; }
         public BaseAbilityInfo GetBaseAbilityInfo(){ return _baseInfo; }
 
+        public virtual void Release()
+        {
+
+        }
         public BaseAbilityInfo MakeBaseInfoEditable()
         {
             _baseInfo = _baseInfo.EditableCopy();

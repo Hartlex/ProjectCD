@@ -84,6 +84,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities.Targ
             if(attacker==null) return false;
 
             var posResult = new SkillResultPosition();
+            posResult.CurrentPosition = target.GetPos();
             var statusManager = target.GetStatusManager();
             var downAfterThrust = statusManager.FindStatus(CharStateType.CHAR_STATE_DOWN);
             var moveState = downAfterThrust ? CharMoveState.CMS_KNOCKBACK_DOWN : CharMoveState.CMS_KNOCKBACK;
@@ -98,7 +99,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities.Targ
                     break;
             }
 
-            bool needSkipThrustPos = !statusManager.AnimationDelayController.SetAnimationDelay(this, animDelay);
+            //bool needSkipThrustPos = !statusManager.AnimationDelayController.SetAnimationDelay(this, animDelay);
+            bool needSkipThrustPos = false;
 
             var knockBackLength = needSkipThrustPos ? 0 : abilityInfo.Params[1] / 10f;
 
@@ -121,10 +123,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities.Targ
 
                 normVector *= knockBackLength;
 
-                var thrustResult = target.ExecuteThrust(true, normVector, ref posResult.DestinationPosition,
-                    knockBackLength, downAfterThrust);
+                var destPos = targetPos + normVector;
 
-                return !thrustResult;
+                var thrustResult = target.ExecuteThrust(true, destPos, ref posResult.DestinationPosition,
+                    knockBackLength, downAfterThrust);
+                if (thrustResult == false) return false;
+                //return !thrustResult;
             }
 
             abilityInfo = GetBaseAbilityInfo().EditableCopy();
@@ -144,7 +148,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities.Targ
             
 
             posResult.CurrentPosition = targetPos;
-
+            result = posResult;
             return true;
 
         }

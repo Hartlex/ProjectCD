@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CDShared.Generics;
+using CDShared.Logging;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.EtcState;
 using SunStructs.Definitions;
 using static ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.StatusPoolIndex;
 using static SunStructs.Definitions.CharStateType;
@@ -166,75 +169,82 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
                 case SPI_BASESTATUS:
                     return new BaseStatus();
                 case SPI_ABILITYSTATUS:
-                    break;
+                    return new AbilityStatus();
                 case SPI_WOUNDSTATUS:
-                    break;
+                    return new WoundStatus();
                 case SPI_STUNSTATUS:
-                    break;
+                    return new StunStatus();
                 case SPI_ABSORBSTATUS:
-                    break;
+                    return new AbilityStatus();
                 case SPI_CURESTATUS:
-                    break;
+                    return new CureStatus();
                 case SPI_BLINDSTATUS:
-                    break;
+                    return new BlindStatus();
                 case SPI_MAGICSHIELDSTATUS:
-                    break;
+                    return new MagicShieldStatus();
                 case SPI_FEARSTATUS:
-                    break;
+                    return new FearStatus();
                 case SPI_SPBONUSSTATUS:
-                    break;
+                    return new SpBonusStatus();
                 case SPI_CHAOSSTATUS:
-                    break;
+                    return new ChangeAttrStatus();
                 case SPI_WINDSHIELDSTATUS:
-                    break;
+                    return new WindShieldStatus();
                 case SPI_MIRRORSTATUS:
-                    break;
+                    return new MirrorStatus();
                 case SPI_THRUSTSTATUS:
-                    break;
+                    return new ThrustStatus();
                 case SPI_SLEEPSTATUS:
-                    break;
+                    return new SleepStatus();
                 case SPI_LOWHPSTATUS:
-                    break;
+                    return new LowHPStatus();
                 case SPI_BONUSDAMAGESTATUS:
-                    break;
+                    return new BonusDamageStatus();
                 case SPI_DRAGONTRANSSTATUS:
-                    break;
+                    return new DragonTransStatus();
                 case SPI_SUMMONSTATUS:
-                    break;
+                    Logger.Instance.Log($"Unknown Status[SPI_SUMMONSTATUS]");
+                    return new BaseStatus();
                 case SPI_INCOMPETENCESTATUS:
-                    break;
+                    return new IncompetenceStatus();
                 case SPI_INTENSIFYSUMMON:
-                    break;
+                    Logger.Instance.Log($"Unknown Status[SPI_INTENSIFYSUMMON]");
+                    return new BaseStatus();
                 case SPI_SUCTIONSTATUS:
-                    break;
+                    return new SuctionStatus();
                 case SPI_CHANGE_ATTR:
-                    break;
+                    return new ChangeAttrStatus();
                 case SPI_TRANSPARENT:
-                    break;
+                    Logger.Instance.Log($"Unknown Status[SPI_TRANSPARENT]");
+                    return new BaseStatus();
                 case SPI_VITALSUCTION_STATUS:
-                    break;
+                    Logger.Instance.Log($"Unknown Status[SPI_VITALSUCTION_STATUS]");
+                    return new BaseStatus();
                 case SPI_ENCHANTPOISON_STATUS:
-                    break;
+                    return new EnchantPoisonStatus();
                 case SPI_SHELDPOINTSTATUS:
-                    break;
+                    return new ShieldPointStatus();
                 case SPI_STYLETHRUST:
-                    break;
+                    return new StyleThrustStatus();
                 case SPI_STYLESTUN:
-                    break;
+                    return new StyleStunStatus();
                 case SPI_STYLEDOWN:
-                    break;
+                    return new StyleDownStatus();
                 case SPI_RECOVERSTATUS:
-                    break;
+                    return new RecoverStatus();
                 case SPI_STEELSTATUS:
-                    break;
+                    return new SteelStatus();
                 case SPI_BATTLESTATUS:
-                    break;
+                    return new BattleStatus();
                 case SPI_TOGGLEFPSTATUS:
-                    break;
+                    Logger.Instance.Log($"Unknown Status[SPI_TOGGLEFPSTATUS]");
+                    return new BaseStatus();
                 case SPI_AUTOCASTBYATTACK:
-                    break;
+                    Logger.Instance.Log($"Unknown Status[SPI_AUTOCASTBYATTACK]");
+                    return new BaseStatus();
                 case SPI_OVERLAPSTATUS:
-                    break;
+                    Logger.Instance.Log($"Unknown Status[SPI_OVERLAPSTATUS]");
+                    return new BaseStatus();
                 case SPI_SIZE_MAX:
                     break;
                 default:
@@ -339,6 +349,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             _cantMoveField = 0;
             _cantUseSkillField = 0;
             _exclusiveActionField = 0;
+        }
+
+        public bool CanAttack()
+        {
+            return _cantAttackField == 0;
         }
 
         public void AddRestrictStatus(CharStateType stateType)

@@ -105,15 +105,20 @@ internal class Style : SkillBase
         var aiCommon = AiParameterDb.Instance.GetAiParamInfo();
         if (isRiding == false && (SkillInfo.SkillEffect & SKILL_EFFECT_KNOCKBACK) != 0)
         {
-            var normV = SunVector.GetDistanceVector(_targetPos, _playerPos);
+            var normV = _targetPos - _playerPos;
             normV.Normalize();
+
+            Logger.Instance.Log($"NormalVector[{normV}]");
+
             normV *= _baseStyleInfo.KnockBackRange;
+            Logger.Instance.Log($"KnockbackRange: " +_baseStyleInfo.KnockBackRange);
+
 
             if (target.ExecuteThrust(true, normV, ref _thrustPos, _baseStyleInfo.KnockBackRange, knockdownExecute))
             {
                 if (statusManager.AllocStatus(CharStateType.CHAR_STATE_STYLE_THRUST,out var status , aiCommon.ThrustTime))
                 {
-                    //TODO ETCSTATUS
+                    
                 }
 
                 knockdownExecute = false;
@@ -162,15 +167,16 @@ internal class Style : SkillBase
 
     public override void SetupDefault(Character owner, ref SkillInfo skillInfo, RootSkillInfo rootSkillInfo)
     {
-        base.SetupDefault(owner, ref skillInfo, rootSkillInfo);
+        
         if (rootSkillInfo is BaseStyleInfo styeInfo)
         {
             _baseStyleInfo = styeInfo;
         }
         else
         {
-            Logger.Instance.Log($"Skill initialize with wrong Info!",LogType.ERROR);
+            Logger.Instance.Log($"Style initialize with wrong Info!",LogType.ERROR);
         }
+        base.SetupDefault(owner, ref skillInfo, rootSkillInfo);
     }
 
     public override bool StartExecute()
@@ -214,7 +220,7 @@ internal class Style : SkillBase
             (SkillAreaType) _baseStyleInfo.AttRangeForm,
             Owner,
             SkillInfo.MainTargetPosition,
-            (int) _baseStyleInfo.AttRange,
+            _baseStyleInfo.AttRange,
             _baseStyleInfo.MaxTargetNum-1,
             SkillInfo.MainTargetKey
         );

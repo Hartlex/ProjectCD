@@ -4,10 +4,10 @@ using static SunStructs.Definitions.AttrType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class BlindStatus :AbilityStatus
+    internal class BlindStatus :AbilityStatus
     {
         private int _prevSightRange;
-
+        public override void Execute() { }
         public override void Start()
         {
             _prevSightRange = GetOwner()!.GetSightRange() * 10;

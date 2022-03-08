@@ -6,7 +6,7 @@ using SunStructs.ServerInfos.General.Skill;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem
 {
-    public class SkillInfo
+    internal class SkillInfo
     {
         public Character Owner;
         public ushort SkillCode;
@@ -40,7 +40,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem
         }
     }
 
-    public class SkillExtraOption
+    internal class SkillExtraOption
     {
         enum _optionType
         {
@@ -73,7 +73,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem
 
     }
 
-    public class BonusAbilityEffect
+    internal class BonusAbilityEffect
     {
         public uint TargetKey;
         public int SkillAttackPower;
@@ -87,7 +87,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem
         }
     }
 
-    public class DamageArgs
+    internal class DamageArgs
     {
         public Character attacker;
         public AttackType attackType;

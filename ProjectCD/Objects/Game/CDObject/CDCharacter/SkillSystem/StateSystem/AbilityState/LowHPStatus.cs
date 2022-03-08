@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class LowHPStatus : AbilityStatus
+    internal class LowHPStatus : AbilityStatus
     {
+        public override void Execute() { }
         public void UpdateLowHP()
         {
             

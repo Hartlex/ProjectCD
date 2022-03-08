@@ -1,4 +1,5 @@
-﻿using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
+﻿using CDShared.Logging;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.EtherSystem;
 using ProjectCD.Objects.Game.World;
@@ -10,7 +11,7 @@ using SunStructs.ServerInfos.General.Skill;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes;
 
-public abstract class SkillBase
+internal abstract class SkillBase
 {
     #region Properties
 
@@ -28,7 +29,7 @@ public abstract class SkillBase
     public bool RequestCancel { get; set; }
     public bool RequestRemove { get; }
     protected bool IsInvokedInSafeArea { get; private set; }
-    protected bool PassiveApplied { get; }
+    protected bool PassiveApplied { get; set; }
     #endregion
         
     protected List<Ability> Abilities { get; private set; }
@@ -96,6 +97,8 @@ public abstract class SkillBase
     {
         NumberOfEffects = 0;
         NumberOfTargetsHit = 0;
+        SkillResults = new SkillResultBase[Const.MAX_TARGET_COUNT];
+        EffectResults = new SkillResultEffect[Const.MAX_EFFECT_COUNT];
     }
     protected void SetAttribution()
     {
@@ -124,6 +127,10 @@ public abstract class SkillBase
 
             if (ability.Execute(target, out var result))
             {
+                if (result is SkillResultDmg dmgResult)
+                {
+                    Logger.Instance.Log($"Damage[{dmgResult.Damage}] HP[{dmgResult.TargetHp}]");
+                }
                 skillResultBase.SkillResultAbility[skillResultBase.AbilityCount] = result!;
                 skillResultBase.AbilityCount++;
             }
@@ -135,7 +142,7 @@ public abstract class SkillBase
         return skillResultBase.AbilityCount != 0;
     }
 
-    protected byte ExecuteEffectAbilities(ref SkillResultBase skillResultBase)
+    protected byte ExecuteEffectAbilities()
     {
         for (var i = 0; i < Abilities.Count; i++)
         {
@@ -143,13 +150,13 @@ public abstract class SkillBase
 
             if (Abilities[i].ExecuteEffect(out var result))
             {
-                skillResultBase.SkillResultEffects[skillResultBase.EffectCount] = result!;
-                skillResultBase.EffectCount++;
+                EffectResults[NumberOfEffects] = result!;
+                NumberOfEffects++;
 
             }
         }
 
-        return skillResultBase.EffectCount;
+        return (byte) NumberOfEffects;
     }
 
     protected void BroadcastInstantResult()
@@ -167,7 +174,6 @@ public abstract class SkillBase
         packetInfo.NumberOfTargets = (byte) NumberOfTargetsHit;
         packetInfo.NumberOfFieldEffects = (byte) NumberOfEffects;
         packetInfo.SkillResults = SkillResults;
-
         var packet = new SkillInstantResultBRD(packetInfo);
 
         Field!.SendToAll(packet);
@@ -187,7 +193,7 @@ public abstract class SkillBase
         packetInfo.NumberOfTargets = (byte)NumberOfTargetsHit;
         packetInfo.NumberOfFieldEffects = (byte)NumberOfEffects;
         packetInfo.SkillResults = SkillResults;
-
+        packetInfo.SkillResultEffects = EffectResults;
         var packet = new SkillDelayResultBRD(packetInfo);
 
         Field!.SendToAll(packet);
@@ -201,12 +207,12 @@ public abstract class SkillBase
 
         if ((SkillAttribution & Const.SKILL_ATTRIBUTION_TARGETFLYING) != 0)
         {
-            AIMsgFlying flyMsg = new(DateTime.Now.Ticks, ExecuteTick);
+            AIMsgFlying flyMsg = new(Interval);
             target.OnAiMessage(flyMsg);
         }
         if ((SkillAttribution & Const.SKILL_ATTRIBUTION_TARGETSTOP) != 0)
         {
-            AIMsgKnockDown knockDownMsg = new(DateTime.Now.Ticks, ExecuteTick);
+            AIMsgKnockDown knockDownMsg = new(DateTime.Now.Ticks, Interval);
             target.OnAiMessage(knockDownMsg);
         }
     }
@@ -242,8 +248,7 @@ public abstract class SkillBase
     public virtual void SetupDefault(Character owner, ref SkillInfo skillInfo, RootSkillInfo rootSkillInfo)
     {
         Abilities = new List<Ability>(5); //Max Abilities
-        SkillResults = new SkillResultBase[Const.MAX_TARGET_COUNT];
-        EffectResults = new SkillResultEffect[Const.MAX_EFFECT_COUNT];
+
 
         Owner = owner;
         Field = owner.GetCurrentField()!;

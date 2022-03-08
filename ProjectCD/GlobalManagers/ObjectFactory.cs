@@ -12,7 +12,7 @@ using static ProjectCD.Objects.Game.CDObject.ObjectKey;
 
 namespace ProjectCD.GlobalManagers
 {
-    public class ObjectFactory : Singleton<ObjectFactory>
+    internal class ObjectFactory : Singleton<ObjectFactory>
     {
         private ObjectKeyGenerator _monsterKeyGen;
         private ObjectKeyGenerator _itemKeyGen;

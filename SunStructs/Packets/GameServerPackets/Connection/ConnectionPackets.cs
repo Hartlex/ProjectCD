@@ -28,4 +28,9 @@ namespace SunStructs.Packets.GameServerPackets.Connection
     {
         public ConnectToWorldCmd(ConnectToWorldInfo info) : base(21, info) { }
     }
+    public class AckBackToCharSelect : ConnectionPacket
+    {
+        public AckBackToCharSelect(EmptyPacketInfo info) : base(143, info) { }
+        public AckBackToCharSelect() : base(143, new EmptyPacketInfo()) { }
+    }
 }

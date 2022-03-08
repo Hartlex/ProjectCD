@@ -12,7 +12,7 @@ namespace SunStructs.PacketInfos.Game.Skill.Server
         public byte NumberOfTargets;
         public byte NumberOfFieldEffects;
         public SkillResultBase[] SkillResults;
-        
+        public SkillResultEffect[] SkillResultEffects;
 
         //public InstantSkillResultInfo(ushort skillCode, uint clientSerial, uint attackerObjKey, uint primeTargetObjKey, SunVector primeTargetPosition, SunVector currentPos, SunVector destPos, uint attackerHP, uint attackerMP, byte numberOfTargets,byte numberOfFieldEffects) : base(skillCode, clientSerial, attackerObjKey, primeTargetObjKey, primeTargetPosition)
         //{
@@ -40,6 +40,10 @@ namespace SunStructs.PacketInfos.Game.Skill.Server
             for (var i = 0; i < NumberOfTargets; i++)
             {
                 SkillResults[i].GetBytes(ref buffer);
+            }
+            for (var i = 0; i < NumberOfFieldEffects; i++)
+            {
+                SkillResultEffects[i].GetBytes(ref buffer);
             }
 
 

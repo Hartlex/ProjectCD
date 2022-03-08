@@ -15,7 +15,7 @@ using SunStructs.ServerInfos.General;
 
 namespace ProjectCD.Objects.Game.CDObject
 {
-    public class FieldItem : ObjectBase
+    internal class FieldItem : ObjectBase
     {
         private Character? _owner;
         private Item? _item;

@@ -23,7 +23,7 @@ namespace SunStructs.RuntimeDB
 
         }
 
-        public BaseSkillInfo GetBaseSkillInfo(ushort skillCode)
+        public BaseSkillInfo? GetBaseSkillInfo(ushort skillCode)
         {
             try
             {

@@ -14,7 +14,7 @@ using SunStructs.Packets;
 
 namespace ProjectCD.Objects.NetObjects
 {
-    public class User
+    internal class User
     {
         private UserConnectionState _connectionState;
         private byte[] _clientSerial=Array.Empty<byte>();

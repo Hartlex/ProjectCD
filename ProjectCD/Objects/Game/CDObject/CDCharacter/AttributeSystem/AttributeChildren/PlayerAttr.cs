@@ -12,7 +12,7 @@ using static SunStructs.Formulas.Char.CommonCharacterFormulas;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeChildren
 {
-    public class PlayerAttr : Attributes
+    internal class PlayerAttr : Attributes
     {
         private readonly Player _owner;
         public PlayerAttr(Player player) : base(new PlayerAttrProfile())
@@ -120,7 +120,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
             Attrs[(int) ATTR_PHYSICAL_ATTACK_SUCCESS_RATIO].SetValue(CalcPhysicalAttackRateBase(charType,level,DEX));
             Attrs[(int) ATTR_PHYSICAL_ATTACK_BLOCK_RATIO].SetValue(CalcPhysicalAvoidRateBase(charType,level,DEX));
 
-            Attrs[(int)ATTR_PHYSICAL_ATTACK_BLOCK_RATIO].Update();
+            Attrs[(int)ATTR_PHYSICAL_ATTACK_SUCCESS_RATIO].Update();
             Attrs[(int)ATTR_PHYSICAL_ATTACK_BLOCK_RATIO].Update();
             
             

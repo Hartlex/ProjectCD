@@ -3,7 +3,7 @@ using SunStructs.Definitions;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class CureStatus : AbilityStatus
+    internal class CureStatus : AbilityStatus
     {
         private const int STATE_NUM=4;
         private readonly int[] _states = new int[STATE_NUM];

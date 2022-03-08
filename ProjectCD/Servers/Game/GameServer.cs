@@ -12,7 +12,7 @@ using SunStructs.Definitions;
 
 namespace ProjectCD.Servers.Game
 {
-    public class GameServer : CDServer
+    internal class GameServer : CDServer
     {
         private readonly WorldServer _worldServer;
         private readonly FieldManager _fieldManager;
@@ -35,7 +35,7 @@ namespace ProjectCD.Servers.Game
             var elapsed =(float) ((endTick - tick)/TimeSpan.TicksPerMillisecond);
             var perf = elapsed / Const.SERVER_UPDATE_TIME;
             if (perf > 0.5 )
-                Logger.Instance.Log($"GameServer performance is at {elapsed*100}");
+                Logger.Instance.Log($"GameServer performance is at {perf * 100}%");
         }
 
         protected override void OnConnect(Connection connection)

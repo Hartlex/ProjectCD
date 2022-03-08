@@ -1,4 +1,6 @@
 ﻿using CDShared.ByteLevel;
+using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes;
+using SunStructs.Definitions;
 using SunStructs.PacketInfos.Game.Skill.Server;
 using SunStructs.ServerInfos.General.Skill;
 
@@ -7,7 +9,6 @@ namespace ProjectCD.Objects.Game.Slots.Skill
     public class SkillContainer
     {
         private readonly Dictionary<ushort, SkillSlot> _skillSlots = new();
-
         public SkillContainer(byte[] data)
         {
             ByteBuffer buffer = new(data);
@@ -21,7 +22,6 @@ namespace ProjectCD.Objects.Game.Slots.Skill
                 _skillSlots.Add(code,slot);
             }
         }
-
         public byte[] Serialize()
         {
             ByteBuffer buffer = new();
@@ -61,6 +61,21 @@ namespace ProjectCD.Objects.Game.Slots.Skill
         public bool TryGetSkillSlot(ushort skillCode, out SkillSlot slot)
         {
             return _skillSlots.TryGetValue(skillCode, out slot);
+        }
+
+        public List<BaseSkillInfo> GetPassiveSkills()
+        {
+            var result = new List<BaseSkillInfo>();
+            foreach (var slots in _skillSlots.Values)
+            {
+                if (slots.RootSkillInfo.IsSkill() && slots.RootSkillInfo is BaseSkillInfo skillInfo)
+                {
+                    if (skillInfo.SkillType == SkillType.SKILL_TYPE_PASSIVE)
+                        result.Add(skillInfo);
+                }
+            }
+
+            return result;
         }
     }
 }

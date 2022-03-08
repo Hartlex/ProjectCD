@@ -118,6 +118,11 @@ namespace ProjectCD.Objects.Game.Items
             return _info.ItemType;
         }
 
+        public WeaponType GetWeaponType()
+        {
+            return (WeaponType) _info.ItemType;
+        }
+
         public RankInfo[]? GetRankValues()
         {
             return _option.GetRankValues();

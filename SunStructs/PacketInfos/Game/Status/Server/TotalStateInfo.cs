@@ -9,10 +9,10 @@ namespace SunStructs.PacketInfos.Game.Status.Server
 {
     public class TotalStateInfo : ServerPacketInfo
     {
-        public readonly byte StateCount;
-        public readonly StateInfo[] States;
-        public readonly byte EtcStateCount;
-        public readonly EtcStateInfo[] EtcStates;
+        public byte StateCount;
+        public StateInfo[] States;
+        public byte EtcStateCount;
+        public EtcStateInfo[] EtcStates;
         
         public TotalStateInfo(EtcStateInfo[] etcStates)
         {

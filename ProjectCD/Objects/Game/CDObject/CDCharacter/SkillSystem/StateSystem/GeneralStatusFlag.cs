@@ -7,7 +7,7 @@ using static SunStructs.Definitions.SkillTargetType;
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem;
 
 
-public class GeneralStatusFlag
+internal class GeneralStatusFlag
 {
     private uint _flags;
     private MatchCheckCodeFilters? _filters;
@@ -121,10 +121,10 @@ public class GeneralStatusFlag
         if ((_flags & (uint) ENABLE_ONLY_SKILL_TARGET_ME) != 0)
         {
             var targetType = info.TargetType;
-            return targetType is (byte)SKILL_TARGET_FRIEND 
-                              or (byte)SKILL_TARGET_ME
-                              or (byte)SKILL_TARGET_REACHABLE_FRIEND 
-                              or (byte)SKILL_TARGET_REACHABLE_ME;
+            return targetType is SKILL_TARGET_FRIEND 
+                              or SKILL_TARGET_ME
+                              or SKILL_TARGET_REACHABLE_FRIEND 
+                              or SKILL_TARGET_REACHABLE_ME;
         }
 
         if (_filters == null) return true;

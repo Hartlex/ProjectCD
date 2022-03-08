@@ -16,7 +16,7 @@ using ObjectType = SunStructs.Definitions.ObjectType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
-    public partial class Player : Character
+    internal partial class Player : Character
     {
         private readonly PlayerGeneral _general;
         private readonly PlayerPVPInfo _pvp;
@@ -39,8 +39,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 
             PlayerAttributesInit(ref reader);
             PlayerMovementInit(ref reader);
-            PlayerInventoryInit(ref reader);
             PlayerSkillInit(ref reader);
+            PlayerInventoryInit(ref reader);
+
             
             SetNextExp();
 
@@ -69,7 +70,34 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
         {
             var currentField = GetCurrentField();
             if (currentField != null) LeaveField();
+
+            InitRecoveryStates();
+
             return field.EnterField(this, pos);
+        }
+
+        public void InitRecoveryStates()
+        {
+            int expireTime = Int32.MaxValue;
+            int hpPeriod = 2000;
+            int mpPeriod = 4000;
+            int sdPeriod = 2000;
+
+            CharStateType hpStateType = CharStateType.CHAR_STATE_ETC_AUTO_RECOVER_HP;
+            CharStateType mpStateType = CharStateType.CHAR_STATE_ETC_AUTO_RECOVER_MP;
+            CharStateType sdStateType = CharStateType.CHAR_STATE_ETC_AUTO_RECOVER_SD;
+            CharStateType hpMpStateType = CharStateType.CHAR_STATE_ETC_AUTO_RECOVER_HPMP;
+
+            if (GetCharType() == CharType.CHAR_BERSERKER)
+            {
+                StatusManager.AllocStatus(hpStateType, out var status1, expireTime, hpPeriod);
+                StatusManager.AllocStatus(mpStateType, out status1, expireTime, mpPeriod);
+            }
+            else
+            {
+                StatusManager.AllocStatus(hpMpStateType, out var status2, expireTime, hpPeriod);
+            }
+            StatusManager.AllocStatus(sdStateType, out var status3, expireTime, sdPeriod);
         }
         public FullCharInfoZone GetFullCharInfoZone()
         {
@@ -80,9 +108,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 GetMoney(),
                 (ushort) _skillManager.GetCurrentStyleCode(),
                 (ushort)GetMaxHP(),
-                (ushort)GetMaxHP(),
+                (ushort)GetHP(),
                 (ushort)GetMaxMP(),
-                (ushort)GetMaxMP(),
+                (ushort)GetMP(),
                 0,
                 0,
                 0,
@@ -116,7 +144,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 0,
                 0,
                 (ushort)GetMaxSD(),
-                (ushort)GetMaxSD()
+                (ushort)GetSD()
             ),_inventory.GetShiftedBytes());
         }
 
@@ -132,8 +160,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 Name = GetName(),
                 Position = GetPos(),
                 SelectedStyleCode = (ushort) _skillManager.GetCurrentStyleCode(),
-                MoveSpeedRatio = (ushort) GetMoveSpeedRatio(),
-                AttackSpeedRatio = (ushort) GetAttSpeedRatio(),
+                //MoveSpeedRatio = (ushort) GetMoveSpeedRatio(),
+                //AttackSpeedRatio = (ushort) GetAttSpeedRatio(),
+                MoveSpeedRatio = 206,
+                AttackSpeedRatio = 300
             };
             info.SetCharType(GetCharType());
             info.SetFace(_general.FaceCode);

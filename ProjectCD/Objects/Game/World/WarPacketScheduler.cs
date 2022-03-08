@@ -7,7 +7,7 @@ using Timer = System.Timers.Timer;
 
 namespace ProjectCD.Objects.Game.World
 {
-    public class WarPacketScheduler
+    internal class WarPacketScheduler
     {
         private readonly Timer _timer;
         private readonly List<WarPacketInfo> _warPacketQueue;

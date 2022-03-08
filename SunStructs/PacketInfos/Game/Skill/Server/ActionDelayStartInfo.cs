@@ -30,6 +30,7 @@ namespace SunStructs.PacketInfos.Game.Skill.Server
         public byte NumberOfTargets;
         public byte NumberOfFieldEffects;
         public SkillResultBase[] SkillResults;
+        public SkillResultEffect[] SkillResultEffects;
         
         //public ActionDelayResultInfo(ushort skillCode, uint clientSerial, uint attackerObjKey, uint primeTargetObjKey, SunVector primeTargetPosition, uint attackerHP, uint attackerMP, byte numberOfTargets, byte numberOfFieldEffects) : base(skillCode, clientSerial, attackerObjKey, primeTargetObjKey, primeTargetPosition)
         //{
@@ -50,12 +51,14 @@ namespace SunStructs.PacketInfos.Game.Skill.Server
             b = BitManip.Set6to7(b, NumberOfFieldEffects);
             buffer.WriteByte(b);
 
-            foreach (var skillResultBase in SkillResults)
+            for (var i = 0; i < NumberOfTargets; i++)
             {
-                skillResultBase.GetBytes(ref buffer);
+                SkillResults[i].GetBytes(ref buffer);
             }
-            
-            
+            for (var i = 0; i < NumberOfFieldEffects; i++)
+            {
+                SkillResultEffects[i].GetBytes(ref buffer);
+            }
         }
 
 

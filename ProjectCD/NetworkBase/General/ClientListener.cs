@@ -6,7 +6,7 @@ using ProjectCD.NetworkBase.Connections;
 
 namespace ProjectCD.NetworkBase.General
 {
-    public class ClientListener
+    internal class ClientListener
     {
 
         public static ManualResetEvent allDone = new ManualResetEvent(false);

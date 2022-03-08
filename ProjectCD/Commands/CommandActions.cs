@@ -5,7 +5,7 @@ using ProjectCD.Objects.NetObjects;
 
 namespace ProjectCD.Commands
 {
-    public class CommandActions : Singleton<CommandActions>
+    internal class CommandActions : Singleton<CommandActions>
     {
         private readonly Dictionary<string, Action<List<string>, User>> _playerActions = new();
 
@@ -45,7 +45,7 @@ namespace ProjectCD.Commands
         {
             _playerActions.Add("addItem",PlayerCmdActions.AddItem);
             _playerActions.Add("updateDB",PlayerCmdActions.Save);
-            //_playerActions.Add("spawnMob", PlayerCmdActions.SpawnMob);
+            _playerActions.Add("spawn", PlayerCmdActions.SpawnMobs);
         }
     }
 }

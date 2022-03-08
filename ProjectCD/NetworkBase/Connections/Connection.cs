@@ -6,7 +6,7 @@ using SunStructs.Packets;
 
 namespace ProjectCD.NetworkBase.Connections
 {
-    public class Connection : IDisposable
+    internal class Connection : IDisposable
     {
         public ConnectionState State { get; private set; }
 

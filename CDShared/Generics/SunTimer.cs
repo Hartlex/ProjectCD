@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CDShared.Logging;
 using static CDShared.Generics.SunCalc;
+using Timer = System.Timers.Timer;
 
 namespace CDShared.Generics
 {
@@ -111,4 +112,44 @@ namespace CDShared.Generics
 
 
     }
+
+    public class TimerBase
+    {
+        private Timer? _timer;
+        private bool _isElapsed;
+
+
+        public void SetTimer(int delay,bool start=true,bool autoReset=false)
+        {
+            _isElapsed = false;
+            if (_timer == null)
+            {
+                _timer = new Timer(delay);
+                _timer.AutoReset = autoReset;
+                _timer.Enabled = start;
+                _timer.Elapsed += (sender, args) => _isElapsed = true;
+
+            }
+
+            _timer.Interval = delay;
+            if (start) _timer.Start();
+        }
+
+        public bool IsExpired()
+        {
+            return _isElapsed;
+        }
+
+        public void Reset()
+        {
+            _isElapsed = false;
+            _timer!.Start();
+        }
+
+        public void Stop()
+        {
+            _timer!.Stop();
+        }
+    }
+
 }

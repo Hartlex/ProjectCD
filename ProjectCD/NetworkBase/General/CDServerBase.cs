@@ -5,7 +5,7 @@ using ProjectCD.NetworkBase.Connections;
 
 namespace ProjectCD.NetworkBase.General
 {
-    public abstract class CDServerBase
+    internal abstract class CDServerBase
     {
         private ClientListener _listener;
         private readonly ServerConfig _config;

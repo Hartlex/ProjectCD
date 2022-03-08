@@ -9,7 +9,7 @@ using SunStructs.Definitions;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem
 {
-    public class ActiveSkillManager
+    internal class ActiveSkillManager
     {
         private Character _owner;
 
@@ -31,7 +31,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem
                     skill.CancelExecute();
                     _skills.Remove(skill.GetSkillCode());
                 }
-                else if (curTick <= skill.ExecuteTick || skill.RequestRemove)
+                else if (curTick >= skill.ExecuteTick || skill.RequestRemove)
                 {
                     skill.EndExecute();
                     if (_owner.IsObjectType(ObjectType.PLAYER_OBJECT) &&

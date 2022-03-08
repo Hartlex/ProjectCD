@@ -17,6 +17,7 @@ using SunStructs.PacketInfos.Game.Connection;
 using SunStructs.PacketInfos.Game.Connection.Client;
 using SunStructs.PacketInfos.Game.Connection.Server;
 using SunStructs.PacketInfos.Game.Quest.Server;
+using SunStructs.PacketInfos.Game.Status.Server;
 using SunStructs.Packets;
 using SunStructs.Packets.GameServerPackets.CharInfo;
 using SunStructs.Packets.GameServerPackets.Connection;
@@ -33,6 +34,8 @@ namespace ProjectCD.Servers.Game.Actions
             RegisterConnectionAction(118,OnAskEnterCharSelect);
             RegisterConnectionAction(31, OnAskEnterGame);
             RegisterConnectionAction(223,OnHeartbeat);
+            RegisterConnectionAction(216,OnAskBackToCharSelect);
+            RegisterConnectionAction(249,OnAskReEnterCharSelect);
             Logger.Instance.LogOnLine($"[GAME][CONNECTION] {_count} actions registered!", LogType.SUCCESS);
             Logger.Instance.Log($"", LogType.SUCCESS);
         }
@@ -82,16 +85,43 @@ namespace ProjectCD.Servers.Game.Actions
             var charPacket = new FullCharInfoCmd(fullInfo);
 
             var skillPacket = new PlayerSkillInfoCmd(new(player.GetFullSkillInfo()));
-            var quickPacket = new PlayerQuickInfoCmd(new TestPacketInfo(new byte[] { 0 }));
-            var stylePacket = new PlayerStyleInfoCmd(new TestPacketInfo(new byte[] { 0 }));
-            var statePacket = new PlayerStateInfoCmd(new TestPacketInfo(new byte[] { 0 }));
+            var quickPacket = new PlayerQuickInfoCmd(new(player.GetQuickSlotBytes()));
+
+            //var stateInfo = new TotalStateInfo();
+            //stateInfo.EtcStateCount = 1;
+            //stateInfo.EtcStates = new[] { new EtcStateInfo((ushort)CharStateType.CHAR_STATE_STUN, 5000) };
+            //stateInfo.StateCount = 1;
+            //stateInfo.States = new[] { new StateInfo(10301, 0, 0, 10000) };
+            var stylePacket = new PlayerStyleInfoCmd(new TestPacketInfo(new byte[]{0}));
+            //var statePacket = new PlayerStateInfoCmd(new TestPacketInfo(stateInfo.GetBytes()));
             var questPacket = new QuestListCmd(
                 new QuestListInfo(Array.Empty<FinishedQuestInfo>(),
                     Array.Empty<OngoingQuestInfo>()));
             var enterGamePacket = new AckEnterGame(new AckEnterGameInfo(connection.User.UserID));
 
-            connection.Send(charPacket, skillPacket, quickPacket, stylePacket, statePacket, questPacket, enterGamePacket);
+            connection.Send(charPacket, skillPacket, quickPacket, stylePacket, /*statePacket,*/ questPacket, enterGamePacket);
+            //connection.Send(statePacket);
 
+        }
+
+        private static void OnAskBackToCharSelect(ByteBuffer buffer, Connection connection)
+        {
+            var player = connection.User.Player;
+            var field = player.GetCurrentField();
+            if (field == null) return;
+            if (field.LeaveField(player))
+            {
+                connection.Send(new AckBackToCharSelect());
+            }
+        }
+
+        private static void OnAskReEnterCharSelect(ByteBuffer buffer, Connection connection)
+        {
+            var user = connection.User;
+            var charInfos = user.GetCharacters();
+            var outInfo = new AckEnterCharSelectInfo(user.UserID, charInfos);
+            var packet = new AckEnterCharSelect(outInfo);
+            connection.Send(packet);
         }
 
         private static void OnHeartbeat(ByteBuffer buffer, Connection connection)

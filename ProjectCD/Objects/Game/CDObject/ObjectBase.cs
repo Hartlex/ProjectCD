@@ -11,7 +11,7 @@ using SunStructs.ServerInfos.General;
 
 namespace ProjectCD.Objects.Game.CDObject;
 
-public abstract class ObjectBase
+internal abstract class ObjectBase
 {
     private uint _objectID;
     private SunVector _position;

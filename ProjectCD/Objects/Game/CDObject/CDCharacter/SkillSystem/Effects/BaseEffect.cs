@@ -5,7 +5,7 @@ using SunStructs.ServerInfos.General;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Effects
 {
-    public class BaseEffect : BaseStatus
+    internal class BaseEffect : BaseStatus
     {
         protected ushort SkillCode;
         protected Field? Field;
@@ -25,7 +25,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Effects
 
             base.Init(attacker, GetStateType(),applicationTime,period);
         }
-        public virtual void SetDamage(AttackType attackType, ushort damage){}
+        public virtual void SetDamage(AttackType attackType, int damage){}
         public virtual void SetSkillPercentDamage(float skillPercentDamage){}
     }
 }

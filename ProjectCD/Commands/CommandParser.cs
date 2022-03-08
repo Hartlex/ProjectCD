@@ -3,7 +3,7 @@ using ProjectCD.Objects.NetObjects;
 
 namespace ProjectCD.Commands
 {
-    public class CommandParser : Singleton<CommandParser>
+    internal class CommandParser : Singleton<CommandParser>
     {
         public void ParseCommand(string str, User user)
         {

@@ -14,7 +14,9 @@ namespace SunStructs.Packets.GameServerPackets.Status
         ATTR_CHANGE_BRD = 157,
         CHANGE_HP = 16,
         CHANGE_MP = 50,
-        CHANGE_CONDITION_BRD = 63
+        CHANGE_CONDITION_BRD = 63,
+        ASK_INCREASE_ATTRIBUTE=60,
+        ACK_INCREASE_ATTRIBUTE = 125,
     }
     public class StatusPacket : Packet
     {
@@ -38,5 +40,9 @@ namespace SunStructs.Packets.GameServerPackets.Status
     public class ChangConditionBRD : StatusPacket
     {
         public ChangConditionBRD(ChangeConditionInfo info) : base(CHANGE_CONDITION_BRD, info) { }
+    }
+    public class AckIncreaseAttr : StatusPacket
+    {
+        public AckIncreaseAttr(AckIncreaseAttrInfo info) : base(ACK_INCREASE_ATTRIBUTE, info) { }
     }
 }

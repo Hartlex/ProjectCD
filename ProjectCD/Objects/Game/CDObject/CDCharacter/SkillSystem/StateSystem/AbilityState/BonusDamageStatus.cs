@@ -7,9 +7,10 @@ using static SunStructs.Definitions.AttrValueKind;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class BonusDamageStatus :AbilityStatus
+    internal class BonusDamageStatus :AbilityStatus
     {
         private AttackType _attackType;
+        public override void Execute() { }
         public override void Init(Character owner, Character? attacker, Ability ability)
         {
             base.Init(owner, attacker, ability);

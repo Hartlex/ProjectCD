@@ -6,7 +6,7 @@ using static SunStructs.Definitions.RecoverType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.EtcState
 {
-    public class RecoverStatus : EtcStatus
+    internal class RecoverStatus : EtcStatus
     {
         private int _regenHP;
         private int _regenMP;

@@ -3,10 +3,11 @@ using static SunStructs.Definitions.AttrValueKind;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class AbsorbStatus : AbilityStatus
+    internal class AbsorbStatus : AbilityStatus
     {
         public AbsorbStatus(){}
 
+        public override void Execute() { }
         public override void AttackAbsorb(int damage)
         {
             var value = AbilityValue;

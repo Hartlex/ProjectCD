@@ -11,7 +11,7 @@ using ProjectCD.NetworkBase.Connections;
 
 namespace ProjectCD.Servers.World
 {
-    public class WorldServer : CDServer
+    internal class WorldServer : CDServer
     {
         public WorldServer(ServerConfig config) : base(config)
         {

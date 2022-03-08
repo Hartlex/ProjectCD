@@ -9,7 +9,7 @@ using SunStructs.Definitions;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
-    public partial class Player
+    internal partial class Player
     {
         public void AddDBParams(ref SqlCommand cmd)
         {
@@ -53,7 +53,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             cmd.Parameters.Add("@InvisOpt", SqlDbType.TinyInt).Value = 0;
             cmd.Parameters.Add("@InventoryLock", SqlDbType.TinyInt).Value = 0;
             cmd.Parameters.Add("@InventoryItem", SqlDbType.VarBinary).Value = _inventory.Serialize();
-            cmd.Parameters.Add("@TmpInventoryItem", SqlDbType.VarBinary).Value = new byte[1];
+            cmd.Parameters.Add("@TmpInventoryItem", SqlDbType.VarBinary).Value = _tmpInventory.Serialize();
             cmd.Parameters.Add("@EquipItem", SqlDbType.VarBinary).Value = _equipment.Serialize();
             cmd.Parameters.Add("@Skill", SqlDbType.VarBinary).Value = _skillContainer.Serialize();
             cmd.Parameters.Add("@QuickSkill", SqlDbType.VarBinary).Value = _quickSlots.Serialize();

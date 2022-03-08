@@ -20,11 +20,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities.Targ
 
             var skill = GetSkill();
 
-            if (skill == null)
-            {
-                _executablePos = false;
-            }
-
+            _executablePos = skill != null;
 
 
         }

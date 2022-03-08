@@ -26,7 +26,7 @@ using static SunStructs.Definitions.ItemResult;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
-    public partial class Player
+    internal partial class Player
     {
         private byte _inventoryTabs;
         private Inventory _inventory;
@@ -47,6 +47,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _equipment = new (equipBytes, this);
             _tmpInventory = new(MAX_TMP_INVENTORY_SLOT_NUM, tmpInvBytes,this);
             _quickSlots = new(MAX_QUICK_SLOT_NUM, quickBytes);
+        }
+
+        public byte[] GetQuickSlotBytes()
+        {
+            return _quickSlots.Serialize();
         }
 
         public bool ItemMove(ItemMoveInfo info)
@@ -237,6 +242,26 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
                 PlayerKey = GetKey(),
                 EquipmentInfo = bytes
             };
+        }
+
+        public ItemType GetWeaponItemType()
+        {
+            var item = _equipment.GetItem((int) EquipContainerPos.EQUIPCONTAINER_WEAPON);
+            return item?.GetItemType() ?? ItemType.ITEMTYPE_INVALID;
+        }
+        public WeaponType GetWeaponWeaponType()
+        {
+            var item = _equipment.GetItem((int)EquipContainerPos.EQUIPCONTAINER_WEAPON);
+            return item?.GetWeaponType() ?? WeaponType.WEAPONTYPE_INVALID;
+        }
+
+        public void OnEquipChange(ItemSlot slot,bool equip)
+        {
+            if (equip)
+            {
+                if(slot.Pos == (int) EquipContainerPos.EQUIPCONTAINER_WEAPON)
+                    _skillManager.OnWeaponChange(slot.GetItem()!.GetItemType());
+            }
         }
     }
 }

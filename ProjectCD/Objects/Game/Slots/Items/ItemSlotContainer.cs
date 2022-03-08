@@ -7,7 +7,7 @@ using SunStructs.ServerInfos.General.Object.Items;
 
 namespace ProjectCD.Objects.Game.Slots.Items
 {
-    public class ItemSlotContainer
+    internal class ItemSlotContainer
     {
         protected Player Owner;
         private readonly Dictionary<int, ItemSlot> _slots;
@@ -155,8 +155,8 @@ namespace ProjectCD.Objects.Game.Slots.Items
                 return false;
             }
 
-            container2.InsertItem(itemFrom, posFrom, true);
-            InsertItem(itemTo, posTo, true);
+            container2.InsertItem(itemFrom, posTo, true);
+            InsertItem(itemTo, posFrom, true);
             return false;
         }
 

@@ -25,7 +25,7 @@ namespace ProjectCD.Objects.Game.Slots.Quick
 
         public byte[] GetBytes()
         {
-            ByteBuffer buffer = new(4);
+            ByteBuffer buffer = new();
             GetBytes(ref buffer);
             return buffer.GetData();
         }

@@ -2,6 +2,8 @@
 
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
+using CDShared.Logging;
+using SunStructs.Definitions;
 using static ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttrValueType;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
@@ -9,7 +11,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
     public class Attribute
     {
         private readonly int[] _values = new int[7];
+        private readonly AttrType _type = AttrType.ATTR_TYPE_INVALID;
+        public Attribute(){}
 
+        public Attribute(AttrType type)
+        {
+            _type = type;
+        }
         public void Update()
         {
             UpdateAll();
@@ -36,22 +44,34 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 
         public void AddValue(int value, AttrValueType type = BASE)
         {
+            if (value == 0) return;
+            //Logger.Instance.Log($"[{_type}] added value [{type}][{value}] oldValue[{_values[(int)type]}] newValue[{_values[(int)type] + value}]");
             _values[(int) type] += value;
         }
         public void SubtractValue(int value, AttrValueType type = BASE)
         {
+            if (value == 0) return;
+
+            //Logger.Instance.Log($"[{_type}] subtract value [{type}][{value}] oldValue[{_values[(int)type]}] newValue[{_values[(int)type] - value}]");
+
             _values[(int)type] -= value;
         }
         public void SetValue(int value, AttrValueType type = BASE)
         {
+            //Logger.Instance.Log($"[{_type}] set value [{type}][{value}] oldValue[{_values[(int)type]}] newValue[{value}]");
+
             _values[(int) type] = value;
         }
         public void SetValue(ushort value,AttrValueType type = BASE)
         {
+            //Logger.Instance.Log($"[{_type}] set value [{type}][{value}] oldValue[{_values[(int)type]}] newValue[{value}]");
+
             _values[(int) type] = value;
         }
         public void SetValue(uint value, AttrValueType type = BASE)
         {
+            //Logger.Instance.Log($"[{_type}] set value [{type}][{value}] oldValue[{_values[(int)type]}] newValue[{value}]");
+
             _values[(int)type] = (int) value;
         }
 

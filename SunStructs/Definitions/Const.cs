@@ -39,7 +39,7 @@ namespace SunStructs.Definitions
         public const int MAX_PLAYER_RENDER_INFO_SIZE = 50;
         public const int MAX_PET_NAME_LENGTH = 10;
 
-        public const int MAX_PACKET_DELAY_TIME = 500;
+        public const int MAX_PACKET_DELAY_TIME = 50;
 
         public const long BASE_EXPIRE_TIME_INFINITY = -1;
 

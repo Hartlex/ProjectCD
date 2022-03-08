@@ -3,6 +3,7 @@ using CDShared.Logging;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer;
 using ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities;
 using SunStructs.Definitions;
+using SunStructs.PacketInfos.Game.Skill.Server;
 using SunStructs.ServerInfos.General.Skill;
 using static SunStructs.Definitions.BattleResult;
 using static SunStructs.Definitions.Const;
@@ -47,11 +48,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes
             {
                 var abilityID = baseAbilityInfo.AbilityId;
                 var ability = AbilityFactory.Instance.AllocAbility(abilityID, GetSkillType());
-                if (ability == null)
-                {
-                    Logger.Instance.Log($"Error allocating Ability[{abilityID}]");
-                    return;
-                }
+                if (ability == null) continue;
+
                 ability.Init(this,baseAbilityInfo);
                 ability.SetEventCode(eventCode);
 
@@ -91,6 +89,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes
             {
                 SkillInfo.MainTargetKey = Owner!.GetKey();
                 SkillInfo.MainTargetPosition = SkillInfo.CurrentPosition;
+            }
+            else if (targetType == SKILL_TARGET_AREA)
+            {
+
             }
             else if (_baseSkillInfo.AttackRangeForm == (byte) SRF_PIERCE)
             {
@@ -146,10 +148,19 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes
                             SendAIMessage(mainTarget);
                         }
                     }
+                    else
+                    {
+                        if (ExecuteAbilities(Owner, out var ownerResult))
+                        {
+                            SkillResults[NumberOfTargetsHit] = ownerResult;
+                            NumberOfTargetsHit++;
+                            foundTargets--;
+                        }
+                    }
 
                 }
             }
-            else if (_baseSkillInfo.TargetType == (byte) SKILL_TARGET_SUMMON)
+            else if (_baseSkillInfo.TargetType == SKILL_TARGET_SUMMON)
             {
             }
             else if (_baseSkillInfo.AttackRangeForm == (byte) SRF_AREA_POSITION)
@@ -169,20 +180,22 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes
             }
             else
             {
+                foundTargets = _baseSkillInfo.MaxTargetNum;
                 var targets = Field.FindTargets(
                     (SkillTargetType) _baseSkillInfo.TargetType,
                     (SkillAreaType) _baseSkillInfo.AttackRangeForm,
                     Owner,
                     SkillInfo.MainTargetPosition,
-                    _baseSkillInfo.SkillRange / 10,
+                    _baseSkillInfo.SkillArea / 10f,
                     foundTargets,
                     exceptTargetKey
                 );
-
+                Logger.Instance.Log($"Found [{targets.Length}] Targets");
                 foreach (var target in targets)
                 {
-                    if (!ExecuteAbilities(Owner, out var ownerResult)) continue;
-
+                    if (target == null) break;
+                    if (!ExecuteAbilities(target, out var ownerResult)) continue;
+                    ownerResult.SkillEffect = SkillInfo.SkillEffect;
                     SkillResults[NumberOfTargetsHit] = ownerResult;
                     NumberOfTargetsHit++;
 
@@ -194,10 +207,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.SkillTypes
                 }
             }
 
-            if (SkillResults[0] != null)
-            {
-                NumberOfEffects = ExecuteEffectAbilities(ref SkillResults[0]);
-            }
+            //if (SkillResults[0] != null)
+            //{
+            NumberOfEffects = ExecuteEffectAbilities();
+            //}
 
 
             Owner!.OnAttack(mainTarget, _baseSkillInfo.SkillCode, 0);

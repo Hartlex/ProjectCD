@@ -26,17 +26,17 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem
             switch (skillType)
             {
                 case SKILL_TYPE_PASSIVE:
-                    //return new PassiveSkill();
+                    return new PassiveSkill();
                 case SKILL_TYPE_ACTIVE_INSTANT:
                     return new InstantSkill();
                 case SKILL_TYPE_ACTIVE_DELAYED:
-                    //return new DelayedSkill();
+                    return new DelayedSkill();
                 case SKILL_TYPE_STYLE:
                     return new Style();
                 case SKILL_TYPE_NORMAL:
                     return new NormalAttack();
-                case SKILL_TYPE_ACTIVE:
-                    break;
+                case SKILL_TYPE_NORMAL_AREA:
+                    return new NormalAttack();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(skillType), skillType, null);
 

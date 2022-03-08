@@ -7,7 +7,7 @@ using SunStructs.PacketInfos.Auth.Server;
 
 namespace ProjectCD.GlobalManagers.Config
 {
-    public class ConfigManager : Singleton<ConfigManager>
+    internal class ConfigManager : Singleton<ConfigManager>
     {
         private static readonly string ConfigPath= ConfigurationManager.AppSettings["configPath"];
         private AuthServerConfig _authServerConfig;

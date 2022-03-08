@@ -23,8 +23,8 @@ namespace SunStructs.ServerInfos.General.Object.AI
         public readonly uint SearchPeriod;
         public readonly uint RetreatPeriod;
         public readonly uint TrackPeriod;
-        public readonly uint IdleMinTime;
-        public readonly uint IdleMaxTime;
+        public readonly int IdleMinTime;
+        public readonly int IdleMaxTime;
         public readonly uint RunawayTime;
         public readonly uint RegenLocationLimit;
         public readonly uint WanderRadius;
@@ -64,8 +64,8 @@ namespace SunStructs.ServerInfos.General.Object.AI
             SearchPeriod= sb.ReadUint();
             RetreatPeriod= sb.ReadUint();
             TrackPeriod= sb.ReadUint();
-            IdleMinTime= sb.ReadUint();
-            IdleMaxTime= sb.ReadUint();
+            IdleMinTime= sb.ReadInt();
+            IdleMaxTime= sb.ReadInt();
             RunawayTime= sb.ReadUint();
             RegenLocationLimit= sb.ReadUint();
             WanderRadius= sb.ReadUint();

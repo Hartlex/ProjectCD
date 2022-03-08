@@ -89,6 +89,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
             //Logger.Instance.Log("Equiping Item");
             ItemAttributeCalculator itemCalc = new ItemAttributeCalculator(Owner.GetAttributes(), this,true);
             itemCalc.Equip(slot,true,false);
+            Owner.OnEquipChange(slot, true);
 
         }
 
@@ -97,6 +98,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContain
             //Logger.Instance.Log("Unequiping Item");
             ItemAttributeCalculator itemCalc = new ItemAttributeCalculator(Owner.GetAttributes(), this, true);
             itemCalc.UnEquip(slot, true, false);
+            Owner.OnEquipChange(slot,false);
         }
 
         public override bool TryGetItemOfTypeAt(EquipContainerPos pos, ushort code, out ItemSlot? slot)

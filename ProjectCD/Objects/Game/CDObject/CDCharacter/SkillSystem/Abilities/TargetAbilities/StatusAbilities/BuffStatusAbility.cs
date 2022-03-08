@@ -11,8 +11,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities.Targ
     {
         public override bool IsValidState()
         {
-            return GetAttrType() != AttrType.ATTR_TYPE_INVALID &&
-                   GetCharStateType() != CharStateType.CHAR_STATE_INVALID;
+            return !(GetAttrType() == AttrType.ATTR_TYPE_INVALID &&
+                   GetCharStateType() == CharStateType.CHAR_STATE_INVALID);
         }
     }
 }

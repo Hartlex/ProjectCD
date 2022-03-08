@@ -165,7 +165,7 @@ namespace SunStructs.Formulas.Char
             switch (type)
             {
                 case CHAR_DRAGON:
-                    return (str / 6);
+                    return (str / 5);
                 case CHAR_BERSERKER:
                     return (str / 7);
                 case CHAR_SHADOW:
@@ -186,7 +186,7 @@ namespace SunStructs.Formulas.Char
             switch (type)
             {
                 case CHAR_DRAGON:
-                    return (str / 4);
+                    return (str / 3);
                 case CHAR_BERSERKER:
                     return (str / 2);
                 case CHAR_SHADOW:
@@ -382,7 +382,7 @@ namespace SunStructs.Formulas.Char
             if (dex < 0) dex = 0;
             switch (type)
             {
-                case CHAR_DRAGON: phyValue = 3; break;
+                case CHAR_DRAGON: phyValue = 2; break;
                 case CHAR_BERSERKER: phyValue = 4; break;
                 case CHAR_SHADOW: phyValue = 3; break;
                 case CHAR_VALKYRIE: phyValue = 2; break;

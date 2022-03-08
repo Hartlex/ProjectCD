@@ -7,7 +7,7 @@ using SunStructs.RuntimeDB;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Slots
 {
-    public class Inventory : ItemSlotContainer
+    internal class Inventory : ItemSlotContainer
     {
         public Inventory(int tabCount, byte[] data, Player owner) : base(tabCount*15, data, owner)
         {

@@ -2,7 +2,7 @@
 
 namespace ProjectCD.Commands
 {
-    public class Command
+    internal class Command
     {
         private string _rawString;
         private CommandType _type;

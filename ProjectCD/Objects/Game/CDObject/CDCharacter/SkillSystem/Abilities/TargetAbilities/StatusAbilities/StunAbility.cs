@@ -38,7 +38,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.Abilities.Targ
             stunResult.CurrentPosition = target!.GetPos();
 
             target.CancelAllSkill();
-
+            result = stunResult;
             return true;
         }
     }

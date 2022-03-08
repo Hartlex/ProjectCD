@@ -2,7 +2,7 @@
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class ChaosStatus : AbilityStatus
+    internal class ChaosStatus : AbilityStatus
     {
         public override void Start()
         {

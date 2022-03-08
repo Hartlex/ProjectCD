@@ -25,7 +25,7 @@ namespace SunStructs.ServerInfos.General.Skill
         public readonly uint CastAnimCode;
         public readonly int CSSyncDelay;
         public readonly ushort FlyingObjCode;
-        public readonly ushort FlyingLifeTime;
+        public readonly int FlyingLifeTime;
         public readonly uint FieldEffectCode;
         public readonly ushort SkillAttribute;
         public readonly ushort RequireLevel;
@@ -39,11 +39,11 @@ namespace SunStructs.ServerInfos.General.Skill
         public readonly byte SkillStatType;
         public readonly ushort[] RequireSkillStat;
         public readonly byte RequireSkillPoint;
-        public readonly byte TargetType;
+        public readonly SkillTargetType TargetType;
         public readonly byte ForbiddenTarget;
         public readonly float HPCost;
         public readonly float MPCost;
-        public readonly ushort SkillCasting;
+        public readonly int SkillCasting;
         public readonly uint Cooldown;
         public readonly ushort SkillRange;
         public readonly byte AttackRangeForm;
@@ -70,7 +70,7 @@ namespace SunStructs.ServerInfos.General.Skill
             CSSyncDelay = int.Parse(info[16]);
             WZAnimCode = info[9];
             FlyingObjCode = ushort.Parse(info[18]);
-            FlyingLifeTime= ushort.Parse(info[19]);
+            FlyingLifeTime= int.Parse(info[19]);
             FieldEffectCode = uint.Parse(info[21]);
             SkillAttribute = ushort.Parse(info[22]);
             RequireLevel = ushort.Parse(info[23]);
@@ -88,11 +88,11 @@ namespace SunStructs.ServerInfos.General.Skill
             SkillStatType = byte.Parse(info[35]);
             RequireSkillStat = new[] {ushort.Parse(info[36]), ushort.Parse(info[37])};
             RequireSkillPoint = byte.Parse(info[38]);
-            TargetType = byte.Parse(info[39]);
+            TargetType = (SkillTargetType) int.Parse(info[39]);
             ForbiddenTarget = byte.Parse(info[40]);
             HPCost = float.Parse(info[41]);
             MPCost = float.Parse(info[42]);
-            SkillCasting = ushort.Parse(info[43]);
+            SkillCasting = int.Parse(info[43]);
             Cooldown = uint.Parse(info[44]);
             SkillRange= ushort.Parse(info[45]);
             AttackRangeForm = byte.Parse(info[46]);

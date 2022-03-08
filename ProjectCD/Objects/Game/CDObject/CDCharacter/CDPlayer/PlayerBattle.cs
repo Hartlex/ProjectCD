@@ -7,7 +7,7 @@ using SunStructs.Definitions;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
-    public partial class Player
+    internal partial class Player
     {
         private bool _forceAttack;
 

@@ -158,5 +158,10 @@ namespace SunStructs.ServerInfos.General
             return Vector3.Distance(v1._vector, v2._vector);
         }
 
+        public static float Get2DDistance(SunVector v1, SunVector v2)
+        {
+            return Vector2.Distance(new Vector2(v1.GetX(), v1.GetY()), new Vector2(v2.GetX(), v2.GetY()));
+        }
+
     }
 }

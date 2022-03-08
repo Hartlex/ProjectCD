@@ -5,7 +5,7 @@ using static SunStructs.Definitions.Const;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
 {
-    public class BaseStatus
+    internal class BaseStatus
     {
         private Character? _owner;
         private CharStateType _stateType;
@@ -26,13 +26,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             if (applicationTime == BASE_EXPIRE_TIME_INFINITY)
                 _expireTime = BASE_EXPIRE_TIME_INFINITY;
             else
-                _expireTime = _executionTime + _applicationTime;
+                _expireTime = new DateTime(_executionTime).AddMilliseconds(_applicationTime).Ticks;
         }
         public virtual void Start(){}
 
         public virtual void Execute()
         {
-            _executionTime = DateTime.Now.Ticks + _period;
+            _executionTime = DateTime.Now.AddMilliseconds(_period).Ticks;
         }
         public virtual void End(){}
         public virtual bool Update(long tick)
@@ -101,7 +101,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
 
 #region Private
 
-        private bool IsExecutionTime(long tick) { return tick >= _expireTime && IsPeriodicStatus(); }
+        private bool IsExecutionTime(long tick) { return tick >= _executionTime && IsPeriodicStatus(); }
         public bool IsExpired(long tick) { return _expireTime != BASE_EXPIRE_TIME_INFINITY && _expireTime<=tick; }
 
 #endregion

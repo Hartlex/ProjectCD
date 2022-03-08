@@ -13,7 +13,7 @@ using SunStructs.ServerInfos.General.Object.Character.Player;
 
 namespace ProjectCD.GlobalManagers.DB
 {
-    public class Database : Singleton<Database>
+    internal class Database : Singleton<Database>
     {
         private string _connectionString;
         public bool Initialize()

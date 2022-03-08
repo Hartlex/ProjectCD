@@ -21,6 +21,8 @@ namespace ProjectCD.Servers.Game
             ZoneActions.Initialize();
             BattleActions.Initialize();
             SkillActions.Initialize();
+            StatusActions.Initialize();
+            StyleActions.Initialize();
         }
     }
 }

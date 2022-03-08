@@ -8,7 +8,7 @@ using SunStructs.Definitions;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.AbilityState
 {
-    public class ChangeAttrStatus : AbilityStatus
+    internal class ChangeAttrStatus : AbilityStatus
     {
         public override void Init(Character owner, Character? attacker, Ability ability)
         {

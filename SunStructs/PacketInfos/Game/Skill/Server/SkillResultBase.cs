@@ -8,35 +8,80 @@ namespace SunStructs.PacketInfos.Game.Skill.Server
     public class SkillResultBase : ServerPacketInfo
     {
         public readonly uint TargetKey;
-        public byte EffectCount;
+        //public byte EffectCount;
         public byte AbilityCount;
-        public SkillResultEffect[] SkillResultEffects;
+
+        public byte SkillEffect;
+        //public SkillResultEffect[] SkillResultEffects;
         public SkillResultAbility[] SkillResultAbility;
         public override void GetBytes(ref ByteBuffer buffer)
         {
             buffer.WriteUInt32(TargetKey);
             byte b = 0;
-            b = BitManip.Set0to4(b, EffectCount);
+            b = BitManip.Set0to4(b, SkillEffect);
             b = BitManip.Set5to7(b, AbilityCount);
             buffer.WriteByte(b);
-            for (int i = 0; i < EffectCount; i++)
-            {
-                SkillResultEffects[i].GetBytes(ref buffer);
-            }
+
+
+            var buf = new ByteBuffer();
+            //buf.WriteUInt16(1);
+            //buf.WriteUInt16(0);
+            //buf.WriteUInt32(0);
+            //buf.WriteUInt16(5);
+            //buf.WriteUInt32(170);
+            //buf.WriteByte(5);
+            //buf.WriteBlock(new byte[]
+            //{
+            //    1,0,
+            //    0,0,
+            //    0,0,0,0,
+            //    100,0,
+            //    0,0,0,0,
+            //    0
+            //});
+            buffer.WriteBlock(buf.GetData());
+            //public ushort AbilityOrder;
+            //public ushort AbilityCode;
+            //public uint AbilityDuration;
+            //public ushort Damage;
+            //public uint TargetHp;
+            //public byte Effect; //Crit
+
             for (int i = 0; i < AbilityCount; i++)
             {
                 SkillResultAbility[i].GetBytes(ref buffer);
             }
+
+
+
+
+            //for (int i = 0; i < EffectCount; i++)
+            //{
+            //    SkillResultEffects[i].GetBytes(ref buffer);
+            //}
+            //b = BitManip.Set0to2(b, AbilityCount);
+            //b = BitManip.Set3to7(b, EffectCount);
+            //buffer.WriteByte(b);
+            //for (int i = 0; i < AbilityCount; i++)
+            //{
+            //    SkillResultAbility[i].GetBytes(ref buffer);
+            //}
+
+            //for (int i = 0; i < EffectCount; i++)
+            //{
+            //    SkillResultEffects[i].GetBytes(ref buffer);
+            //}
+
 
         }
 
         public SkillResultBase(uint targetKey)
         {
             TargetKey = targetKey;
-            EffectCount = 0;
+            //EffectCount = 0;
             AbilityCount = 0;
             SkillResultAbility = new SkillResultAbility[7];
-            SkillResultEffects = new SkillResultEffect[31];
+            //SkillResultEffects = new SkillResultEffect[31];
         }
 
         public override string ToString()
@@ -155,8 +200,17 @@ namespace SunStructs.PacketInfos.Game.Skill.Server
         public SunVector CurrentPosition;
         public SunVector DestinationPosition;
 
-        public SkillResultPosition(){}
-        public SkillResultPosition(SkillResultAbility baseInfo) : base(baseInfo){}
+        public SkillResultPosition()
+        {
+            CurrentPosition = new SunVector(0, 0, 0);
+            DestinationPosition = new SunVector(0, 0, 0);
+        }
+
+        public SkillResultPosition(SkillResultAbility baseInfo) : base(baseInfo)
+        {
+            CurrentPosition = new SunVector(0, 0, 0);
+            DestinationPosition = new SunVector(0, 0, 0);
+        }
 
         public override void GetBytes(ref ByteBuffer buffer)
         {

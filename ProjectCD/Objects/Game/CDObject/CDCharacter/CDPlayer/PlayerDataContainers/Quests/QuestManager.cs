@@ -10,7 +10,7 @@ using SunStructs.ServerInfos.General.Quest;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer.PlayerDataContainers.Quests
 {
-    public class QuestManager
+    internal class QuestManager
     {
         private readonly List<ushort> _finishedQuestCodes;
         private readonly Dictionary<ushort, Quest> _ongoingQuests;

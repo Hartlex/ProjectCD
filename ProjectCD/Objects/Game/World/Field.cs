@@ -28,6 +28,7 @@ using SunStructs.Packets.GameServerPackets.Map;
 using SunStructs.Packets.GameServerPackets.Sync;
 using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General;
+using SunStructs.ServerInfos.General.Object.AI;
 using SunStructs.ServerInfos.General.Object.Character.NPC;
 using SunStructs.ServerInfos.General.World;
 using static SunStructs.Definitions.Const;
@@ -36,14 +37,14 @@ using Timer = System.Timers.Timer;
 
 namespace ProjectCD.Objects.Game.World
 {
-    public class Field
+    internal class Field
     {
         private readonly BaseFieldInfo _baseFieldInfo;
         private readonly GameServer _server;
         private readonly Dictionary<uint, Player> _activePlayers;
         private readonly Dictionary<uint, ObjectBase> _activeObjects;
         private readonly WarPacketScheduler _warPacketScheduler;
-     
+        private readonly EffectManager _effectManager;
 
         public Field(BaseFieldInfo baseFieldInfo, GameServer server)
         {
@@ -52,7 +53,7 @@ namespace ProjectCD.Objects.Game.World
             _activePlayers = new(MAX_PLAYERS_ON_MAP);
             _activeObjects = new(MAX_OBJECTS_ON_MAP);
             _warPacketScheduler = new (this);
-
+            _effectManager = new(this);
         }
 
         public virtual bool EnterField(ObjectBase obj, SunVector pos, ushort angle = 0)
@@ -237,44 +238,101 @@ namespace ProjectCD.Objects.Game.World
             return _activeObjects.TryGetValue(key, out var value) ? (Character) value : default;
         }
 
-        public Character[] FindTargets(SkillTargetType targetType, SkillAreaType attackRangeForm, Character owner, SunVector mainTargetPosition, int skillRange, int maxTargets, uint exceptTargetKey=0)
+        public Character[] FindTargets(SkillTargetType targetType, SkillAreaType attackRangeForm, Character owner, SunVector mainTargetPosition, float skillRange, int maxTargets, uint exceptTargetKey=0)
         {
             if (attackRangeForm == SkillAreaType.SRF_FOWARD_ONE) return Array.Empty<Character>();
 
-            var result = new Character[MAX_TARGET_COUNT];
+            var targets = new Character[MAX_TARGET_COUNT];
             int i = 0;
             foreach (var activeObject in _activeObjects.Values)
             {
                 if(!activeObject.IsObjectType(ObjectType.CHARACTER_OBJECT)) continue;
-                if(SunVector.GetDistance(activeObject.GetPos(),mainTargetPosition)>skillRange) continue;
+                var character = (Character) activeObject;
+                if(SunVector.GetDistance(character.GetPos(),mainTargetPosition)>skillRange) continue;
 
-                //switch (targetType)
-                //{
-                //    //TODO friend check etc
-                //}
-                if(activeObject.GetKey() == exceptTargetKey) continue;
+                switch (targetType)
+                {
+                    case SkillTargetType.SKILL_TARGET_AREA:
+                        if (owner.IsFriend(character) != UserRelationType.USER_RELATION_ENEMY) continue;
+                        if (character.IsDead()) continue;
+                        break;
+                    case SkillTargetType.SKILL_TARGET_AREA_ENEMY_CORPSE:
+                        if (owner.IsFriend(character) != UserRelationType.USER_RELATION_ENEMY) continue;
+                        if (character.IsAlive()) continue;
+                        break;
+                    case SkillTargetType.SKILL_TARGET_NONE:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_ENEMY:
+                        if (owner.IsFriend(character) != UserRelationType.USER_RELATION_ENEMY) continue;
+                        break;
+                        //Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        //return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_FRIEND:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_ME:
+                        if (character.IsDead()) continue;
+                        break;
+                    //Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                    //return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_FRIEND_CORPSE:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_REACHABLE_ENEMY:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_REACHABLE_FRIEND:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_REACHABLE_ME:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_SUMMON:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_ENEMY_PLAYER:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_ENEMY_CORPSE:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_ENEMY_AND_ME:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    case SkillTargetType.SKILL_TARGET_MAX:
+                        Logger.Instance.Log($"Find Targets should not be called on TargetType[{targetType}][{attackRangeForm}]");
+                        return Array.Empty<Character>();
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(targetType), targetType, null);
+                }
+                if (activeObject.GetKey() == exceptTargetKey) continue;
 
-                result[i] = (Character) activeObject;
+                targets[i] = (Character) activeObject;
                 i++;
 
                 if(i== maxTargets) break;
             }
 
+            var result = new Character[i];
+            Array.Copy(targets,result,i);
             return result;
         }
 
         public void Update(long tick)
         {
+            _effectManager.Update(tick);
             lock (_activeObjects)
             {
-                foreach (var activeObject in _activeObjects)
+                foreach (var activeObject in _activeObjects.Values.ToList())
                 {
-                    activeObject.Value.Update(tick);
+                    activeObject.Update(tick);
                 }
             }
 
         }
 
+        public EffectManager GetEffectManager(){ return _effectManager; }
         public bool TeleportObject(Character target, ref SunVector destPos)
         {
             var info = new ObjectTeleportInfo(true, target.GetKey(), destPos);
@@ -285,9 +343,39 @@ namespace ProjectCD.Objects.Game.World
 
             return true;
         }
+
+        public bool FindPath(Character owner, ref SunVector destPos, CharStateType getStateType)
+        {
+            return true;
+        }
+
+        public void SendAiMessageAroundExceptMe(NPC sender, AIMsg msg)
+        {
+            foreach (var obj in _activeObjects.Values.ToList())
+            {
+                if (obj.IsObjectType(ObjectType.NPC_OBJECT) && obj is NPC npc)
+                {
+                    if(!ReferenceEquals(npc,sender)) 
+                        npc.OnAiMessage(msg);
+                }
+            }
+
+        }
+
+        public Character? SearchTarget(Character searcher, TargetSearchType searchType, UserRelationType relationType)
+        {
+            var range = searcher.GetSightRange();
+
+            foreach (var activePlayer in _activePlayers.Values.ToList())
+            {
+                if (SunVector.GetDistance(activePlayer.GetPos(), searcher.GetPos()) <= range) return activePlayer;
+            }
+
+            return null;
+        }
     }
 
-    public class GameField : Field
+    internal class GameField : Field
     {
         public GameField(BaseFieldInfo baseFieldInfo, GameServer server) : base(baseFieldInfo, server)
         {

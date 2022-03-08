@@ -12,7 +12,7 @@ using ProjectCD.Objects.NetObjects;
 
 namespace ProjectCD.Servers
 {
-    public abstract class CDServer : CDServerBase
+    internal abstract class CDServer : CDServerBase
     {
         private readonly Dictionary<uint,User> _connectedUsers = new ();
         private readonly Dictionary<byte[], User> _waitingList=new();

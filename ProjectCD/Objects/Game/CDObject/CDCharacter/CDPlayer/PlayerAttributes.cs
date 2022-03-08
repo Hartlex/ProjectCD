@@ -16,9 +16,10 @@ using static SunStructs.Formulas.Char.CommonCharacterFormulas;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
 {
-    public partial class Player
+    internal partial class Player
     {
         private PlayerAttr _attributes;
+
 
         public void PlayerAttributesInit(ref SqlDataReader reader)
         {
@@ -60,8 +61,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _attributes[ATTR_EXPERTY2].Update();
 
             _attributes[ATTR_RECOVERY_HP].SetValue(recoverHP);
-            _attributes[ATTR_RECOVERY_HP].SetValue(recoverMP);
-            _attributes[ATTR_RECOVERY_HP].SetValue(recoverSD);
+            _attributes[ATTR_RECOVERY_MP].SetValue(recoverMP);
+            _attributes[ATTR_RECOVERY_SD].SetValue(recoverSD);
 ;
 
             _attributes[ATTR_MAX_HP].SetValue(CalcHP(GetCharType(),GetLevel(), _attributes[ATTR_VIT].GetValue16()));
@@ -80,9 +81,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _attributes[ATTR_MAX_MP].Update();
             _attributes[ATTR_MAX_SD].Update();
 
-            SetHP(_attributes[ATTR_MAX_HP].GetValue());
-            SetMP(_attributes[ATTR_MAX_MP].GetValue());
-            SetSD(_attributes[ATTR_MAX_SD].GetValue());
+            //SetHP(_attributes[ATTR_MAX_HP].GetValue());
+            //SetMP(_attributes[ATTR_MAX_MP].GetValue());
+            //SetSD(_attributes[ATTR_MAX_SD].GetValue());
+            SetHP(1);
+            SetMP(1);
+            SetSD(1);
 
             _attributes.Update();
 

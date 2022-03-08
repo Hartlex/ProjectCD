@@ -18,8 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Objects\Game\CDObject\CDCharacter\SkillSystem\Abilities\NonTargetAbilities\" />
-    <Folder Include="Objects\Game\CDObject\CDCharacter\SkillSystem\Abilities\PassiveAbilities\" />
     <Folder Include="Objects\Game\Quest\" />
   </ItemGroup>
 

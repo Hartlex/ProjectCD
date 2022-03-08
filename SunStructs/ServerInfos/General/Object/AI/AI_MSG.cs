@@ -64,7 +64,7 @@ namespace SunStructs.ServerInfos.General.Object.AI
     {
         public readonly uint AttackerKey;
         public readonly uint TargetKey;
-        public AIMsgHelpRequest(long deliveryTick, uint attackerKey,uint targetKey) : base(AI_MSG_ID_HELP_REQUEST, deliveryTick)
+        public AIMsgHelpRequest(uint attackerKey,uint targetKey) : base(AI_MSG_ID_HELP_REQUEST)
         {
             AttackerKey = attackerKey;
             TargetKey = targetKey;
@@ -80,27 +80,27 @@ namespace SunStructs.ServerInfos.General.Object.AI
     }
     public class AIMsgKnockDown : AIMsg
     {
-        public readonly long KnockDownTick;
+        public readonly int KnockDownTime;
 
-        public AIMsgKnockDown(long deliveryTick, long knockDownTick) : base(AI_MSG_ID_KNOCKDOWN, deliveryTick)
+        public AIMsgKnockDown(long deliveryTick, int knockDownTime) : base(AI_MSG_ID_KNOCKDOWN, deliveryTick)
         {
-            KnockDownTick = knockDownTick;
+            KnockDownTime = knockDownTime;
         }
     }
     public class AIMsgFlying : AIMsg
     {
-        public readonly long FlyingTick;
+        public readonly int FlyingTime;
 
-        public AIMsgFlying(long deliveryTick, long flyingTick) : base(AI_MSG_ID_FLYING, deliveryTick)
+        public AIMsgFlying(int flyingTime) : base(AI_MSG_ID_FLYING)
         {
-            FlyingTick = flyingTick;
+            FlyingTime = flyingTime;
         }
     }
     public class AIMsgStun : AIMsg
     {
-        public readonly long StunTick;
+        public readonly int StunTick;
 
-        public AIMsgStun(long deliveryTick, long stunTick) : base(AI_MSG_ID_STUN, deliveryTick)
+        public AIMsgStun(int stunTick) : base(AI_MSG_ID_STUN)
         {
             StunTick = stunTick;
         }
@@ -157,7 +157,7 @@ namespace SunStructs.ServerInfos.General.Object.AI
     {
         public readonly uint TargetObjectKey;
 
-        public AIMsgEnemyFound(long deliveryTick, uint targetObjectKey) : base(AI_MSG_ID_ENEMY_FOUND, deliveryTick)
+        public AIMsgEnemyFound(uint targetObjectKey) : base(AI_MSG_ID_ENEMY_FOUND)
         {
             TargetObjectKey = targetObjectKey;
         }
@@ -166,19 +166,21 @@ namespace SunStructs.ServerInfos.General.Object.AI
     {
         public readonly uint TargetKey;
         public readonly int RunAwayTime;
+        public readonly ushort StateID;
 
-        public AIMsgRunAway(long deliveryTick, uint targetKey, int runAwayTime) : base(AI_MSG_ID_RUNAWAY,
+        public AIMsgRunAway(long deliveryTick, uint targetKey, int runAwayTime, ushort stateID=0) : base(AI_MSG_ID_RUNAWAY,
             deliveryTick)
         {
             TargetKey = targetKey;
             RunAwayTime = runAwayTime;
+            StateID = stateID;
         }
     }
     public class AIMsgChaos : AIMsg
     {
-        public readonly long ChaosTime;
+        public readonly int ChaosTime;
 
-        public AIMsgChaos(long deliveryTick, long chaosTime) : base(AI_MSG_ID_CHAOS, deliveryTick)
+        public AIMsgChaos(int chaosTime) : base(AI_MSG_ID_CHAOS)
         {
             ChaosTime = chaosTime;
         }

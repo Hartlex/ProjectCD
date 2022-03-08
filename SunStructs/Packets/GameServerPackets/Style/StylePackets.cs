@@ -12,7 +12,8 @@ namespace SunStructs.Packets.GameServerPackets.Style
     public enum StyleProtocol{
         STYLE_ATTACK_RESULT =41,
         STYLE_ATTACK_BRD = 198,
-        STYLE_CHANGE_BRD = 95
+        STYLE_CHANGE_BRD = 95,
+        ASK_CHANGE_STYLE = 221
     }
     public class StylePacket : Packet
     {

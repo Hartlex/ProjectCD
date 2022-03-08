@@ -4,7 +4,7 @@ using ProjectCD.NetworkBase.Connections;
 
 namespace CD.Network.Server.Config
 {
-    public class ServerConfig
+    internal class ServerConfig
     {
         private readonly IPEndPoint _myIpEndPoint;
         private readonly int _acceptedSessions;

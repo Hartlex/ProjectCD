@@ -8,7 +8,7 @@ using SunStructs.Packets;
 
 namespace ProjectCD.NetworkBase.Server
 {
-    public class PacketParser<T> : Singleton<PacketParser<T>>
+    internal class PacketParser<T> : Singleton<PacketParser<T>>
     {
         private readonly ActionBib _bib;
 
@@ -40,7 +40,7 @@ namespace ProjectCD.NetworkBase.Server
                 {
                     id = "WORLD";
                 }
-                Logger.Instance.LogOnLine($"Action[{id}][{typ}][{action.Method.Name}] registered!");
+                //Logger.Instance.LogOnLine($"Action[{id}][{typ}][{action.Method.Name}] registered!");
             }
 #endif
         }
@@ -80,7 +80,7 @@ namespace ProjectCD.NetworkBase.Server
         }
     }
 
-    public class ActionBib
+    internal class ActionBib
     {
         private readonly Dictionary<byte, Dictionary<byte, Action<ByteBuffer, Connection>>> _actions;
 

@@ -9,7 +9,7 @@ using ProjectCD.NetworkBase.Connections;
 
 namespace CD.Network.Server.Config
 {
-    public class AuthServerConfig : ServerConfig
+    internal class AuthServerConfig : ServerConfig
     {
         public AuthServerConfig(IPEndPoint ipEndPoint, int acceptedSessions, Action<ByteBuffer, Connection> handlePacket) : base(ipEndPoint, acceptedSessions, handlePacket)
         {

@@ -116,7 +116,7 @@ namespace ProjectCD.Objects.Game.World
         {
             var monster = (Monster)ObjectFactory.Instance.CreateObject(ObjectType.MONSTER_OBJECT)!;
             if (!monster.Initialize(monsterKey, 0, 0, 0)) return;
-
+            monster.SetSpawnPos(pos);
             EnterField(monster, pos);
 
 

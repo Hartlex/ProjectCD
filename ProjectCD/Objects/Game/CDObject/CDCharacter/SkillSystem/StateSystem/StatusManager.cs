@@ -274,7 +274,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             }
             else
             {
-                _ADDSTATUS(newStatus);
+                _ADDSTATUS(newStatus,type);
             }
         } 
 
@@ -497,9 +497,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             return false;
         }
 
-        private void _ADDSTATUS(BaseStatus status)
+        private void _ADDSTATUS(BaseStatus status,CharStateType type)
         {
-            _statusMap.Add(status.GetStateType(),new StatusNode(){RequestRemove = false, Status = status});
+            _statusMap.Add(type, new StatusNode(){RequestRemove = false, Status = status});
             _bits.AddRestrictStatus(status.GetStateType());
         }
 

@@ -13,7 +13,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         private readonly int[] _values = new int[7];
         private readonly AttrType _type = AttrType.ATTR_TYPE_INVALID;
         public Attribute(){}
-
         public Attribute(AttrType type)
         {
             _type = type;
@@ -89,7 +88,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             UpdateRatValues();
             //_values[(int) CALC] += _values[(int) CALC_RATIO] * _values[(int) CALC]+100 / 100; //100 = 10%
         }
-
         public void Clear()
         {
             for (int i = 0; i < _values.Length; i++)
@@ -99,6 +97,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         }
     }
 
+    public enum AttributeUpdateType
+    {
+        UPDATE_TYPE_NOTHING,
+        UPDATE_TYPE_NO_RATIO,
+        UPDATE_TYPE_SUM_RATIO,
+        UPDATE_TYPE_MAX
+    }
 
 
 }

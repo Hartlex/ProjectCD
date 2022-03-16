@@ -99,10 +99,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
                 case STATE_ID_TRACK_AREA:
                     return _trackAreaState;
                 default:
-                    return  _wanderState;
+                    return new NpcState();
             }
 
-            return _wanderState;
+            return new NpcState();
 
         }
     }

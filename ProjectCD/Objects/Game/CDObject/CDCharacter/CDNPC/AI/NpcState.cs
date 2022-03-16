@@ -115,22 +115,22 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
 
         protected virtual void OnMsgForceAttack(AIMsg msg)
         {
-            //if (!(msg is AIMsgForceAttack attackMsg)) return;
-            //var target = Owner.GetCurrentField()?.FindCharacter(attackMsg.TargetId);
-            //if (target == null) return;
-            //if (Owner.IsFriend(target)==UserRelationType.USER_RELATION_ENEMY)
-            //{
-            //    Owner.SetTargetChar(target);
-            //    Owner.ChangeState(STATE_ID_TRACK);
+            if (!(msg is AIMsgForceAttack attackMsg)) return;
+            var target = Owner.GetCurrentField()?.FindCharacter(attackMsg.TargetId);
+            if (target == null) return;
+            if (Owner.IsFriend(target) == UserRelationType.USER_RELATION_ENEMY)
+            {
+                Owner.SetTargetChar(target);
+                Owner.ChangeState(STATE_ID_TRACK);
 
-                //if (Owner.IsMemberOfGroup())
-                //{
-                //    AIMsgEnemyFound aiMsg = new (DateTime.Now.Ticks, attackMsg.TargetId);
-                //    Owner.SendAiMessageToGroupExceptMe(aiMsg);
+                if (Owner.IsGroupMember())
+                {
+                    AIMsgEnemyFound aiMsg = new(attackMsg.TargetId);
+                    Owner.SendAiMsgToGroupExceptMe(aiMsg);
 
-                //}
-            //}
-            
+                }
+            }
+
         }
 
         protected virtual void OnMsgAttacked(AIMsg msg)
@@ -230,20 +230,19 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
 
         protected virtual void OnMsgLetsGo(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_LetsGo letsGoMsg)) return;
+            if (!(msg is AIMsgLetsGo letsGoMsg)) return;
 
-            //var curPos = Owner.GetPos();
-            //var destPos = letsGoMsg.DestPosition;
-            
-            //var aiParam = AiParameterDb.Instance.GetAiParamInfo(Owner.GetBaseInfo().AIType);
-            //var random = GlobalRand.Instance.Random(aiParam.WanderRadius * 100,
-            //    aiParam.WanderRadius * 100) / 100;
-            
-            //destPos = SunVector.GetRandomPosAround(destPos,random);
+            var curPos = Owner.GetPos();
+            var destPos = letsGoMsg.DestPosition;
 
-            //if (Owner.MoveAndBroadcast(destPos, (eCHAR_MOVE_STATE) letsGoMsg.MoveState)) return;
-            //Owner.MoveAndBroadcast(letsGoMsg.DestPosition, (eCHAR_MOVE_STATE) letsGoMsg.MoveState);
+            var aiParam = AiParameterDb.Instance.GetAiTypeInfo(Owner.GetBaseInfo().AIType);
+            var random = GlobalRand.Instance.Random(aiParam.WanderRadius * 100,
+                aiParam.WanderRadius * 100) / 100;
 
+            destPos = SunVector.GetRandomPosAround(destPos, random);
+
+            if (Owner.ThrustMoveAndBroadcast(destPos,letsGoMsg.MoveState)) return;
+            Owner.ThrustMoveAndBroadcast(letsGoMsg.DestPosition, letsGoMsg.MoveState);
 
         }
 
@@ -275,68 +274,68 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
 
         protected virtual void OnMsgChangeState(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_ChangeState changeState)) return;
-            //if (changeState.StateID == (int) STATE_ID_RETURN)
-            //{
-            //    Owner.ChangeState(changeState.StateID);
-            //    Owner.SetMainTarget(null);
-            //}
+            if (!(msg is AIMsgChangeState changeState)) return;
+            if (changeState.StateID == (int)STATE_ID_RETURN)
+            {
+                Owner.ChangeState((AIStateID) changeState.StateID);
+                Owner.SetTargetChar(null);
+            }
 
         }
 
         protected virtual void OnMsgCommandFollow(AIMsg msg)
         {
-            //Owner.SetMainTarget(null);
-            //Owner.ChangeState((uint) STATE_ID_IDLE);
+            Owner.SetTargetChar(null);
+            Owner.ChangeState(STATE_ID_IDLE);
         }
 
         protected virtual void OnMsgUseSkill(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_UseSkill useSkillMsg)) return;
-            //var target = Owner.CurrentMap?.FindCharacter(useSkillMsg.TargetKey);
-            //if (target == null) return;
+            if (!(msg is AIMsgUseSkill useSkillMsg)) return;
+            var target = Owner.GetCurrentField()?.FindCharacter(useSkillMsg.TargetKey);
+            if (target == null) return;
 
-            //if (!Owner.IsFriend(target))
-            //{
-            //    Owner.SelectSkill(target, useSkillMsg.SkillCode);
-            //    Owner.ChangeState((uint) STATE_ID_TRACK);
-            //}
-            
+            if (Owner.IsFriend(target)!=UserRelationType.USER_RELATION_FRIEND)
+            {
+                Owner.SelectSkill(target, useSkillMsg.SkillCode);
+                Owner.ChangeState(STATE_ID_TRACK);
+            }
+
         }
 
         protected virtual void OnMsgGroupCommand(AIMsg msg)
         {
-            //if (!(msg is AI_MSG_GroupCommand groupCommand)) return;
-            //switch (groupCommand.Type)
-            //{
-            //    case Group_CMD.GROUP_CMD_TYPE_ATTACK:
-            //        OnMsgGroupCommand_Attack(groupCommand.TargetKey);
-            //        break;
-            //    case Group_CMD.GROUP_CMD_TYPE_STOP_ATTACK:
-            //        OnMsgGroupCommand_StopAttack();
-            //        break;
-            //}
+            if (!(msg is AIMsgGroupCommand groupCommand)) return;
+            switch (groupCommand.Type)
+            {
+                case GroupCMD.GROUP_CMD_TYPE_ATTACK:
+                    OnMsgGroupCommand_Attack(groupCommand.TargetKey);
+                    break;
+                case GroupCMD.GROUP_CMD_TYPE_STOP_ATTACK:
+                    OnMsgGroupCommand_StopAttack();
+                    break;
+            }
         }
 
         protected virtual void OnMsgGroupCommand_Attack(uint targetKey)
         {
-            //var target = Owner.CurrentMap?.FindCharacter(targetKey);
-            //if (target == null) return;
-            //Owner.SetMainTarget(target);
-            //Owner.ChangeState((uint) STATE_ID_HELP);
+            var target = Owner.GetCurrentField()?.FindCharacter(targetKey);
+            if (target == null) return;
+            Owner.SetTargetChar(target);
+            Owner.ChangeState(STATE_ID_HELP);
         }
 
         protected virtual void OnMsgGroupCommand_StopAttack()
         {
-            //if (Owner.GetMainTarget() != null)
-            //{
-            //    Owner.GetMainTarget().FreeEnemySlot(Owner.GetTrackSlot());
-            //    Owner.SetTrackSlot(-1);
-                
-            //}
-            //Owner.ChangeState((uint) STATE_ID_IDLE);
+            if (Owner.GetCurrentTarget() != null)
+            {
+                //Owner.GetCurrentTarget().FreeEnemySlot(Owner.GetTrackSlot());
+                //Owner.SetTrackSlot(-1);
+
+            }
+            Owner.ChangeState(STATE_ID_IDLE);
         }
-        
-        
+
+
     }
 }

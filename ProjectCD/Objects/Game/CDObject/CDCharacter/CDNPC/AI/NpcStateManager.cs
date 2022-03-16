@@ -48,8 +48,9 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
                 _currentState.OnEnter(param1);
             }
             _stateChangeCheck.SetTimer(1000);
-            _specialTimer.SetTimer(_owner.GetBaseInfo().SkillUpdateTime);
-
+            _specialTimer.SetTimer(_owner.GetBaseInfo().SkillUpdateTime != 0
+                ? _owner.GetBaseInfo().SkillUpdateTime
+                : int.MaxValue);
         }
 
         public void Update(long deltaTick)

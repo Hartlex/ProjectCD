@@ -13,6 +13,7 @@ using ProjectCD.Objects.Game.World;
 using SunStructs.Definitions;
 using SunStructs.Formulas.Char;
 using SunStructs.PacketInfos.Game.Sync.Server;
+using SunStructs.PacketInfos.Game.Sync.Server.WarPacket;
 using SunStructs.Packets.GameServerPackets.Sync;
 using SunStructs.RuntimeDB;
 using SunStructs.ServerInfos.General;
@@ -33,12 +34,14 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
         protected NPCAttr Attrs;
         protected TargetManager TargetManager;
         protected NpcStateManager NPCStateManager;
+
         #endregion
 
         #region Private
 
         private ushort _selectedSkillCode;
         private int _selectedSkillDelay;
+        private SunVector _spawnPosition;
 
         #endregion
 
@@ -48,7 +51,15 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
         public NPC(uint key) : base(key)
         {
             SetObjectType(ObjectType.NPC_OBJECT);
-            
+            NPCStateManager = new NpcStateManager(this);
+            TargetManager = new TargetManager(this);
+   
+        }
+
+        public override bool Update(long currentTick)
+        {
+            NPCStateManager.Update(currentTick);
+            return base.Update(currentTick);
         }
 
         public bool Initialize(ushort npcCode, NPCMoveAttitude moveType, uint moveAreaID, AIStateID stateID, int param1 = 0)
@@ -86,11 +97,14 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
             SetMP(Info.MaxMP);
             SetSD(Info.MaxSD);
 
-            TargetManager = new TargetManager(this);
-            NPCStateManager = new NpcStateManager(this);
+            //TargetManager = new TargetManager(this);
+            //NPCStateManager = new NpcStateManager(this);
 
             return true;
         }
+
+        public SunVector GetSpawnPos(){return _spawnPosition;}
+        public void SetSpawnPos(SunVector pos){_spawnPosition = pos;}
 
         public MonsterRenderInfo GetRenderInfo()
         {
@@ -100,8 +114,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
                 GetPos(),
                 (uint) GetHP(),
                 (uint) GetMaxHP(),
-                Attrs.GetValue16(AttrType.ATTR_MOVE_SPEED),
-                Attrs.GetValue16(AttrType.ATTR_ATTACK_SPEED),
+                Attrs[AttrType.ATTR_MOVE_SPEED].GetRatio(),
+                100,
                 0
             );
         }
@@ -170,6 +184,15 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
             return Info.ArmorType;
         }
 
+        public float GetAttackRange()
+        {
+            return Info.AttRange;
+        }
+
+        #region Movement
+
+
+
         public override bool ExecuteThrust(bool forced, SunVector destPos, ref SunVector posAfterThrust, float moveDistance,
             bool downAfterThrust)
         {
@@ -192,8 +215,22 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
             //TODO AI MESSAGE
         }
 
+        public bool ThrustMoveAndBroadcast(SunVector destPos, byte moveState)
+        {
+            var currentPos = GetPos();
+            SetPos(destPos);
+            var warPacketInfo = new MoveThrustBrdInfo(GetKey(), moveState, currentPos, destPos);
+            GetCurrentField()?.QueueWarPacketInfo(warPacketInfo);
+            return true;
+        }
 
+        public bool IsOutOfRegenLocationLimit(SunVector targetPos)
+        {
+            var dist = AiParameterDb.Instance.GetAiTypeInfo(Info.AIType).RegenLocationLimit;
+            return SunVector.GetDistance(GetSpawnPos(), targetPos) > dist;
+        }
 
+        #endregion
 
         public float GetSightRange()
         {
@@ -210,7 +247,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
         }
 
         #region StateManager
-
+        
         public void SetInitialState(AIStateID stateID,NPCMoveAttitude moveType,uint moveAreaID,int param1)
         {
             //if(moveType!=0)
@@ -354,6 +391,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
 
         public override void ChangeState(AIStateID stateID, int param1 = 0, int param2 = 0, int param3 = 0)
         {
+            
             NPCStateManager.ChangeState(stateID, param1, param2, param3);
         }
 
@@ -462,7 +500,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
         {
             return SunVector.GetDistance(GetPos(), attacker.GetPos());
         }
-
+        public float GetDistToTarget()
+        {
+            var target = TargetManager.GetCurrentTarget();
+            if (target == null) return 0;
+            return SunVector.GetDistance(GetPos(), target.GetPos());
+        }
         public void RemoveTarget(uint objectKey)
         {
             TargetManager.RemoveTarget(objectKey);
@@ -491,11 +534,27 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
             return false;
         }
 
+        public bool IsFollowerOfGroup()
+        {
+            return false;
+        }
+
+        public bool IsLeaderAlive()
+        {
+            return false;
+        }
+        public bool IsLeaderOfGroup()
+        {
+            return false;
+        }
         public void SendAiMsgToGroupExceptMe(AIMsg msg)
         {
 
         }
 
         #endregion
+
+
+
     }
 }

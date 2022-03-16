@@ -18,7 +18,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem.Et
             var owner = GetOwner();
             if (owner == null) return;
 
-            AIMsgStun msg = new( GetApplicationTime());
+            AIMsgStun msg = new(DateTime.Now.Ticks, GetApplicationTime());
             owner.OnAiMessage(msg);
 
             owner.StopMoving();

@@ -75,7 +75,8 @@ namespace SunStructs.ServerInfos.General
             return new SunVector(
                 (float) (r * Math.Cos(t) + pos.GetX()),
                 (float) (r * Math.Sin(t) + pos.GetY()),
-                pos.GetZ()
+                0
+                //pos.GetZ()
             );
         }
         public static SunVector GetDistanceVector(SunVector v1, SunVector v2)

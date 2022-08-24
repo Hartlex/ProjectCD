@@ -45,7 +45,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
 
         #endregion
 
-
+        
         public BaseNPCInfo GetBaseInfo(){ return Info;}
 
         public NPC(uint key) : base(key)
@@ -114,13 +114,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
                 GetPos(),
                 (uint) GetHP(),
                 (uint) GetMaxHP(),
-                Attrs[AttrType.ATTR_MOVE_SPEED].GetRatio(),
-                100,
+                (ushort) GetMoveSpeedRatio(),
+                (ushort) GetAttSpeedRatio(),
                 0
             );
         }
-
-
+        
         public bool IsHPMPRegenNPC()
         {
             switch (Info.Grade)
@@ -169,6 +168,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
             return (int) (GetLevel() / 2.5f + Attrs[AttrType.ATTR_PHYSICAL_ATTACK_BLOCK_RATIO].GetValue());
         }
 
+        #region Attributes
+        
         public override NPCAttr GetAttributes()
         {
             return Attrs;
@@ -188,6 +189,13 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
         {
             return Info.AttRange;
         }
+
+        public float GetSightRange()
+        {
+            return Attrs[AttrType.ATTR_SIGHT_RANGE].GetValue() / 10f;
+        }
+
+        #endregion
 
         #region Movement
 
@@ -218,7 +226,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
         public bool ThrustMoveAndBroadcast(SunVector destPos, byte moveState)
         {
             var currentPos = GetPos();
-            SetPos(destPos);
+            //SetPos(destPos);
+            destPos.ToTwoDim();
+            MoveStateControl.SetMoveState((CharMoveState) moveState);
+            MoveStateControl.SetNewDestinationPos(destPos);
+
             var warPacketInfo = new MoveThrustBrdInfo(GetKey(), moveState, currentPos, destPos);
             GetCurrentField()?.QueueWarPacketInfo(warPacketInfo);
             return true;
@@ -232,10 +244,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC
 
         #endregion
 
-        public float GetSightRange()
-        {
-            return Attrs[AttrType.ATTR_SIGHT_RANGE].GetValue() / 10f;
-        }
 
 
 

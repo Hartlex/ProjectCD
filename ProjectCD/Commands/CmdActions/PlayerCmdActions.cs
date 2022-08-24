@@ -38,7 +38,7 @@ namespace ProjectCD.Commands.CmdActions
             var sep = (int) MathF.Sqrt(amount);
             for (int i = 0; i < amount; i++)
             {
-                field.SpawnMonsterEx(key,pos+new SunVector(2f*k+4,2f*j,0));
+                field.SpawnMonsterEx(key,pos+new SunVector(2f*k+10,2f*j,0));
                 k++;
                 if (i % sep == 0)
                 {

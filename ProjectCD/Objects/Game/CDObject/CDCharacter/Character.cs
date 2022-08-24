@@ -104,7 +104,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter
         public override bool Update(long currentTick)
         {
             StatusManager.Update(currentTick);
-            ActiveSkillManager.Update();     
+            ActiveSkillManager.Update();
+            MoveStateControl.Update(currentTick);
             return true;
         }
 

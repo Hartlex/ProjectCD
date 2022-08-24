@@ -356,6 +356,15 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             return _cantAttackField == 0;
         }
 
+        public bool CanBeAttacked()
+        {
+            return _cantBeAttackedField == 0;
+        }
+        public bool CanMove()
+        {
+            return _cantMoveField == 0;
+        }
+
         public void AddRestrictStatus(CharStateType stateType)
         {
             SetField(stateType, _cantAttackStates,      ref _cantAttackField);

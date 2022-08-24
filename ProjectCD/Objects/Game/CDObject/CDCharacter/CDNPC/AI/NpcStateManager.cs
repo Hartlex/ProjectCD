@@ -53,7 +53,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
                 : int.MaxValue);
         }
 
-        public void Update(long deltaTick)
+        public void Update(long currentTick)
         {
             //_owner.SpecialAction();
             //_owner.StatusResist();
@@ -73,14 +73,14 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
 
             if (_escapeState != null)
             {
-                var progress = _escapeState.OnUpdate(deltaTick);
+                var progress = _escapeState.OnUpdate(currentTick);
                 if (progress) return;
 
                 _escapeState.OnExit();
                 _escapeState = null;
             }
 
-            _currentState.OnUpdate(deltaTick);
+            _currentState.OnUpdate(currentTick);
             
         }
 
@@ -179,7 +179,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI
             return true;
         }
 
-        public bool OnUpdate(long deltaTick)
+        public bool OnUpdate(long currentTick)
         {
             const bool updateContinue = true;
             const bool updateStop = true;

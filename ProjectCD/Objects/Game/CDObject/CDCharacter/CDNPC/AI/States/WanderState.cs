@@ -65,7 +65,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI.States
         {
             var aiParam = AiParameterDb.Instance.GetAiTypeInfo(_monster.GetBaseInfo().AIType);
 
-            float moveDist = aiParam.WanderRadius;
+            //float moveDist = aiParam.WanderRadius;
+            float moveDist = Owner.GetBaseInfo().MoveRange;
 
             var spawnPos = _monster.GetSpawnPos();
 

@@ -135,7 +135,6 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
             Attrs[(int) ATTR_MOVE_SPEED].SetValue(calcValue, AttrValueType.CALC);
 
             Attrs[(int)ATTR_ATTACK_SPEED].Update();
-
             calcValue = CalcAttackSpeedRatio(
                 charType,
                 DEX,
@@ -231,25 +230,25 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
 
             Attrs[(int)ATTR_PREMIUMSERVICE_PCBANG].Update();
 
-            Attrs[(int)ATTR_ENEMY_CRITICAL_RATIO_CHANGE].Update();
-            Attrs[(int)ATTR_ATTACK_DAMAGE_ABSORB_HP_RATIO].Update();
-            Attrs[(int)ATTR_ATTACK_DAMAGE_ABSORB_SD_RATIO].Update();
+            //Attrs[(int)ATTR_ENEMY_CRITICAL_RATIO_CHANGE].Update();
+            //Attrs[(int)ATTR_ATTACK_DAMAGE_ABSORB_HP_RATIO].Update();
+            //Attrs[(int)ATTR_ATTACK_DAMAGE_ABSORB_SD_RATIO].Update();
 
-            Attrs[(int)ATTR_CRAFT_COST_RATIO].Update();
-            Attrs[(int)ATTR_CRAFT_PREVENT_EXTINCTION_MATERIAL_RATIO].Update();
-            Attrs[(int)ATTR_ENCHANT_COST_RATIO].Update();
-            Attrs[(int)ATTR_ENCHANT_PREVENT_DESTROY_N_DOWNGRADE_ITEM_RATIO].Update();
-            Attrs[(int)ATTR_RECOVER_POTION_COOLTIME_RATIO].Update();
-            Attrs[(int)ATTR_RECOVER_POTION_RECOVERY_RATIO].Update();
+            //Attrs[(int)ATTR_CRAFT_COST_RATIO].Update();
+            //Attrs[(int)ATTR_CRAFT_PREVENT_EXTINCTION_MATERIAL_RATIO].Update();
+            //Attrs[(int)ATTR_ENCHANT_COST_RATIO].Update();
+            //Attrs[(int)ATTR_ENCHANT_PREVENT_DESTROY_N_DOWNGRADE_ITEM_RATIO].Update();
+            //Attrs[(int)ATTR_RECOVER_POTION_COOLTIME_RATIO].Update();
+            //Attrs[(int)ATTR_RECOVER_POTION_RECOVERY_RATIO].Update();
 
-            Attrs[(int)ATTR_QUEST_REWARD_EXP_RATIO].Update();
-            Attrs[(int)ATTR_MAX_DAMAGE_RATIO].Update();
-            Attrs[(int)ATTR_DOMINATION_MAPOBJECT_DAMAGE_RATIO].Update();
-            Attrs[(int)ATTR_SHOP_REPAIR_HEIM_RATIO].Update();
-            Attrs[(int)ATTR_SHOP_BUY_HEIM_RATIO].Update();
+            //Attrs[(int)ATTR_QUEST_REWARD_EXP_RATIO].Update();
+            //Attrs[(int)ATTR_MAX_DAMAGE_RATIO].Update();
+            //Attrs[(int)ATTR_DOMINATION_MAPOBJECT_DAMAGE_RATIO].Update();
+            //Attrs[(int)ATTR_SHOP_REPAIR_HEIM_RATIO].Update();
+            //Attrs[(int)ATTR_SHOP_BUY_HEIM_RATIO].Update();
             
-            Attrs[(int)ATTR_DEBUFF_DURATION].SetValue(CalcDebufDuration(SPR));
-            Attrs[(int)ATTR_DEBUFF_DURATION].Update();
+            //Attrs[(int)ATTR_DEBUFF_DURATION].SetValue(CalcDebufDuration(SPR));
+            //Attrs[(int)ATTR_DEBUFF_DURATION].Update();
 
 
 

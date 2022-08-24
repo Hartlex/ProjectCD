@@ -280,7 +280,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
 
         public bool CanBeAttacked()
         {
-            return true;
+            return _bits.CanBeAttacked();
         }
 
         public bool CanAttack()
@@ -288,6 +288,10 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.SkillSystem.StateSystem
             return _bits.CanAttack();
         }
 
+        public bool CanMove()
+        {
+            return _bits.CanMove();
+        }
         public bool IsImmunityDamageState()
         {
             return FindStatus(CHAR_STATE_IMMUNITY_DAMAGE) || FindStatus(CHAR_STATE_TRANSPARENT);

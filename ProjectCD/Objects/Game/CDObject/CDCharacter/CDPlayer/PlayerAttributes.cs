@@ -81,12 +81,12 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             _attributes[ATTR_MAX_MP].Update();
             _attributes[ATTR_MAX_SD].Update();
 
-            //SetHP(_attributes[ATTR_MAX_HP].GetValue());
-            //SetMP(_attributes[ATTR_MAX_MP].GetValue());
-            //SetSD(_attributes[ATTR_MAX_SD].GetValue());
-            SetHP(1);
-            SetMP(1);
-            SetSD(1);
+            SetHP(_attributes[ATTR_MAX_HP].GetValue());
+            SetMP(_attributes[ATTR_MAX_MP].GetValue());
+            SetSD(_attributes[ATTR_MAX_SD].GetValue());
+            //SetHP(1);
+            //SetMP(1);
+            //SetSD(1);
 
             _attributes.Update();
 

@@ -370,7 +370,9 @@ namespace SunStructs.Formulas.Char
                     break;
             }
 
-            return MaxBoundCheck(300, (int)(itemAttSpeed + statBonus + skillAttSpeed));
+            var weightedRatio = 1.0f + statBonus + skillAttSpeed / 100f;
+
+            return MaxBoundCheck(300, (int)(itemAttSpeed * weightedRatio));
         }
         public static int MaxBoundCheck(int maxValue, int value)
         {

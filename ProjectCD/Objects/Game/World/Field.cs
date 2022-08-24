@@ -322,13 +322,11 @@ namespace ProjectCD.Objects.Game.World
         public void Update(long tick)
         {
             _effectManager.Update(tick);
-            lock (_activeObjects)
-            {
                 foreach (var activeObject in _activeObjects.Values.ToList())
                 {
                     activeObject.Update(tick);
                 }
-            }
+            
 
         }
 

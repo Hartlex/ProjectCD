@@ -48,6 +48,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDPlayer
             MoveStateControl.SetAngle(info.Angle);
             MoveStateControl.SetTileID(info.TileIndex);
             MoveStateControl.SetMoveState((CharMoveState)info.MoveState);
+            Logger.Instance.Log($"Pos[{info.CurrentPosition}] MoveState[{info.MoveState}]");
             GetCurrentField()?.QueueWarPacketInfo(new KeyboardMoveBrdInfo((ushort)GetKey(), info));
         }
 

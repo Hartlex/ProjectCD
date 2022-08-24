@@ -8,6 +8,7 @@ using ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC;
 using SunStructs.Definitions;
 using SunStructs.ServerInfos.General.Object.Character.NPC;
 using static SunStructs.Definitions.AttrType;
+using static SunStructs.Formulas.Char.CommonCharacterFormulas;
 
 namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeChildren
 {
@@ -46,7 +47,8 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
             this[ATTR_CRITICAL_RATIO_CHANGE].SetValue(baseInfo.CriticalRatio);
             this[ATTR_ADD_MAGICAL_CRITICAL_RATIO].SetValue(baseInfo.CriticalRatio);
 
-            this[ATTR_SIGHT_RANGE].SetValue((int) (baseInfo.ViewRange *10));
+            //this[ATTR_SIGHT_RANGE].SetValue((int) (baseInfo.ViewRange *10));
+            this[ATTR_SIGHT_RANGE].SetValue((int) (baseInfo.ViewRange));
 
             this[ATTR_RECOVERY_HP].SetValue(recoverHP);
             this[ATTR_RECOVERY_MP].SetValue(recoverMP);
@@ -66,6 +68,76 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem.AttributeC
 
             UpdateAttackPower();
             UpdateDefense();
+
+            Attrs[(int)ATTR_MOVE_SPEED].Update();
+            int calcValue = CalcMoveSpeedRatio(
+                0,
+                0,
+                Attrs[(int)ATTR_MOVE_SPEED].GetValue(AttrValueType.SKILL)
+            );
+            calcValue *= 100 + Attrs[(int)ATTR_MOVE_SPEED].GetValue(AttrValueType.CALC_RATIO);
+            calcValue /= 100;
+            Attrs[(int)ATTR_MOVE_SPEED].SetValue(calcValue, AttrValueType.CALC);
+
+            Attrs[(int)ATTR_ATTACK_SPEED].Update();
+            calcValue = CalcAttackSpeedRatio(
+                0,
+                0,
+                0,
+                Attrs[(int)ATTR_ATTACK_SPEED].GetValue(AttrValueType.SKILL)
+            );
+            calcValue *= 100 + Attrs[(int)ATTR_ATTACK_SPEED].GetValue(AttrValueType.CALC_RATIO);
+            calcValue /= 100;
+            Attrs[(int)ATTR_ATTACK_SPEED].SetValue(calcValue, AttrValueType.CALC);
+
+            for (AttrValueType i = AttrValueType.ITEM; i < AttrValueType.CALC_RATIO; i++)
+            {
+                var value = Attrs[(int)ATTR_ALL_ATTACK_RANGE].GetValue(i);
+                if (value > 0)
+                {
+                    Attrs[(int)ATTR_NORMAL_ATTACK_RANGE].SetValue(value, i);
+                    Attrs[(int)ATTR_SKILL_ATTACK_RANGE].SetValue(value, i);
+                }
+            }
+            Attrs[(int)ATTR_NORMAL_ATTACK_RANGE].Update();
+            Attrs[(int)ATTR_SKILL_ATTACK_RANGE].Update();
+
+            Attrs[(int)ATTR_ALL_ATTACK_RANGE].Clear();
+
+            Attrs[(int)ATTR_SIGHT_RANGE].Update();
+
+            Attrs[(int) ATTR_ADD_ALL_CRITICAL_RATIO].Update();
+            Attrs[(int) ATTR_CRITICAL_RATIO_CHANGE].Update();
+            Attrs[(int)ATTR_CRITICAL_RATIO_CHANGE].AddValue(Attrs[(int)ATTR_CRITICAL_RATIO_CHANGE].GetValue());
+
+            Attrs[(int)ATTR_CRITICAL_DAMAGE_CHANGE].Update();
+
+            Attrs[(int)ATTR_ADD_SKILL_ATTACK_POWER].Update();
+            Attrs[(int)ATTR_ADD_SKILL_DAMAGE_RATIO].Update();
+
+            Attrs[(int)ATTR_ABSORB_HP].Update();
+            Attrs[(int)ATTR_ABSORB_MP].Update();
+
+            Attrs[(int)ATTR_ADD_ATTACK_INC_RATIO].Update();
+            Attrs[(int)ATTR_ADD_DEFENSE_INC_RATIO].Update();
+            Attrs[(int)ATTR_AREA_ATTACK_RATIO].Update();
+            Attrs[(int)ATTR_REFLECT_DAMAGE_RATIO].Update();
+            Attrs[(int)ATTR_DECREASE_DAMAGE].Update();
+            Attrs[(int)ATTR_DOUBLE_DAMAGE_RATIO].Update();
+            Attrs[(int)ATTR_INCREASE_MIN_DAMAGE].Update();
+            Attrs[(int)ATTR_INCREASE_MAX_DAMAGE].Update();
+
+            Attrs[(int)ATTR_DECREASE_PVPDAMAGE].Update();
+            Attrs[(int)ATTR_BYPASS_DEFENCE_RATIO].Update();
+            Attrs[(int)ATTR_RESISTANCE_BADSTATUS_RATIO].Update();
+            Attrs[(int)ATTR_INCREASE_SKILL_LEVEL].Update();
+
+            Attrs[(int)ATTR_RESIST_HOLDING].Update();
+            Attrs[(int)ATTR_RESIST_SLEEP].Update();
+            Attrs[(int)ATTR_RESIST_POISON].Update();
+            Attrs[(int)ATTR_RESIST_KNOCKBACK].Update();
+            Attrs[(int)ATTR_RESIST_DOWN].Update();
+            Attrs[(int)ATTR_RESIST_STUN].Update();
 
         }
 

@@ -17,7 +17,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         {
             _type = type;
         }
-        public void Update()
+        public virtual void Update()
         {
             UpdateAll();
         }
@@ -33,7 +33,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
 
         public int GetValue(AttrValueType type = CALC)
         {
-            return _values[(int)CALC];
+            return _values[(int)type];
         }
 
         public int GetRatio()
@@ -74,19 +74,20 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
             _values[(int)type] = (int) value;
         }
 
-        private void UpdateAbsValues()
+        protected void UpdateAbsValues()
         {
             _values[(int) CALC] = _values[(int) BASE] + _values[(int) ITEM] + _values[(int) SKILL];
         }
-        private void UpdateRatValues()
+        protected void UpdateRatValues()
         {
             _values[(int) CALC_RATIO] =  _values[(int) ITEM_RATIO] + _values[(int) SKILL_RATIO];
         }
-        private void UpdateAll()
+        protected void UpdateAll()
         {
             UpdateAbsValues();
             UpdateRatValues();
-            //_values[(int) CALC] += _values[(int) CALC_RATIO] * _values[(int) CALC]+100 / 100; //100 = 10%
+            _values[(int) CALC] *= _values[(int) CALC_RATIO] + 100;
+            _values[(int) CALC] /= 100;
         }
         public void Clear()
         {
@@ -97,6 +98,42 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.AttributeSystem
         }
     }
 
+    public class NoUpdateAttribute : Attribute
+    {
+        public override void Update()
+        {
+            
+        }
+
+        public NoUpdateAttribute(AttrType type) : base(type)
+        {
+        }
+    }
+
+
+    public class NoRatioAttribute : Attribute
+    {
+        public override void Update()
+        {
+            UpdateAbsValues();
+        }
+
+        public NoRatioAttribute(AttrType type) : base(type)
+        {
+        }
+    }
+
+    public class FullUpdateAttribute : Attribute
+    {
+        public override void Update()
+        {
+            UpdateAll();
+        }
+
+        public FullUpdateAttribute(AttrType type) : base(type)
+        {
+        }
+    }
     public enum AttributeUpdateType
     {
         UPDATE_TYPE_NOTHING,

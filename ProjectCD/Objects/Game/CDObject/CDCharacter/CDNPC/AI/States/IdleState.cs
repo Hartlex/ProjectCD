@@ -18,7 +18,7 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI.States
 
             var delay = param1 != 0 ? param1 : GlobalRandom.Rand(AiTypeInfo.IdleMinTime, AiTypeInfo.IdleMaxTime);
             _idleTimer = new (delay);
-            _searchTimer = new(0);
+            _searchTimer = new(1000);
             Owner.SetTargetChar(null);
         }
 
@@ -33,7 +33,11 @@ namespace ProjectCD.Objects.Game.CDObject.CDCharacter.CDNPC.AI.States
             if (_searchTimer.IsExpired() && Owner.CanAttack())
             {
                 var target = Owner.SearchTarget();
-                if (target == null) return;
+                if (target == null)
+                {
+                    _searchTimer.Reset();
+                    return;
+                }
 
                 if (Owner.IsGroupMember())
                 {
